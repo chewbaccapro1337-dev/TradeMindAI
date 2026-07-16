@@ -11,37 +11,72 @@ from dotenv import load_dotenv
 import os
 from risk import calculate_risk
 from database import create_tables
+from journal import (
+    ask_symbol,
+    get_symbol,
+    get_side,
+    get_entry,
+    get_exit,
+    back,
+    SYMBOL,
+    SIDE,
+    ENTRY,
+    EXIT,
+    show_last_trades,
+    get_trade_risk,
+    TRADE_RISK
+)
+from keyboards import (
+    main_keyboard,
+    back_keyboard,
+    start_keyboard
+)
+from telegram import ReplyKeyboardRemove
+from session import session_data
+from analysis import (
+    ask_photo,
+    analyze_photo,
+    ANALYZE,
+)
+from pathlib import Path
+from dotenv import load_dotenv
 
-# Загружаем переменные из .env
-load_dotenv()
+BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(BASE_DIR / ".env")
 
 # Получаем токен
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 
-BALANCE, RISK = range(2)
+BALANCE = 0
+RISK = 1
+ANALYZE = 20
 
 BOT_NAME = "TradeMind_AI"
-VERSION = "0.1.0"
+VERSION = "1.0.0"
 
 # Временное хранилище данных пользователей
-user_data = {}
 
-keyboard = [
-    ["📊 Рассчитать риск"],
-    ["📈 Журнал сделок"],
-    ["📷 Анализ сделки"],
-]
+RISK_BACK_MENU = "menu"
+RISK_BACK_BALANCE = "balance"
 
-reply_markup = ReplyKeyboardMarkup(
-    keyboard,
-    resize_keyboard=True
-)
+reply_markup=main_keyboard
+
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+   await update.message.reply_text(
+     "Пока я умею:\n"
+     "• 📊 Рассчитывать риск\n"
+     "• 📈 Вести журнал сделок\n"
+     "• 📄 Отображать последние сделки\n\n"
+     "🚀 Скоро появится много новых функций!\n\n"
+     "Нажмите «🚀 Старт», чтобы открыть главное меню.",
+     reply_markup=start_keyboard
+ )
+
+async def open_main_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
-        "👋 Добро пожаловать в TradeMind AI!\n\n"
-        "Выберите действие:",
-        reply_markup=reply_markup
+        "🏠 Главное меню",
+        reply_markup=main_keyboard
     )
 
 async def risk(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -66,16 +101,22 @@ async def risk(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
 
 async def ask_balance(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("💰 Введите баланс:")
+    context.user_data["module"] = "risk"
+    context.user_data["back"] = "menu"
+
+    await update.message.reply_text(
+        "💰 Введите баланс:",
+        reply_markup=back_keyboard
+    )
+
     return BALANCE
 
 async def get_balance(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
         balance = float(update.message.text)
 
-        user_data[update.effective_user.id] = {
-            "balance": balance
-        }
+        context.user_data["balance"] = balance
+        context.user_data["back"] = "balance"
 
         await update.message.reply_text(
             "📉 Теперь введите риск (%):"
@@ -94,7 +135,7 @@ async def get_risk(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
         risk_percent = float(update.message.text)
 
-        balance = user_data[update.effective_user.id]["balance"]
+        balance = context.user_data["balance"]
 
         risk_amount = calculate_risk(balance, risk_percent)
 
@@ -105,7 +146,7 @@ async def get_risk(update: Update, context: ContextTypes.DEFAULT_TYPE):
             reply_markup=reply_markup
         )
 
-        user_data.pop(update.effective_user.id, None)
+        context.user_data.clear()
 
         return ConversationHandler.END
 
@@ -115,6 +156,22 @@ async def get_risk(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
 
         return RISK
+
+async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    print("CANCEL CALLED")
+    context.user_data.clear()
+
+    await update.message.reply_text(
+        "❌ Действие отменено.",
+        reply_markup=ReplyKeyboardRemove()
+    )
+
+    await update.message.reply_text(
+        "🏠 Главное меню",
+        reply_markup=main_keyboard
+    )
+
+    return ConversationHandler.END
 
 def main():
     app = ApplicationBuilder().token(BOT_TOKEN).build()
@@ -126,20 +183,102 @@ def main():
     entry_points=[
         CommandHandler("risk", ask_balance),
         MessageHandler(filters.Regex("^📊 Рассчитать риск$"), ask_balance),
+        MessageHandler(filters.Regex("^📈 Журнал сделок$"), ask_symbol),
+        MessageHandler(filters.Regex("^📷 Анализ сделки$"), ask_photo),
     ],
     states={
         BALANCE: [
-            MessageHandler(filters.TEXT & ~filters.COMMAND, get_balance)
-        ],
+        MessageHandler(
+            filters.TEXT
+            & ~filters.COMMAND
+            & ~filters.Regex("^⬅️ Назад$")
+            & ~filters.Regex("^❌ Отмена$"),
+            get_balance
+        )
+     ],
         RISK: [
-            MessageHandler(filters.TEXT & ~filters.COMMAND, get_risk)
-        ],
+        MessageHandler(
+            filters.TEXT
+            & ~filters.COMMAND
+            & ~filters.Regex("^⬅️ Назад$")
+            & ~filters.Regex("^❌ Отмена$"),
+            get_risk
+        )
+     ],
+        SYMBOL: [
+    MessageHandler(
+        filters.TEXT
+        & ~filters.COMMAND
+        & ~filters.Regex("^⬅️ Назад$")
+        & ~filters.Regex("^❌ Отмена$"),
+        get_symbol
+    )
+     ],
+      SIDE: [
+        MessageHandler(
+            filters.TEXT
+            & ~filters.COMMAND
+            & ~filters.Regex("^⬅️ Назад$")
+            & ~filters.Regex("^❌ Отмена$"),
+            get_side
+        )
+     ],
+    ENTRY: [
+        MessageHandler(
+            filters.TEXT
+            & ~filters.COMMAND
+            & ~filters.Regex("^⬅️ Назад$")
+            & ~filters.Regex("^❌ Отмена$"),
+            get_entry
+        )
+     ],
+
+ EXIT: [
+        MessageHandler(
+            filters.TEXT
+            & ~filters.COMMAND
+            & ~filters.Regex("^⬅️ Назад$")
+            & ~filters.Regex("^❌ Отмена$"),
+            get_exit
+        )
+     ],
+ TRADE_RISK: [
+        MessageHandler(
+           filters.TEXT
+           & ~filters.COMMAND
+           & ~filters.Regex("^⬅️ Назад$")
+           & ~filters.Regex("^❌ Отмена$"),
+           get_trade_risk
+    )  
+     ],
+
+ ANALYZE: [
+        MessageHandler(
+          filters.PHOTO,
+          analyze_photo
+    )
+     ],
     },
-    fallbacks=[],
-    
+  fallbacks=[
+    CommandHandler("cancel", cancel),
+    MessageHandler(filters.Regex("^❌ Отмена$"), cancel),
+    MessageHandler(filters.Regex("^⬅️ Назад$"), back),
+]
 )
     app.add_handler(CommandHandler("start", start))
+    app.add_handler(
+    MessageHandler(
+        filters.Regex("^🚀 Старт$"),
+        open_main_menu
+    )
+)
     app.add_handler(conv_handler)
+    app.add_handler(
+    MessageHandler(
+        filters.Regex("^📄 Последние сделки$"),
+        show_last_trades
+    )
+)
     app.run_polling()
 if __name__ == "__main__":
     main()

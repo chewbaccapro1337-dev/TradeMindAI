@@ -52,3 +52,21 @@ def save_trade(user_id, symbol, side, entry, exit_price, risk, pnl):
 
     conn.commit()
     conn.close()
+    
+def get_last_trades(user_id, limit=10):
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT symbol, side, entry, exit, pnl, created_at
+        FROM trades
+        WHERE user_id = ?
+        ORDER BY id DESC
+        LIMIT ?
+    """, (user_id, limit))
+
+    trades = cursor.fetchall()
+
+    conn.close()
+
+    return trades
