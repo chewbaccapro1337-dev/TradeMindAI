@@ -40,6 +40,7 @@ from analysis import (
 )
 from pathlib import Path
 from dotenv import load_dotenv
+from telegram.request import HTTPXRequest
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / ".env")
@@ -52,7 +53,7 @@ RISK = 1
 ANALYZE = 20
 
 BOT_NAME = "TradeMind_AI"
-VERSION = "1.0.0"
+VERSION = "1.0.1"
 
 # Временное хранилище данных пользователей
 
@@ -174,7 +175,21 @@ async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE):
     return ConversationHandler.END
 
 def main():
-    app = ApplicationBuilder().token(BOT_TOKEN).build()
+    proxy_url = "socks5://socks5://eGX3Sq:6RcWQV@213.226.79.167.8000"
+
+    request = HTTPXRequest(
+        proxy=proxy_url,
+        connect_timeout=30,
+        read_timeout=30,
+        write_timeout=30
+    )
+
+    app = (
+        ApplicationBuilder()
+        .token(BOT_TOKEN)
+        .request(request)
+        .build()
+    )
     create_tables()
 
     print(f"🤖 {BOT_NAME} v{VERSION} запущен!")
