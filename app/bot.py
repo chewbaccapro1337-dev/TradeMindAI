@@ -40,6 +40,8 @@ from analysis import (
 )
 from pathlib import Path
 from dotenv import load_dotenv
+import asyncio
+from telegram import Bot
 from telegram.request import HTTPXRequest
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -175,19 +177,28 @@ async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE):
     return ConversationHandler.END
 
 def main():
-    proxy_url = "socks5://socks5://eGX3Sq:6RcWQV@213.226.79.167.8000"
+
+    proxy_url = "socks5://qMLzj4:r5NZWQ@168.81.42.247:8000"
 
     request = HTTPXRequest(
         proxy=proxy_url,
         connect_timeout=30,
-        read_timeout=30,
-        write_timeout=30
+        read_timeout=60,
+        write_timeout=30,
+        pool_timeout=30
     )
 
-    app = (
-        ApplicationBuilder()
+    get_updates_request = HTTPXRequest(
+        proxy=proxy_url,
+        connect_timeout=30,
+        read_timeout=90,
+        write_timeout=30,
+        pool_timeout=30
+    )
+    app = ( ApplicationBuilder()
         .token(BOT_TOKEN)
         .request(request)
+        .get_updates_request(get_updates_request)
         .build()
     )
     create_tables()
@@ -294,6 +305,9 @@ def main():
         show_last_trades
     )
 )
-    app.run_polling()
+    app.run_polling(
+       timeout=60,
+       drop_pending_updates=False
+)
 if __name__ == "__main__":
     main()
