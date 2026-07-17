@@ -43,7 +43,8 @@ from dotenv import load_dotenv
 import asyncio
 from telegram import Bot
 from telegram.request import HTTPXRequest
-from news import show_news
+from news import show_news, news_button
+from telegram.ext import CallbackQueryHandler
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / ".env")
@@ -313,7 +314,9 @@ def main():
         show_news
     )
 )
-
+    app.add_handler(
+    CallbackQueryHandler(news_button)
+)
     app.run_polling(
        timeout=60,
        drop_pending_updates=False
