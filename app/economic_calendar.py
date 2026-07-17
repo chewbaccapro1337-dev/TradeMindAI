@@ -1,17 +1,18 @@
 import requests
-from bs4 import BeautifulSoup
+from jb_news.news import JBNews
+
+API_KEY = "PCMdc1YONIzbla9skEdRl9Z5HRJIbjho"
+
+jb = JBNews()
 
 
 def get_calendar():
 
-    url = "https://www.forexfactory.com/calendar"
+    if jb.calendar(
+        API_KEY,
+        today=True
+    ):
 
-    headers = {
-        "User-Agent": "Mozilla/5.0"
-    }
+        return jb.calendar_info
 
-    html = requests.get(url, headers=headers, timeout=20).text
-
-    print(html[:500])
-
-    return html
+    return []
