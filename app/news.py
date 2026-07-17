@@ -8,5 +8,7 @@ async def show_news(update, context):
 
     data = get_calendar()
 
-    await update.message.reply_text(str(data))
+    print(events)
+
+    await update.message.reply_text(str(events))
 
