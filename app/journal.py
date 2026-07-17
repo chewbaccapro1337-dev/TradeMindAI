@@ -1,6 +1,6 @@
 from telegram import Update
 from telegram.ext import ContextTypes, ConversationHandler
-from database import get_last_trades
+from database import get_last_trades, get_statistics
 from keyboards import (
     main_keyboard,
     back_keyboard,
@@ -9,8 +9,13 @@ from keyboards import (
 )
 from database import save_trade
 from session import session_data
-
-SYMBOL, SIDE, ENTRY, EXIT, TRADE_RISK = range(10, 15)
+from states import (
+    SYMBOL,
+    SIDE,
+    ENTRY,
+    EXIT,
+    TRADE_RISK
+)
 
 trade_data = session_data
 
@@ -225,22 +230,6 @@ async def get_exit(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         return TRADE_RISK
 
-        pnl = (
-            exit_price - user["entry"]
-            if user["side"] == "BUY"
-            else user["entry"] - exit_price
-        )
-
-        save_trade(
-            user_id=update.effective_user.id,
-            symbol=user["symbol"],
-            side=user["side"],
-            entry=user["entry"],
-            exit_price=exit_price,
-            risk=0,
-            pnl=pnl,
-        )
-
         await update.message.reply_text(
             "✅ Сделка сохранена!\n\n"
             f"📈 {user['symbol']}\n"
@@ -304,7 +293,13 @@ async def get_trade_risk(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         return TRADE_RISK
 async def show_last_trades(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    trades = get_last_trades(update.effective_user.id)
+
+    print("SHOW LAST TRADES CALLED")
+
+    trades = get_last_trades(
+        update.effective_user.id,
+        limit=20
+    )
 
     if not trades:
         await update.message.reply_text(
@@ -312,17 +307,87 @@ async def show_last_trades(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         return
 
-    text = "📄 Последние сделки:\n\n"
+
+    text = "📒 Последние 20 сделок:\n\n"
+
 
     for i, trade in enumerate(trades, start=1):
-        symbol, side, entry, exit_price, pnl, created = trade
+
+        symbol, side, entry, exit_price, risk, pnl, created = trade
+
+
+        result = "✅" if pnl > 0 else "❌"
+
 
         text += (
-            f"{i}. {symbol} | {side}\n"
-            f"Вход: {entry}\n"
-            f"Выход: {exit_price}\n"
-            f"PnL: {pnl:.2f}\n\n"
+            f"{i}. {result} {symbol} | {side}\n"
+            f"📥 Вход: {entry}\n"
+            f"📤 Выход: {exit_price}\n"
+            f"⚠️ Риск: {risk:.2f}$\n"
+            f"💰 PnL: {pnl:.2f}$\n"
+            f"📅 {created}\n"
+            "━━━━━━━━━━━━━━\n\n"
         )
 
+
+    await update.message.reply_text(text[:4000])
+
+async def show_statistics(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
+    stats = get_statistics(
+        update.effective_user.id
+    )
+
+
+    if not stats[0]:
+        await update.message.reply_text(
+            "📊 Статистика пока пустая."
+        )
+        return
+
+
+    (
+        total,
+        wins,
+        losses,
+        profit,
+        loss,
+        total_pnl,
+        avg_win,
+        avg_loss,
+        best,
+        worst
+
+    ) = stats
+
+
+    wins = wins or 0
+    losses = losses or 0
+
+    winrate = (
+        wins / total * 100
+        if total
+        else 0
+    )
+
+
+    text = (
+        "📊 Статистика трейдинга\n\n"
+
+        f"Всего сделок: {total}\n"
+        f"✅ Победы: {wins}\n"
+        f"❌ Поражения: {losses}\n\n"
+
+        f"🎯 Winrate: {winrate:.1f}%\n\n"
+
+        f"💰 Прибыль: +{profit or 0:.2f}$\n"
+        f"💸 Убыток: {loss or 0:.2f}$\n\n"
+
+        f"📈 Итог: {total_pnl or 0:.2f}$\n\n"
+
+        f"🔥 Лучшая сделка: {best or 0:.2f}$\n"
+        f"💀 Худшая сделка: {worst or 0:.2f}$"
+    )
+
+
     await update.message.reply_text(text)
-    

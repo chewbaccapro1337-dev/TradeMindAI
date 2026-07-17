@@ -7,7 +7,9 @@ def get_connection():
     return sqlite3.connect(DB_NAME)
 
 
+
 def create_tables():
+
     conn = get_connection()
     cursor = conn.cursor()
 
@@ -25,7 +27,13 @@ def create_tables():
     )
     """)
 
+    conn.commit()
+    conn.close()
+
+
+
 def save_trade(user_id, symbol, side, entry, exit_price, risk, pnl):
+
     conn = get_connection()
     cursor = conn.cursor()
 
@@ -52,13 +60,22 @@ def save_trade(user_id, symbol, side, entry, exit_price, risk, pnl):
 
     conn.commit()
     conn.close()
-    
-def get_last_trades(user_id, limit=10):
+
+
+
+def get_last_trades(user_id, limit=20):
     conn = get_connection()
     cursor = conn.cursor()
 
     cursor.execute("""
-        SELECT symbol, side, entry, exit, pnl, created_at
+        SELECT 
+            symbol,
+            side,
+            entry,
+            exit,
+            risk,
+            pnl,
+            created_at
         FROM trades
         WHERE user_id = ?
         ORDER BY id DESC
@@ -70,3 +87,34 @@ def get_last_trades(user_id, limit=10):
     conn.close()
 
     return trades
+
+
+def get_statistics(user_id):
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+
+    cursor.execute("""
+        SELECT
+            COUNT(*),
+            SUM(CASE WHEN pnl > 0 THEN 1 ELSE 0 END),
+            SUM(CASE WHEN pnl < 0 THEN 1 ELSE 0 END),
+            SUM(CASE WHEN pnl > 0 THEN pnl ELSE 0 END),
+            SUM(CASE WHEN pnl < 0 THEN pnl ELSE 0 END),
+            SUM(pnl),
+            AVG(CASE WHEN pnl > 0 THEN pnl END),
+            AVG(CASE WHEN pnl < 0 THEN pnl END),
+            MAX(pnl),
+            MIN(pnl)
+
+        FROM trades
+        WHERE user_id = ?
+    """, (user_id,))
+
+
+    stats = cursor.fetchone()
+
+    conn.close()
+
+    return stats

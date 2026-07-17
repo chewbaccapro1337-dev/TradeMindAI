@@ -18,13 +18,9 @@ from journal import (
     get_entry,
     get_exit,
     back,
-    SYMBOL,
-    SIDE,
-    ENTRY,
-    EXIT,
     show_last_trades,
     get_trade_risk,
-    TRADE_RISK
+    show_statistics
 )
 from keyboards import (
     main_keyboard,
@@ -45,16 +41,22 @@ from telegram import Bot
 from telegram.request import HTTPXRequest
 from news import show_news, news_button
 from telegram.ext import CallbackQueryHandler
+from states import (
+    BALANCE,
+    RISK,
+    SYMBOL,
+    SIDE,
+    ENTRY,
+    EXIT,
+    TRADE_RISK,
+    ANALYZE
+)
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / ".env")
 
 # Получаем токен
 BOT_TOKEN = os.getenv("BOT_TOKEN")
-
-BALANCE = 0
-RISK = 1
-ANALYZE = 20
 
 BOT_NAME = "TradeMind_AI"
 VERSION = "1.0.1"
@@ -228,7 +230,7 @@ def main():
         MessageHandler(
             filters.TEXT
             & ~filters.COMMAND
-            & ~filters.Regex("^⬅️ Назад$")
+	            & ~filters.Regex("^⬅️ Назад$")
             & ~filters.Regex("^❌ Отмена$"),
             get_risk
         )
@@ -300,14 +302,19 @@ def main():
         open_main_menu
     )
 )
-    app.add_handler(conv_handler)
     app.add_handler(
     MessageHandler(
-        filters.Regex("^📄 Последние сделки$"),
+        filters.Regex("^📒 Последние сделки$"),
         show_last_trades
     )
 )
 
+    app.add_handler(
+    MessageHandler(
+        filters.Regex("📈 Статистика"),
+        show_statistics
+    )
+)
     app.add_handler(
     MessageHandler(
         filters.Regex("^📰 Новости$"),
@@ -317,6 +324,13 @@ def main():
     app.add_handler(
     CallbackQueryHandler(news_button)
 )
+
+
+
+    app.add_handler(conv_handler)
+
+    app.add_handler(CommandHandler("start", start))
+
     app.run_polling(
        timeout=60,
        drop_pending_updates=False
