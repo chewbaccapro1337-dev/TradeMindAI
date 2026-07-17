@@ -1,6 +1,6 @@
 import requests
 
-API_KEY = "d9d4u7hr01qj7sqb1dt0d9d4u7hr01qj7sqb1dtg"
+API_KEY = "d9d5809r01qj7sqb2e2gd9d5809r01qj7sqb2e30"
 
 def get_calendar():
     url = (
