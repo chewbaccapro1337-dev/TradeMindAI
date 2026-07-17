@@ -10,5 +10,9 @@ async def show_news(update, context):
 
     print(events)
 
-    await update.message.reply_text(str(events))
+    events = get_calendar()
+
+ await update.message.reply_text(
+    events[:3000]
+ )
 
