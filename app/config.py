@@ -1,0 +1,1 @@
+FMP_API_KEY = "oqoPDXoBNRBH2VedPRE4yc354cDf7oja"
