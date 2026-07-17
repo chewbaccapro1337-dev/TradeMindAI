@@ -43,6 +43,7 @@ from dotenv import load_dotenv
 import asyncio
 from telegram import Bot
 from telegram.request import HTTPXRequest
+from news import show_news
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / ".env")
@@ -291,7 +292,7 @@ def main():
     MessageHandler(filters.Regex("^⬅️ Назад$"), back),
 ]
 )
-    app.add_handler(CommandHandler("start", start))
+    app.add_handler(CommandHazndler("start", start))
     app.add_handler(
     MessageHandler(
         filters.Regex("^🚀 Старт$"),
@@ -305,6 +306,14 @@ def main():
         show_last_trades
     )
 )
+
+    app.add_handler(
+    MessageHandler(
+        filters.Regex("^📰 Новости$"),
+        show_news
+    )
+)
+
     app.run_polling(
        timeout=60,
        drop_pending_updates=False

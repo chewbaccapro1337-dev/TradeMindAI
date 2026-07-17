@@ -14,6 +14,7 @@ main_keyboard = ReplyKeyboardMarkup(
         ["📈 Журнал сделок"],
         ["📄 Последние сделки"],
         ["📷 Анализ сделки"],
+        ["📰 Новости"]
     ],
     resize_keyboard=True
 )
