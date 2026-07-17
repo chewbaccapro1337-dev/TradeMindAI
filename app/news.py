@@ -18,9 +18,13 @@ def get_calendar():
 
 async def show_news(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
-    events = get_calendar()
+    print("show_news started")
 
-    await update.message.reply_text(
-        str(events[:5])
-    )
+    events = get_calendar()
+    
+    print(type(events))
+    print(events)    
+    
+    await update.message.reply_text(str(events))
+    
 
