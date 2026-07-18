@@ -2,6 +2,7 @@ from telegram import Update
 from telegram.ext import ContextTypes, ConversationHandler
 from database import (
     save_trade,
+    clear_trades,
     get_last_trades,
     get_open_trades,
     close_trade,
@@ -613,3 +614,13 @@ async def close_trade_price(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
 
         return CLOSE_PRICE
+
+async def clear_history(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
+    clear_trades(update.effective_user.id)
+
+    await update.message.reply_text(
+        "🗑 История сделок очищена.\n"
+        "📊 Статистика сброшена.",
+        reply_markup=main_keyboard
+    )

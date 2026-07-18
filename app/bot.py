@@ -25,7 +25,8 @@ from journal import (
     show_statistics,
     start_close_trade,
     select_close_trade,
-    close_trade_price
+    close_trade_price,
+    clear_history
 )
 from keyboards import (
     main_keyboard,
@@ -354,6 +355,14 @@ def main():
         show_statistics
     )
 )
+
+    app.add_handler(
+    MessageHandler(
+        filters.Regex("^🗑 Очистить историю$"),
+        clear_history
+    )
+)
+
     app.add_handler(
     MessageHandler(
         filters.Regex("^📰 Новости$"),
@@ -363,7 +372,6 @@ def main():
     app.add_handler(
     CallbackQueryHandler(news_button)
 )
-
 
 
     app.add_handler(conv_handler)

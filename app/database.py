@@ -160,6 +160,19 @@ def get_statistics(user_id):
 
     return stats
 
+def clear_trades(user_id):
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        DELETE FROM trades
+        WHERE user_id = ?
+    """, (user_id,))
+
+    conn.commit()
+    conn.close()
+
 def get_open_trades(user_id):
     conn = get_connection()
     cursor = conn.cursor()
