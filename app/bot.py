@@ -86,10 +86,7 @@ reply_markup=main_keyboard
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    add_subscription(
-        update.effective_user.id,
-        1
-    )
+
     await update.message.reply_text(
         "🚀 Добро пожаловать в TradeMind AI!\n\n"
         "🎁 Вам предоставлен тестовый доступ на 1 день.\n\n"

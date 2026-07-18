@@ -39,7 +39,6 @@ async def subscription(update: Update, context: ContextTypes.DEFAULT_TYPE):
         ]
     ]
 
-
     await update.message.reply_text(
         f"""
 💎 TradeMind AI Premium
@@ -79,6 +78,8 @@ async def buy_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
         days = 36500
         price = 4990
 
+    context.user_data["payment_days"] = days
+    context.user_data["payment_price"] = price
 
     await query.message.reply_text(
         f"""
@@ -123,6 +124,8 @@ async def receive_payment(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         return
 
+    days = context.user_data.get("payment_days")
+    price = context.user_data.get("payment_price")
 
     await update.message.reply_text(
         "✅ Чек отправлен на проверку.\nОжидайте активации."
@@ -146,5 +149,8 @@ Username:
 
 📅 Тариф:
 {context.user_data.get("payment_days")} дней
+
+💵 Сумма:
+{price}₽
 """
     )
