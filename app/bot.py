@@ -16,10 +16,12 @@ from journal import (
     get_symbol,
     get_side,
     get_entry,
+    get_tp,
+    get_sl,
     get_exit,
+    get_trade_risk,
     back,
     show_last_trades,
-    get_trade_risk,
     show_statistics
 )
 from keyboards import (
@@ -47,8 +49,11 @@ from states import (
     SYMBOL,
     SIDE,
     ENTRY,
-    EXIT,
+    TP,
+    SL,
     TRADE_RISK,
+    POSITION_SIZE,
+    COMMENT,
     ANALYZE
 )
 
@@ -73,7 +78,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
    await update.message.reply_text(
      "Пока я умею:\n"
      "• 📊 Рассчитывать риск\n"
-     "• 📈 Вести журнал сделок\n"
+     "• 📝 Записывать сделки\n"
      "• 📄 Отображать последние сделки\n\n"
      "🚀 Скоро появится много новых функций!\n\n"
      "Нажмите «🚀 Старт», чтобы открыть главное меню.",
@@ -213,7 +218,7 @@ def main():
     entry_points=[
         CommandHandler("risk", ask_balance),
         MessageHandler(filters.Regex("^📊 Рассчитать риск$"), ask_balance),
-        MessageHandler(filters.Regex("^📈 Журнал сделок$"), ask_symbol),
+        MessageHandler(filters.Regex("^📝 Записать сделку$"), ask_symbol),
         MessageHandler(filters.Regex("^📷 Анализ сделки$"), ask_photo),
     ],
     states={
@@ -262,14 +267,23 @@ def main():
             get_entry
         )
      ],
-
- EXIT: [
+    TP: [
         MessageHandler(
             filters.TEXT
             & ~filters.COMMAND
             & ~filters.Regex("^⬅️ Назад$")
             & ~filters.Regex("^❌ Отмена$"),
-            get_exit
+            get_tp
+        ) 
+     ],
+
+    SL: [
+        MessageHandler(
+            filters.TEXT
+            & ~filters.COMMAND
+            & ~filters.Regex("^⬅️ Назад$")
+            & ~filters.Regex("^❌ Отмена$"),
+            get_sl
         )
      ],
  TRADE_RISK: [

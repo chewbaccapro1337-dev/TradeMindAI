@@ -11,7 +11,7 @@ start_keyboard = ReplyKeyboardMarkup(
 main_keyboard = ReplyKeyboardMarkup(
     [
         ["📊 Рассчитать риск"],
-        ["📈 Журнал сделок"],
+        ["📝 Записать сделку"],
         ["📒 Последние сделки", "📈 Статистика"],
         ["📷 Анализ сделки"],
         ["📰 Новости"]
@@ -37,7 +37,7 @@ buy_sell_keyboard = ReplyKeyboardMarkup(
 symbol_keyboard = ReplyKeyboardMarkup(
     [
         ["BTCUSDT", "ETHUSDT"],
-        ["SOLUSDT", "BNBUSDT"],
+        ["EURUSD", "GBPUSD"],
         ["⬅️ Назад", "❌ Отмена"],
     ],
     resize_keyboard=True

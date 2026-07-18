@@ -13,8 +13,11 @@ from states import (
     SYMBOL,
     SIDE,
     ENTRY,
-    EXIT,
-    TRADE_RISK
+    TP,
+    SL,
+    TRADE_RISK,
+    POSITION_SIZE,
+    COMMENT
 )
 
 trade_data = session_data
@@ -173,6 +176,7 @@ async def get_side(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     
 async def get_entry(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
     if "Отмена" in update.message.text:
         trade_data.pop(update.effective_user.id, None)
 
@@ -187,13 +191,14 @@ async def get_entry(update: Update, context: ContextTypes.DEFAULT_TYPE):
         entry = float(update.message.text)
 
         trade_data[update.effective_user.id]["entry"] = entry
+        trade_data[update.effective_user.id]["back"] = BACK_TO_ENTRY
 
         await update.message.reply_text(
-    "💰 Введите цену выхода:",
-    reply_markup=back_keyboard
-)
-        trade_data[update.effective_user.id]["back"] = BACK_TO_ENTRY
-        return EXIT
+            "🎯 Введите Take Profit (TP):",
+            reply_markup=back_keyboard
+        )
+
+        return TP
 
     except ValueError:
         await update.message.reply_text(
@@ -202,7 +207,67 @@ async def get_entry(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         return ENTRY
 
+async def get_tp(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
+    if "Отмена" in update.message.text:
+        trade_data.pop(update.effective_user.id, None)
+
+        await update.message.reply_text(
+            "❌ Действие отменено.",
+            reply_markup=main_keyboard
+        )
+
+        return ConversationHandler.END
+
+    try:
+        tp = float(update.message.text)
+
+        trade_data[update.effective_user.id]["tp"] = tp
+
+        await update.message.reply_text(
+            "🛑 Введите Stop Loss (SL):",
+            reply_markup=back_keyboard
+        )
+
+        return SL
+
+    except ValueError:
+        await update.message.reply_text(
+            "❌ Введите число."
+        )
+
+        return TP
+
+async def get_sl(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
+    if "Отмена" in update.message.text:
+        trade_data.pop(update.effective_user.id, None)
+
+        await update.message.reply_text(
+            "❌ Действие отменено.",
+            reply_markup=main_keyboard
+        )
+
+        return ConversationHandler.END
+
+    try:
+        sl = float(update.message.text)
+
+        trade_data[update.effective_user.id]["sl"] = sl
+
+        await update.message.reply_text(
+            "💵 Введите риск сделки ($):",
+            reply_markup=back_keyboard
+        )
+
+        return TRADE_RISK
+
+    except ValueError:
+        await update.message.reply_text(
+            "❌ Введите число."
+        )
+
+        return SL
 
 async def get_exit(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if "Отмена" in update.message.text:
@@ -245,7 +310,7 @@ async def get_exit(update: Update, context: ContextTypes.DEFAULT_TYPE):
     except ValueError:
         await update.message.reply_text("❌ Введите число.")
 
-        return EXIT
+        return TRADE_RISK
 async def get_trade_risk(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
         risk = float(update.message.text)
@@ -254,31 +319,43 @@ async def get_trade_risk(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         user["risk"] = risk
 
-        pnl = (
-            user["exit"] - user["entry"]
+        reward = (
+            abs(user["tp"] - user["entry"])
             if user["side"] == "BUY"
-            else user["entry"] - user["exit"]
+            else abs(user["entry"] - user["tp"])
         )
 
-        r_multiple = pnl / risk if risk != 0 else 0
+        loss = (
+            abs(user["entry"] - user["sl"])
+            if user["side"] == "BUY"
+            else abs(user["sl"] - user["entry"])
+        )
+
+        rr = reward / loss if loss != 0 else 0
+
+        expected_profit = risk * rr
 
         save_trade(
             user_id=update.effective_user.id,
             symbol=user["symbol"],
             side=user["side"],
             entry=user["entry"],
-            exit_price=user["exit"],
+            tp=user["tp"],
+            sl=user["sl"],
             risk=risk,
-            pnl=pnl,
+            rr=rr,
+            expected_profit=expected_profit,
+            position_size=user.get("position_size"),
+            comment=user.get("comment")
         )
 
         await update.message.reply_text(
             "✅ Сделка сохранена!\n\n"
             f"📈 {user['symbol']}\n"
             f"📊 {user['side']}\n"
-            f"💵 PnL: {pnl:.2f}$\n"
-            f"⚠️ Риск: {risk:.2f}$\n"
-            f"🎯 R: {r_multiple:.2f}",
+            f"🎯 Потенциальная прибыль: {expected_profit:.2f}$\n"
+            f"📐 RR: 1:{rr:.2f}\n"
+            f"⚠️ Риск: {risk:.2f}$\n",
             reply_markup=main_keyboard
         )
 
@@ -313,18 +390,23 @@ async def show_last_trades(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     for i, trade in enumerate(trades, start=1):
 
-        symbol, side, entry, exit_price, risk, pnl, created = trade
+        symbol, side, entry, tp, sl, risk, rr, expected_profit, status, created = trade
 
+        rr = rr if rr is not None else 0
+        expected_profit = expected_profit if expected_profit is not None else 0
+        status = status if status is not None else "OPEN"
 
-        result = "✅" if pnl > 0 else "❌"
-
+        status_icon = "🟢" if status == "OPEN" else "⚪"
 
         text += (
-            f"{i}. {result} {symbol} | {side}\n"
+            f"{i}. {status_icon} {symbol} | {side}\n"
             f"📥 Вход: {entry}\n"
-            f"📤 Выход: {exit_price}\n"
+            f"🎯 TP: {tp}\n"
+            f"🛑 SL: {sl}\n"
             f"⚠️ Риск: {risk:.2f}$\n"
-            f"💰 PnL: {pnl:.2f}$\n"
+            f"📐 RR: 1:{rr:.2f}\n"
+            f"💰 Потенциал: {expected_profit:.2f}$\n"
+            f"📌 Статус: {status}\n"
             f"📅 {created}\n"
             "━━━━━━━━━━━━━━\n\n"
         )

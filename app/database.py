@@ -17,45 +17,83 @@ def create_tables():
     CREATE TABLE IF NOT EXISTS trades (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         user_id INTEGER NOT NULL,
+
         symbol TEXT NOT NULL,
         side TEXT NOT NULL,
+
         entry REAL NOT NULL,
+        tp REAL NOT NULL,
+        sl REAL NOT NULL,
+
+        risk REAL NOT NULL,
+        rr REAL,
+
+        expected_profit REAL,
+
+        position_size REAL,
+        comment TEXT,
+
+        status TEXT DEFAULT 'OPEN',
+
         exit REAL,
-        risk REAL,
         pnl REAL,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        closed_at TIMESTAMP
     )
     """)
-
+	
     conn.commit()
     conn.close()
 
 
 
-def save_trade(user_id, symbol, side, entry, exit_price, risk, pnl):
+def save_trade(
+    user_id,
+    symbol,
+    side,
+    entry,
+    tp,
+    sl,
+    risk,
+    rr=None,
+    expected_profit=None,
+    position_size=None,
+    comment=None
+):
 
     conn = get_connection()
     cursor = conn.cursor()
 
     cursor.execute("""
-        INSERT INTO trades (
+        INSERT INTO trades(
             user_id,
             symbol,
             side,
             entry,
-            exit,
+            tp,
+            sl,
             risk,
-            pnl
+            rr,
+            expected_profit,
+            position_size,
+            comment,
+            status
         )
-        VALUES (?, ?, ?, ?, ?, ?, ?)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     """, (
         user_id,
         symbol,
         side,
         entry,
-        exit_price,
+        tp,
+        sl,
         risk,
-        pnl
+        rr,
+        expected_profit,
+        position_size,
+        comment,
+        "OPEN"
     ))
 
     conn.commit()
@@ -68,13 +106,16 @@ def get_last_trades(user_id, limit=20):
     cursor = conn.cursor()
 
     cursor.execute("""
-        SELECT 
+        SELECT
             symbol,
             side,
             entry,
-            exit,
+            tp,
+            sl,
             risk,
-            pnl,
+            rr,
+            expected_profit,
+            status,
             created_at
         FROM trades
         WHERE user_id = ?
