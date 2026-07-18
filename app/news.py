@@ -5,7 +5,7 @@ from keyboards import main_keyboard
 from economic_calendar import get_calendar
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from forex_news import get_news
-
+from ai import analyze_economic_event
 
 # Главное меню новостей
 async def show_news(update, context):
@@ -38,6 +38,9 @@ async def show_news(update, context):
                 "📅 Все новости",
                 callback_data="news_all"
             )
+        ],
+        [
+            InlineKeyboardButton("🤖 AI анализ", callback_data="news_ai")
         ]
     ]
 
@@ -67,6 +70,25 @@ async def news_button(update, context):
 
     elif query.data == "news_gbp":
         events = get_news(currency="GBP")
+
+    elif query.data == "news_ai":
+        events = get_news(
+            only_high=True
+        )
+
+        text = "🤖 AI АНАЛИЗ НОВОСТЕЙ\n\n"
+
+
+        for e in events[:5]:
+
+            ai = analyze_economic_event(e)
+
+            text += (
+                f"🔴 {e['currency']}\n"
+                f"{e['event']}\n\n"
+                f"{ai}\n"
+                "━━━━━━━━━━━━━━\n\n"
+            )
 
     else:
         events = get_news()
@@ -111,9 +133,20 @@ async def news_button(update, context):
             text += f"✅ Факт: {e['actual']}\n"
 
 
-        text += "\n━━━━━━━━━━━━━━\n"
+            if e["impact"] == "red":
+ 
+                ai = analyze_economic_event(e)
 
+                text += (
+                    "\n🤖 AI Forecast:\n"
+                    f"{ai}\n"
+        )
+
+
+        text += "\n━━━━━━━━━━━━━━\n"
 
     await query.edit_message_text(
         text[:4000]
     )
+
+    return    

@@ -2,6 +2,10 @@ import os
 from openai import OpenAI
 from dotenv import load_dotenv
 import base64
+from news_ai_cache import (
+    get_cached_analysis,
+    save_analysis
+)
 
 load_dotenv()
 
@@ -149,3 +153,87 @@ def analyze_trade(image_path: str):
     )
 
     return response.output_text
+
+
+def analyze_economic_event(event):
+
+    key = (
+        f"{event['currency']}_"
+        f"{event['event']}_"
+        f"{event.get('actual')}"
+    )
+
+
+    cached = get_cached_analysis(key)
+
+    if cached:
+        return cached
+
+
+    prompt = f"""
+Ты профессиональный трейдер.
+
+Проанализируй экономическую новость:
+
+Валюта:
+{event['currency']}
+
+Событие:
+{event['event']}
+
+Прогноз:
+{event.get('forecast')}
+
+Факт:
+{event.get('actual')}
+
+
+Ответ строго:
+
+🔥 Сила новости:
+от 1 до 5
+
+
+💵 USD:
+🟢 рост
+или
+🔴 падение
+
+
+₿ BTC:
+🟢 рост
+или
+🔴 падение
+
+
+📊 Анализ:
+2-3 предложения.
+
+
+🎯 Торговый сценарий:
+что ждать после выхода новости.
+"""
+
+
+    response = client.chat.completions.create(
+        model="gpt-4.1-mini",
+        messages=[
+            {
+                "role":"user",
+                "content":prompt
+            }
+        ],
+        temperature=0.3
+    )
+
+
+    result = response.choices[0].message.content
+
+
+    save_analysis(
+        key,
+        result
+    )
+
+
+    return result
