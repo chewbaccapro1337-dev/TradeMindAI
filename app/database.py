@@ -1,4 +1,5 @@
 import sqlite3
+from datetime import datetime, timedelta
 
 DB_NAME = "trademind.db"
 
@@ -40,6 +41,13 @@ def create_tables():
 
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         closed_at TIMESTAMP
+    )
+    """)
+
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS subscriptions (
+        user_id INTEGER PRIMARY KEY,
+        expires_at TEXT
     )
     """)
 	
@@ -217,6 +225,40 @@ def close_trade(trade_id, exit_price, pnl):
         exit_price,
         pnl,
         trade_id
+    ))
+
+    conn.commit()
+    conn.close()
+
+def create_subscription_table():
+
+    conn = sqlite3.connect(DB_NAME)
+    cur = conn.cursor()
+
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS subscriptions (
+        user_id INTEGER PRIMARY KEY,
+        expires_at TEXT
+    )
+    """)
+
+    conn.commit()
+    conn.close()
+
+def add_subscription(user_id, days):
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    expires = datetime.now() + timedelta(days=days)
+
+    cursor.execute("""
+    INSERT OR REPLACE INTO subscriptions
+    (user_id, expires_at)
+    VALUES (?, ?)
+    """, (
+        user_id,
+        expires.isoformat()
     ))
 
     conn.commit()

@@ -6,9 +6,22 @@ from economic_calendar import get_calendar
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from forex_news import get_news
 from ai import analyze_economic_event
+from subscription import check_subscription
 
 # Главное меню новостей
 async def show_news(update, context):
+    if not check_subscription(update.effective_user.id):
+
+        await update.message.reply_text(
+            "🔒 Тестовый доступ закончился.\n\n"
+            "TradeMind AI Premium:\n"
+            "🤖 AI анализ\n"
+            "📰 Новости\n"
+            "💧 Liquidity Map\n\n"
+            "Для продолжения оформите подписку."
+        )
+
+        return
 
     keyboard = [
         [

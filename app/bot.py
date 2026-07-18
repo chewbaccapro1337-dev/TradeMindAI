@@ -46,6 +46,7 @@ import asyncio
 from telegram import Bot
 from telegram.request import HTTPXRequest
 from news import show_news, news_button
+from subscription_menu import subscription, buy_callback
 from telegram.ext import CallbackQueryHandler
 from states import (
     BALANCE,
@@ -63,6 +64,9 @@ from states import (
     CLOSE_PRICE
 )
 from liquidity_report import make_report
+from subscription import has_subscription
+from database import add_subscription
+from admin import users, grant, revoke
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / ".env")
@@ -82,15 +86,20 @@ reply_markup=main_keyboard
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-   await update.message.reply_text(
-     "Пока я умею:\n"
-     "• 📊 Рассчитывать риск\n"
-     "• 📝 Записывать сделки\n"
-     "• 📄 Отображать последние сделки\n\n"
-     "🚀 Скоро появится много новых функций!\n\n"
-     "Нажмите «🚀 Старт», чтобы открыть главное меню.",
-     reply_markup=start_keyboard
- )
+    add_subscription(
+        update.effective_user.id,
+        1
+    )
+    await update.message.reply_text(
+        "🚀 Добро пожаловать в TradeMind AI!\n\n"
+        "🎁 Вам предоставлен тестовый доступ на 1 день.\n\n"
+        "Доступные функции:\n"
+        "📊 Журнал сделок\n"
+        "📰 Экономический календарь\n"
+        "🤖 AI анализ новостей\n"
+        "💧 Карта ликвидности\n",
+        reply_markup=start_keyboard
+    )
 
 async def open_main_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
@@ -236,6 +245,7 @@ def main():
         MessageHandler(filters.Regex("^📝 Записать сделку$"), ask_symbol),
         MessageHandler(filters.Regex("^🔒 Закрыть сделку$"), start_close_trade),
         MessageHandler(filters.Regex("^📷 Анализ сделки$"), ask_photo),
+        MessageHandler(filters.Regex("^💎 Подписка$"), subscription)
     ],
     states={
         BALANCE: [
@@ -386,13 +396,33 @@ def main():
     )
 )
     app.add_handler(
-    CallbackQueryHandler(news_button)
+    CallbackQueryHandler(
+        news_button,
+        pattern="^news_"
+    )
 )
 
+    app.add_handler(
+    CallbackQueryHandler(
+        buy_callback,
+        pattern="^buy_"
+    )
+)
 
     app.add_handler(conv_handler)
 
     app.add_handler(CommandHandler("start", start))
+
+    app.add_handler(CommandHandler("users", users))
+    app.add_handler(CommandHandler("grant", grant))
+    app.add_handler(CommandHandler("revoke", revoke))
+
+    app.add_handler(
+    CommandHandler(
+        "subscription",
+        subscription
+    )
+)
 
     app.run_polling(
        timeout=60,
