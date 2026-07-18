@@ -46,7 +46,7 @@ import asyncio
 from telegram import Bot
 from telegram.request import HTTPXRequest
 from news import show_news, news_button
-from subscription_menu import subscription, buy_callback
+from subscription_menu import subscription, buy_callback, receive_payment
 from telegram.ext import CallbackQueryHandler
 from states import (
     BALANCE,
@@ -406,6 +406,13 @@ def main():
     CallbackQueryHandler(
         buy_callback,
         pattern="^buy_"
+    )
+)
+
+    app.add_handler(
+    MessageHandler(
+        filters.Document.PDF,
+        receive_payment
     )
 )
 

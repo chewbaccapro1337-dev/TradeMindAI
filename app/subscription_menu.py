@@ -3,6 +3,8 @@ from telegram.ext import ContextTypes
 from subscription import check_subscription
 
 
+ADMIN_ID = 1176830974
+
 async def subscription(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     user_id = update.effective_user.id
@@ -102,5 +104,47 @@ async def buy_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
 После оплаты отправьте сюда PDF чек.
 
 После проверки подписка будет активирована.
+"""
+    )
+
+async def receive_payment(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
+    user = update.effective_user
+
+    document = update.message.document
+
+    if not document:
+        return
+
+
+    if not document.file_name.endswith(".pdf"):
+        await update.message.reply_text(
+            "❌ Нужен именно PDF чек"
+        )
+        return
+
+
+    await update.message.reply_text(
+        "✅ Чек отправлен на проверку.\nОжидайте активации."
+    )
+
+
+    await context.bot.send_document(
+        chat_id=ADMIN_ID,
+        document=document.file_id,
+        caption=f"""
+💰 Новый чек оплаты
+
+👤 Пользователь:
+{user.first_name}
+
+🆔 ID:
+{user.id}
+
+Username:
+@{user.username}
+
+📅 Тариф:
+{context.user_data.get("payment_days")} дней
 """
     )
