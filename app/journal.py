@@ -1,6 +1,12 @@
 from telegram import Update
 from telegram.ext import ContextTypes, ConversationHandler
-from database import get_last_trades, get_statistics
+from database import (
+    save_trade,
+    get_last_trades,
+    get_open_trades,
+    close_trade,
+    get_statistics
+)
 from keyboards import (
     main_keyboard,
     back_keyboard,
@@ -17,7 +23,9 @@ from states import (
     SL,
     TRADE_RISK,
     POSITION_SIZE,
-    COMMENT
+    COMMENT,
+    SELECT_CLOSE_TRADE,
+    CLOSE_PRICE,
 )
 
 trade_data = session_data
@@ -473,3 +481,135 @@ async def show_statistics(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
     await update.message.reply_text(text)
+
+async def start_close_trade(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
+    trades = get_open_trades(update.effective_user.id)
+
+    if not trades:
+        await update.message.reply_text(
+            "📭 Нет открытых сделок."
+        )
+        return ConversationHandler.END
+
+    text = "🔒 Выберите сделку для закрытия:\n\n"
+
+    for i, trade in enumerate(trades, start=1):
+        (
+            trade_id,
+            symbol,
+            side,
+            entry,
+            tp,
+            sl,
+            risk,
+            rr,
+            expected_profit,
+            created
+        ) = trade
+
+        text += (
+            f"{i}. {symbol} {side}\n"
+            f"📥 Вход: {entry}\n"
+            f"🎯 TP: {tp}\n"
+            f"🛑 SL: {sl}\n"
+            f"⚠️ Риск: {risk}$\n\n"
+        )
+
+    context.user_data["close_trades"] = trades
+
+    await update.message.reply_text(
+        text,
+        reply_markup=back_keyboard
+    )
+
+    return SELECT_CLOSE_TRADE
+
+async def select_close_trade(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
+    print("SELECT CLOSE TRADE CALLED")
+    print("TEXT:", update.message.text)
+    print("DATA:", context.user_data)
+
+    try:
+        index = int(update.message.text) - 1
+
+        trades = context.user_data.get("close_trades")
+
+        if not trades or index < 0 or index >= len(trades):
+            await update.message.reply_text(
+                "❌ Неверный номер сделки."
+            )
+            return SELECT_CLOSE_TRADE
+
+        trade = trades[index]
+
+        context.user_data["selected_trade"] = trade
+
+        await update.message.reply_text(
+            "💵 Введите цену выхода:",
+            reply_markup=back_keyboard
+        )
+
+        return CLOSE_PRICE
+
+    except ValueError:
+        await update.message.reply_text(
+            "❌ Введите номер сделки."
+        )
+
+        return SELECT_CLOSE_TRADE
+
+async def close_trade_price(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
+    try:
+        exit_price = float(update.message.text)
+
+        trade = context.user_data["selected_trade"]
+
+        (
+            trade_id,
+            symbol,
+            side,
+            entry,
+            tp,
+            sl,
+            risk,
+            rr,
+            expected_profit,
+            created
+        ) = trade
+
+        if side == "BUY":
+            r_result = (exit_price - entry) / abs(entry - sl)
+        else:
+            r_result = (entry - exit_price) / abs(sl - entry)
+
+        pnl = risk * r_result
+
+        close_trade(
+            trade_id,
+            exit_price,
+            pnl
+        )
+
+        await update.message.reply_text(
+            "✅ Сделка закрыта!\n\n"
+            f"📈 {symbol}\n"
+            f"📊 {side}\n"
+            f"📤 Выход: {exit_price}\n"
+            f"💰 PnL: {pnl:.2f}$",
+            reply_markup=main_keyboard
+        )
+
+        context.user_data.pop("selected_trade", None)
+        context.user_data.pop("close_trades", None)
+
+        return ConversationHandler.END
+
+    except ValueError:
+        await update.message.reply_text(
+            "❌ Введите число."
+        )
+
+        return CLOSE_PRICE

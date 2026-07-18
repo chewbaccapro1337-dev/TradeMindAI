@@ -159,3 +159,52 @@ def get_statistics(user_id):
     conn.close()
 
     return stats
+
+def get_open_trades(user_id):
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT
+            id,
+            symbol,
+            side,
+            entry,
+            tp,
+            sl,
+            risk,
+            rr,
+            expected_profit,
+            created_at
+        FROM trades
+        WHERE user_id = ?
+        AND status = 'OPEN'
+        ORDER BY id DESC
+    """, (user_id,))
+
+    trades = cursor.fetchall()
+
+    conn.close()
+
+    return trades
+
+def close_trade(trade_id, exit_price, pnl):
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        UPDATE trades
+        SET
+            exit = ?,
+            pnl = ?,
+            status = 'CLOSED',
+            closed_at = CURRENT_TIMESTAMP
+        WHERE id = ?
+    """, (
+        exit_price,
+        pnl,
+        trade_id
+    ))
+
+    conn.commit()
+    conn.close()

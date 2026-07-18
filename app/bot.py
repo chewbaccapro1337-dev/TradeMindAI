@@ -22,7 +22,10 @@ from journal import (
     get_trade_risk,
     back,
     show_last_trades,
-    show_statistics
+    show_statistics,
+    start_close_trade,
+    select_close_trade,
+    close_trade_price
 )
 from keyboards import (
     main_keyboard,
@@ -54,7 +57,9 @@ from states import (
     TRADE_RISK,
     POSITION_SIZE,
     COMMENT,
-    ANALYZE
+    ANALYZE,
+    SELECT_CLOSE_TRADE,
+    CLOSE_PRICE
 )
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -219,6 +224,7 @@ def main():
         CommandHandler("risk", ask_balance),
         MessageHandler(filters.Regex("^📊 Рассчитать риск$"), ask_balance),
         MessageHandler(filters.Regex("^📝 Записать сделку$"), ask_symbol),
+        MessageHandler(filters.Regex("^🔒 Закрыть сделку$"), start_close_trade),
         MessageHandler(filters.Regex("^📷 Анализ сделки$"), ask_photo),
     ],
     states={
@@ -288,12 +294,31 @@ def main():
      ],
  TRADE_RISK: [
         MessageHandler(
-           filters.TEXT
-           & ~filters.COMMAND
-           & ~filters.Regex("^⬅️ Назад$")
-           & ~filters.Regex("^❌ Отмена$"),
-           get_trade_risk
-    )  
+            filters.TEXT
+            & ~filters.COMMAND
+            & ~filters.Regex("^⬅️ Назад$")
+            & ~filters.Regex("^❌ Отмена$"),
+            get_trade_risk
+        )  
+     ],
+ SELECT_CLOSE_TRADE: [
+        MessageHandler(
+            filters.TEXT
+            & ~filters.COMMAND
+            & ~filters.Regex("^⬅️ Назад$")
+            & ~filters.Regex("^❌ Отмена$"),
+            select_close_trade
+        )
+     ],
+	
+ CLOSE_PRICE: [
+        MessageHandler(
+            filters.TEXT
+            & ~filters.COMMAND
+            & ~filters.Regex("^⬅️ Назад$")
+            & ~filters.Regex("^❌ Отмена$"),
+            close_trade_price
+        )
      ],
 
  ANALYZE: [
