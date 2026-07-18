@@ -62,6 +62,7 @@ from states import (
     SELECT_CLOSE_TRADE,
     CLOSE_PRICE
 )
+from liquidity_report import make_report
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / ".env")
@@ -117,6 +118,16 @@ async def risk(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "Пример:\n"
             "/risk 1200 0.5"
         )
+
+async def show_liquidity(update, context):
+
+    await update.message.reply_text(
+        "⏳ Анализирую рынок..."
+    )
+
+    report = make_report()
+
+    await update.message.reply_text(report)
 
 async def ask_balance(update: Update, context: ContextTypes.DEFAULT_TYPE):
     context.user_data["module"] = "risk"
@@ -222,8 +233,6 @@ def main():
 
     conv_handler = ConversationHandler(
     entry_points=[
-        CommandHandler("risk", ask_balance),
-        MessageHandler(filters.Regex("^📊 Рассчитать риск$"), ask_balance),
         MessageHandler(filters.Regex("^📝 Записать сделку$"), ask_symbol),
         MessageHandler(filters.Regex("^🔒 Закрыть сделку$"), start_close_trade),
         MessageHandler(filters.Regex("^📷 Анализ сделки$"), ask_photo),
@@ -346,6 +355,13 @@ def main():
     MessageHandler(
         filters.Regex("^📒 Последние сделки$"),
         show_last_trades
+    )
+)
+
+    app.add_handler(
+    MessageHandler(
+        filters.Regex("^🧠 Карта ликвидности$"),
+        show_liquidity
     )
 )
 
