@@ -6,8 +6,6 @@ from liquidity import (
     build_structure,
     label_structure,
     find_fvg,
-    filter_fvg_by_trend,
-    get_best_fvg,
     detect_liquidity_sweep
 )
 
@@ -49,10 +47,19 @@ for s in labeled:
 
 
 # =====================
-# CURRENT PRICE
+# PRICE
 # =====================
 
 current_price = candles[-1]["close"]
+
+
+# берем последний известный тренд
+
+trend = labeled[-1]["trend"]
+
+
+print("\nCURRENT TREND")
+print(trend)
 
 
 
@@ -62,7 +69,8 @@ current_price = candles[-1]["close"]
 
 bos_choch = detect_bos_choch(
     labeled,
-    current_price
+    current_price,
+    trend
 )
 
 
@@ -80,7 +88,7 @@ fvgs = find_fvg(
 )
 
 
-print("\nALL FVG")
+print("\nFVG")
 
 for fvg in fvgs:
     print(fvg)
@@ -113,10 +121,6 @@ for x in equal_lows:
 
 
 
-# =====================
-# SWEEP
-# =====================
-
 sweep = detect_liquidity_sweep(
     candles,
     equal_lows,
@@ -129,9 +133,5 @@ print(sweep)
 
 
 
-# =====================
-# END
-# =====================
-
-print("\nPRICE:")
+print("\nPRICE")
 print(current_price)
