@@ -8,7 +8,8 @@ from liquidity import (
     find_fvg,
     detect_liquidity_sweep,
     detect_market_structure,
-    detect_sweep_structure_break
+    detect_sweep_structure_break,
+    find_entry_zone
 )
 
 
@@ -153,6 +154,16 @@ sweep_structure = detect_sweep_structure_break(
 
 print("\nSWEEP STRUCTURE")
 print(sweep_structure)
+
+entry_zone = find_entry_zone(
+    sweep,
+    sweep_structure,
+    fvgs
+)
+
+
+print("\nENTRY ZONE")
+print(entry_zone)
 
 print("\nLAST HL/LH")
 
