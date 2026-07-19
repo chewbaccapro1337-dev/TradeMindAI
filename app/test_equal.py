@@ -31,7 +31,7 @@ labeled = label_structure(
 
 
 # определяем тренд
-market_structure = analyze_market_structure(
+market_structure = detect_market_structure(
     labeled
 )
 
