@@ -143,40 +143,30 @@ def label_structure(swings):
 
         item = swing.copy()
 
-
         if swing["kind"] == "HIGH":
 
             if last_high is None:
-
                 item["label"] = "HIGH"
 
             elif swing["price"] > last_high:
-
                 item["label"] = "HH"
 
             else:
-
                 item["label"] = "LH"
 
-
             last_high = swing["price"]
-
 
 
         elif swing["kind"] == "LOW":
 
             if last_low is None:
-
                 item["label"] = "LOW"
 
             elif swing["price"] > last_low:
-
                 item["label"] = "HL"
 
             else:
-
                 item["label"] = "LL"
-
 
             last_low = swing["price"]
 

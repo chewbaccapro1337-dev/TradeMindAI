@@ -52,6 +52,11 @@ for s in labeled:
 
 
 
+market_structure = detect_market_structure(
+    highs,
+    lows
+)
+
 # =====================
 # PRICE
 # =====================
