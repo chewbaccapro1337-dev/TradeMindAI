@@ -9,6 +9,22 @@ from liquidity import (
 
 candles = get_candles()
 
+# получаем swing точки
+highs, lows = find_swings(candles)
+
+# строим общую структуру
+structure = build_structure(
+    highs,
+    lows
+)
+
+print("STRUCTURE")
+
+for s in structure:
+    print(s)
+
+candles = get_candles()
+
 structure = build_structure(
     highs,
     lows
