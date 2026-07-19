@@ -132,6 +132,58 @@ def build_structure(highs, lows):
 
     return clean
 
+def label_structure(swings):
+
+    labeled = []
+
+    last_high = None
+    last_low = None
+
+
+    for swing in swings:
+
+        item = swing.copy()
+
+
+        if swing["kind"] == "HIGH":
+
+            if last_high is None:
+                item["label"] = "HIGH"
+
+            else:
+
+                if swing["price"] > last_high:
+                    item["label"] = "HH"
+
+                else:
+                    item["label"] = "LH"
+
+
+            last_high = swing["price"]
+
+
+        elif swing["kind"] == "LOW":
+
+            if last_low is None:
+                item["label"] = "LOW"
+
+            else:
+
+                if swing["price"] > last_low:
+                    item["label"] = "HL"
+
+                else:
+                    item["label"] = "LL"
+
+
+            last_low = swing["price"]
+
+
+        labeled.append(item)
+
+
+    return labeled
+
 def find_equal_levels(levels, tolerance=5):
 
     levels = sorted(levels, key=lambda x: x["price"])

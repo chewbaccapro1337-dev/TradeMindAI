@@ -4,7 +4,8 @@ from liquidity import (
     find_equal_levels,
     detect_bos,
     detect_market_structure,
-    build_structure
+    build_structure,
+    label_structure
 )
 
 candles = get_candles()
@@ -17,6 +18,18 @@ structure = build_structure(
     highs,
     lows
 )
+
+labeled = label_structure(
+    structure
+)
+
+
+print()
+print("LABELED STRUCTURE")
+
+
+for s in labeled:
+    print(s)
 
 print("STRUCTURE")
 
