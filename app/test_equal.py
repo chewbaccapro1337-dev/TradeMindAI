@@ -132,6 +132,7 @@ print("SWING LOWS:")
 print(lows[:3])
 
 print()
+equal_lows = find_equal_lows(lows)
 
 eqh = find_equal_levels(highs)
 eql = find_equal_levels(lows)
