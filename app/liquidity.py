@@ -75,6 +75,28 @@ def find_swings(candles, left=2, right=2):
 
     return swing_highs, swing_lows
 
+def build_structure(highs, lows):
+
+    swings = []
+
+    for high in highs:
+        swings.append({
+            "index": high["index"],
+            "price": high["price"],
+            "kind": "HIGH"
+        })
+
+    for low in lows:
+        swings.append({
+            "index": low["index"],
+            "price": low["price"],
+            "kind": "LOW"
+        })
+
+    swings.sort(key=lambda x: x["index"])
+
+    return swings
+
 def find_equal_levels(levels, tolerance=5):
 
     levels = sorted(levels, key=lambda x: x["price"])
