@@ -111,17 +111,25 @@ def detect_bos(highs, lows, current_price):
 
     bos = None
 
-    if highs:
-        last_high = highs[-1]["price"]
+    for swing in reversed(highs):
 
-        if current_price > last_high:
-            bos = "BOS_UP"
+        if current_price > swing["price"]:
+            bos = {
+                "type": "BOS_UP",
+                "level": swing["price"]
+            }
+            break
 
-    if lows:
-        last_low = lows[-1]["price"]
+    if bos is None:
 
-        if current_price < last_low:
-            bos = "BOS_DOWN"
+        for swing in reversed(lows):
+
+            if current_price < swing["price"]:
+                bos = {
+                    "type": "BOS_DOWN",
+                    "level": swing["price"]
+                }
+                break
 
     return bos
 

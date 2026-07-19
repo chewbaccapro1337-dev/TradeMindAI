@@ -41,4 +41,8 @@ bos = detect_bos(
 )
 
 print("CURRENT PRICE:", price)
-print("BOS:", bos)
+if bos:
+    print(bos["type"])
+    print(bos["level"])
+else:
+    print("NO BOS")
