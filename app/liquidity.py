@@ -763,7 +763,7 @@ def find_entry_zone(
 
     return zones[-1]
 
-    def generate_market_explanation(
+def generate_market_explanation(
     market_structure,
     sweep,
     sweep_structure,
