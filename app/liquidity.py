@@ -477,7 +477,7 @@ def find_liquidity_zones(candles, distance=50):
 
 def detect_market_structure(highs, lows):
 
-    if len(highs) < 2 or len(lows) < 2:
+    if len(highs) < 3 or len(lows) < 3:
         return None
 
 
@@ -488,46 +488,52 @@ def detect_market_structure(highs, lows):
     prev_low = lows[-2]["price"]
 
 
-    structure = {
-        "trend": None,
-        "last_high": last_high,
-        "last_low": last_low,
-        "prev_high": prev_high,
-        "prev_low": prev_low,
-        "event": None
-    }
+    # ищем последовательность HH + HL
+
+    if (
+        highs[-1]["price"] > highs[-2]["price"]
+        and lows[-1]["price"] > lows[-2]["price"]
+    ):
+
+        trend = "UP"
 
 
-    # пробой прошлого хая = бычий перелом/продолжение
+    # ищем последовательность LH + LL
 
-    if last_high > prev_high:
+    elif (
+        highs[-1]["price"] < highs[-2]["price"]
+        and lows[-1]["price"] < lows[-2]["price"]
+    ):
 
-        structure["trend"] = "UP"
-
-        structure["event"] = {
-            "type": "CHoCH_UP",
-            "price": last_high
-        }
-
-
-    # пробой прошлого лоя = медвежий перелом
-
-    elif last_low < prev_low:
-
-        structure["trend"] = "DOWN"
-
-        structure["event"] = {
-            "type": "CHoCH_DOWN",
-            "price": last_low
-        }
+        trend = "DOWN"
 
 
     else:
 
-        structure["trend"] = "RANGE"
+        # если сделали sweep вверх,
+        # считаем предыдущий тренд бычьим
+
+        if last_high > prev_high:
+
+            trend = "UP"
+
+        elif last_low < prev_low:
+
+            trend = "DOWN"
+
+        else:
+
+            trend = "RANGE"
 
 
-    return structure
+
+    return {
+        "trend": trend,
+        "last_high": last_high,
+        "last_low": last_low,
+        "prev_high": prev_high,
+        "prev_low": prev_low
+    }
 
 def detect_liquidity_sweep(
     candles,
