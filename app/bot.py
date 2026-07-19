@@ -370,7 +370,7 @@ def main():
     app.add_handler(
     MessageHandler(
         filters.Regex("^AI Анализ BTC$"),
-        market_analysis
+        analyze_market
     )
 )
 
