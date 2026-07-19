@@ -184,6 +184,48 @@ def label_structure(swings):
 
     return labeled
 
+def detect_choch(labeled):
+
+    if len(labeled) < 4:
+        return None
+
+
+    last = labeled[-1]
+    previous = labeled[-2]
+
+
+    recent = [
+        x["label"]
+        for x in labeled[-6:]
+    ]
+
+
+    # смена вверх -> вниз
+    if (
+        "HH" in recent
+        and "HL" in recent
+        and last["label"] == "LL"
+    ):
+        return {
+            "type": "CHoCH_DOWN",
+            "price": last["price"]
+        }
+
+
+    # смена вниз -> вверх
+    if (
+        "LH" in recent
+        and "LL" in recent
+        and last["label"] == "HH"
+    ):
+        return {
+            "type": "CHoCH_UP",
+            "price": last["price"]
+        }
+
+
+    return None
+
 def find_equal_levels(levels, tolerance=5):
 
     levels = sorted(levels, key=lambda x: x["price"])

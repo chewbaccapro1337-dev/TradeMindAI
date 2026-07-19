@@ -5,7 +5,8 @@ from liquidity import (
     detect_bos,
     detect_market_structure,
     build_structure,
-    label_structure
+    label_structure,
+    detect_choch
 )
 
 candles = get_candles()
@@ -23,6 +24,14 @@ labeled = label_structure(
     structure
 )
 
+choch = detect_choch(
+    labeled
+)
+
+
+print()
+print("CHoCH:")
+print(choch)
 
 print()
 print("LABELED STRUCTURE")
