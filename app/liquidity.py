@@ -226,36 +226,48 @@ def detect_choch(labeled):
 
     return None
 
-def find_fvg(candles):
+def find_fvg(candles, min_size=20):
 
     fvgs = []
 
     for i in range(2, len(candles)):
 
         candle1 = candles[i-2]
-        candle2 = candles[i-1]
         candle3 = candles[i]
 
-        # Bullish FVG
+
+        # bullish imbalance
+
         if candle1["high"] < candle3["low"]:
 
-            fvgs.append({
-                "type": "BULLISH",
-                "low": candle1["high"],
-                "high": candle3["low"],
-                "index": i
-            })
+            gap = candle3["low"] - candle1["high"]
+
+            if gap >= min_size:
+
+                fvgs.append({
+                    "type": "BULLISH",
+                    "low": candle1["high"],
+                    "high": candle3["low"],
+                    "size": gap,
+                    "index": i
+                })
 
 
-        # Bearish FVG
+        # bearish imbalance
+
         if candle1["low"] > candle3["high"]:
 
-            fvgs.append({
-                "type": "BEARISH",
-                "low": candle3["high"],
-                "high": candle1["low"],
-                "index": i
-            })
+            gap = candle1["low"] - candle3["high"]
+
+            if gap >= min_size:
+
+                fvgs.append({
+                    "type": "BEARISH",
+                    "low": candle3["high"],
+                    "high": candle1["low"],
+                    "size": gap,
+                    "index": i
+                })
 
 
     return fvgs
