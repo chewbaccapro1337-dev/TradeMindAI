@@ -370,7 +370,7 @@ def main():
     app.add_handler(
     MessageHandler(
         filters.Regex("^AI Анализ BTC$"),
-        analyze_market
+        show_liquidity
     )
 )
 
@@ -437,7 +437,7 @@ def main():
 if __name__ == "__main__":
     main()
 
-async def analyze_market(update, context):
+async def market_analysis(update, context):
 
     data = analyze_market()
 
