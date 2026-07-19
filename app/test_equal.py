@@ -6,7 +6,7 @@ from liquidity import (
     build_structure,
     label_structure,
     find_fvg,
-    detect_liquidity_sweep
+    detect_liquidity_sweep,
     detect_market_structure
 )
 
