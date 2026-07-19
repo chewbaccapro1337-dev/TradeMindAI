@@ -437,7 +437,7 @@ def main():
 if __name__ == "__main__":
     main()
 
-async def market_analysis(update, context):
+async def analyze_market(update, context):
 
     data = analyze_market()
 
