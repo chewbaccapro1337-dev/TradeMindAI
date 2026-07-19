@@ -136,6 +136,8 @@ def label_structure(swings):
 
     labeled = []
 
+    trend = None
+
     last_high = None
     last_low = None
 
@@ -153,31 +155,48 @@ def label_structure(swings):
             else:
 
                 if swing["price"] > last_high:
+
                     item["label"] = "HH"
 
+                    trend = "UP"
+
                 else:
+
                     item["label"] = "LH"
+
+                    if trend == "UP":
+                        trend = "DOWN"
 
 
             last_high = swing["price"]
 
 
+
         elif swing["kind"] == "LOW":
 
             if last_low is None:
+
                 item["label"] = "LOW"
+
 
             else:
 
                 if swing["price"] > last_low:
+
                     item["label"] = "HL"
 
                 else:
+
                     item["label"] = "LL"
+
+                    if trend == "DOWN":
+                        trend = "DOWN"
 
 
             last_low = swing["price"]
 
+
+        item["trend"] = trend
 
         labeled.append(item)
 
