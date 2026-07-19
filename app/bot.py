@@ -67,6 +67,7 @@ from liquidity_report import make_report
 from subscription import has_subscription
 from database import add_subscription
 from admin import users, grant, revoke
+from analysis import analyze_market
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / ".env")
@@ -367,8 +368,8 @@ def main():
 
     app.add_handler(
     MessageHandler(
-        filters.Regex("^🧠 Карта ликвидности$"),
-        show_liquidity
+        filters.Regex("^AI Анализ BTC$"),
+        market_analysis
     )
 )
 
@@ -434,3 +435,40 @@ def main():
 )
 if __name__ == "__main__":
     main()
+
+async def market_analysis(update, context):
+
+    data = analyze_market()
+
+
+    text = f"""
+📊 BTC ANALYSIS
+
+Тренд:
+{data['trend']}
+
+
+Цена:
+{data['price']}
+
+
+Структура:
+{data['bos_choch']}
+
+
+Ликвидность:
+{data['sweep']}
+
+
+Зона интереса:
+{data['entry_zone']}
+
+
+Сигнал:
+{data['signal']}
+"""
+
+
+    await update.message.reply_text(
+        text
+    )

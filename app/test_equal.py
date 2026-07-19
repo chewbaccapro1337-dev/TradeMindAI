@@ -9,7 +9,8 @@ from liquidity import (
     detect_liquidity_sweep,
     detect_market_structure,
     detect_sweep_structure_break,
-    find_entry_zone
+    find_entry_zone,
+    generate_market_explanation
 )
 from strategy import generate_signal
 
@@ -182,6 +183,16 @@ signal = generate_signal(
     entry_zone
 )
 
-
 print("\nSIGNAL")
 print(signal)
+
+print("\nAI ANALYSIS")
+
+explanation = generate_market_explanation(
+    market_structure,
+    sweep,
+    sweep_structure,
+    entry_zone
+)
+
+print(explanation)

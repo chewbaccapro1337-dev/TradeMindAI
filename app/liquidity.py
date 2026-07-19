@@ -762,3 +762,95 @@ def find_entry_zone(
     # берём последний актуальный FVG
 
     return zones[-1]
+
+    def generate_market_explanation(
+    market_structure,
+    sweep,
+    sweep_structure,
+    entry_zone
+):
+
+    explanation = []
+
+
+    # тренд
+    if market_structure["trend"] == "DOWN":
+        explanation.append(
+            "Рынок находится в медвежьей структуре."
+        )
+
+    elif market_structure["trend"] == "UP":
+        explanation.append(
+            "Рынок находится в бычьей структуре."
+        )
+
+
+    # ликвидность
+
+    if sweep:
+
+        if sweep["type"] == "HIGH_SWEEP":
+
+            explanation.append(
+                f"Цена сняла верхнюю ликвидность возле {sweep['level']}."
+            )
+
+
+        elif sweep["type"] == "LOW_SWEEP":
+
+            explanation.append(
+                f"Цена сняла нижнюю ликвидность возле {sweep['level']}."
+            )
+
+
+    # структура
+
+    if sweep_structure:
+
+        if sweep_structure["event"] == "CHoCH":
+
+            if sweep_structure["direction"] == "BEARISH":
+
+                explanation.append(
+                    f"После снятия ликвидности произошел слом структуры вниз. "
+                    f"Ключевой уровень {sweep_structure['level']}."
+                )
+
+
+            elif sweep_structure["direction"] == "BULLISH":
+
+                explanation.append(
+                    f"После снятия ликвидности произошел слом структуры вверх. "
+                    f"Ключевой уровень {sweep_structure['level']}."
+                )
+
+
+        elif sweep_structure["event"] == "BOS":
+
+            explanation.append(
+                f"Произошел пробой структуры. "
+                f"Уровень {sweep_structure['level']}."
+            )
+
+
+    # зона
+
+    if entry_zone:
+
+        if entry_zone["type"] == "BEARISH":
+
+            explanation.append(
+                f"Внимание к зоне продавцов FVG "
+                f"{entry_zone['low']} - {entry_zone['high']}."
+            )
+
+
+        elif entry_zone["type"] == "BULLISH":
+
+            explanation.append(
+                f"Внимание к зоне покупателей FVG "
+                f"{entry_zone['low']} - {entry_zone['high']}."
+            )
+
+
+    return "\n".join(explanation)

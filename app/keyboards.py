@@ -10,7 +10,7 @@ start_keyboard = ReplyKeyboardMarkup(
 
 main_keyboard = ReplyKeyboardMarkup(
     [
-        ["🧠 Карта ликвидности"],
+        ["🧠 AI Анализ BTC"],
         ["📝 Записать сделку"],
         ["📒 Последние сделки", "📈 Статистика"],
         ["🔒 Закрыть сделку"],

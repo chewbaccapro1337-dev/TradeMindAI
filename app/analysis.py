@@ -3,6 +3,19 @@ from telegram.ext import ContextTypes, ConversationHandler
 from keyboards import back_keyboard, main_keyboard
 import os
 from ai import analyze_trade
+from liquidity import (
+    get_candles,
+    find_swings,
+    find_equal_levels,
+    detect_bos_choch,
+    build_structure,
+    label_structure,
+    find_fvg,
+    detect_liquidity_sweep,
+    detect_market_structure,
+    find_entry_zone,
+    detect_signal
+)
 
 ANALYZE = 20
 
@@ -47,3 +60,79 @@ async def analyze_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
     return ConversationHandler.END
+
+def analyze_market():
+
+    candles = get_candles()
+
+    highs, lows = find_swings(candles)
+
+    structure = build_structure(
+        highs,
+        lows
+    )
+
+    labeled = label_structure(
+        structure
+    )
+
+
+    market_structure = detect_market_structure(
+        highs,
+        lows
+    )
+
+
+    current_price = candles[-1]["close"]
+
+
+    bos_choch = detect_bos_choch(
+        labeled,
+        current_price,
+        market_structure["trend"]
+    )
+
+
+    fvgs = find_fvg(
+        candles
+    )
+
+
+    equal_highs = find_equal_levels(
+        highs
+    )
+
+    equal_lows = find_equal_levels(
+        lows
+    )
+
+
+    sweep = detect_liquidity_sweep(
+        candles,
+        equal_lows,
+        equal_highs
+    )
+
+
+    entry_zone = find_entry_zone(
+        sweep,
+        bos_choch,
+        fvgs
+    )
+
+
+    signal = detect_signal(
+        market_structure,
+        bos_choch,
+        entry_zone
+    )
+
+
+    return {
+        "trend": market_structure["trend"],
+        "price": current_price,
+        "bos_choch": bos_choch,
+        "sweep": sweep,
+        "entry_zone": entry_zone,
+        "signal": signal
+    }
