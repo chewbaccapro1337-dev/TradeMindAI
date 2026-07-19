@@ -14,7 +14,6 @@ from liquidity import (
     detect_liquidity_sweep,
     detect_market_structure,
     find_entry_zone,
-    detect_signal
 )
 
 ANALYZE = 20
@@ -121,11 +120,14 @@ def analyze_market():
     )
 
 
-    signal = detect_signal(
-        market_structure,
-        bos_choch,
-        entry_zone
-    )
+    signal = None
+
+    if entry_zone:
+    if entry_zone["type"] == "BEARISH":
+        signal = "SHORT BIAS"
+
+    elif entry_zone["type"] == "BULLISH":
+        signal = "LONG BIAS"
 
 
     return {
