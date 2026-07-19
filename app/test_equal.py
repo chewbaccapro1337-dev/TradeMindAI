@@ -9,7 +9,8 @@ from liquidity import (
     detect_choch,
     find_fvg,
     filter_fvg_by_trend,
-    get_best_fvg
+    get_best_fvg,
+    detect_liquidity_sweep
 )
 
 candles = get_candles()
@@ -134,6 +135,16 @@ print()
 
 eqh = find_equal_levels(highs)
 eql = find_equal_levels(lows)
+
+sweep = detect_liquidity_sweep(
+    candles,
+    equal_lows,
+    equal_highs
+)
+
+
+print("\nLIQUIDITY SWEEP:")
+print(sweep)
 
 print("EQUAL HIGHS")
 print(eqh)

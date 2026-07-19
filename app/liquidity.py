@@ -437,3 +437,60 @@ def detect_market_structure(highs, lows):
         "prev_high": prev_high,
         "prev_low": prev_low
     }
+
+def detect_liquidity_sweep(
+    candles,
+    equal_lows,
+    equal_highs
+):
+
+    current_price = candles[-1]["close"]
+
+    sweep = None
+
+
+    # поиск снятия равных минимумов
+
+    for low in equal_lows:
+
+        level = low["price"]
+
+        if current_price > level:
+
+            recent_low = min(
+                c["low"] for c in candles[-10:]
+            )
+
+
+            if recent_low < level:
+
+                sweep = {
+                    "type": "LOW_SWEEP",
+                    "level": level,
+                    "price": recent_low
+                }
+
+
+    # поиск снятия равных максимумов
+
+    for high in equal_highs:
+
+        level = high["price"]
+
+        if current_price < level:
+
+            recent_high = max(
+                c["high"] for c in candles[-10:]
+            )
+
+
+            if recent_high > level:
+
+                sweep = {
+                    "type": "HIGH_SWEEP",
+                    "level": level,
+                    "price": recent_high
+                }
+
+
+    return sweep
