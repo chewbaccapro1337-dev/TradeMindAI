@@ -8,6 +8,7 @@ from liquidity import (
     find_fvg,
     detect_liquidity_sweep,
     detect_market_structure
+    detect_sweep_structure_break
 )
 
 
@@ -143,6 +144,15 @@ sweep = detect_liquidity_sweep(
 print("\nLIQUIDITY SWEEP")
 print(sweep)
 
+sweep_structure = detect_sweep_structure_break(
+    sweep,
+    labeled,
+    current_price
+)
+
+
+print("\nSWEEP STRUCTURE")
+print(sweep_structure)
 
 print("\nLAST HL/LH")
 
