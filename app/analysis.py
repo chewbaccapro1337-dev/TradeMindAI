@@ -122,13 +122,13 @@ def analyze_market():
 
     signal = None
 
- if entry_zone:
-     entry_text = (
-          f"Зона интереса: "
-          f"{entry_zone['low']} - {entry_zone['high']}"
+if entry_zone:
+    entry_text = (
+        f"Зона интереса: "
+        f"{entry_zone['low']} - {entry_zone['high']}"
     )
- else:
-     entry_text = "Подходящая зона интереса не найдена"
+else:
+    entry_text = "Подходящая зона интереса не найдена"
 
 
     return {
