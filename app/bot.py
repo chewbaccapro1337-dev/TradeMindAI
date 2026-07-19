@@ -39,6 +39,7 @@ from analysis import (
     ask_photo,
     analyze_photo,
     ANALYZE,
+    show_liquidity
 )
 from pathlib import Path
 from dotenv import load_dotenv
