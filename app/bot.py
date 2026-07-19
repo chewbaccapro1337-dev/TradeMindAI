@@ -129,6 +129,8 @@ async def risk(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def show_liquidity(update, context):
 
+    print("КНОПКА AI АНАЛИЗ НАЖАТА")
+
     await update.message.reply_text(
         "⏳ Анализирую рынок..."
     )
