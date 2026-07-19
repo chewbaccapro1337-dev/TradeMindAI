@@ -30,45 +30,61 @@ def get_candles(symbol="BTCUSDT", interval="15m", limit=100):
 
     return candles
 
-def find_swings(candles):
+def find_swings(candles, left=2, right=2):
 
     swing_highs = []
     swing_lows = []
 
-    for i in range(2, len(candles) - 2):
+    for i in range(left, len(candles) - right):
 
         high = candles[i]["high"]
-
-        if (
-            high > candles[i-1]["high"]
-            and high > candles[i-2]["high"]
-            and high > candles[i+1]["high"]
-            and high > candles[i+2]["high"]
-        ):
-            swing_highs.append(high)
-
         low = candles[i]["low"]
 
-        if (
-            low < candles[i-1]["low"]
-            and low < candles[i-2]["low"]
-            and low < candles[i+1]["low"]
-            and low < candles[i+2]["low"]
-        ):
-            swing_lows.append(low)
+        is_high = True
+        is_low = True
+
+        # Проверяем соседние свечи слева
+        for j in range(1, left + 1):
+
+            if candles[i - j]["high"] >= high:
+                is_high = False
+
+            if candles[i - j]["low"] <= low:
+                is_low = False
+
+        # Проверяем соседние свечи справа
+        for j in range(1, right + 1):
+
+            if candles[i + j]["high"] > high:
+                is_high = False
+
+            if candles[i + j]["low"] < low:
+                is_low = False
+
+        if is_high:
+            swing_highs.append({
+                "index": i,
+                "price": high
+            })
+
+        if is_low:
+            swing_lows.append({
+                "index": i,
+                "price": low
+            })
 
     return swing_highs, swing_lows
 
 def find_equal_levels(levels, tolerance=5):
 
-    levels = sorted(levels)
+    levels = sorted(levels, key=lambda x: x["price"])
 
     groups = []
     current = [levels[0]]
 
     for level in levels[1:]:
 
-        if abs(level - current[-1]) <= tolerance:
+        if abs(level["price"] - current[-1]["price"]) <= tolerance:
             current.append(level)
 
         else:
@@ -85,7 +101,7 @@ def find_equal_levels(levels, tolerance=5):
     for group in groups:
 
         result.append({
-            "price": sum(group) / len(group),
+            "price": sum(x["price"] for x in group) / len(group),
             "strength": len(group)
         })
 
