@@ -13,28 +13,47 @@ from liquidity import (
 
 candles = get_candles()
 
-# получаем swing точки
+## получаем swing точки
 highs, lows = find_swings(candles)
 
-# строим общую структуру
+
+# строим структуру
 structure = build_structure(
     highs,
     lows
 )
 
+
+# ставим HH HL LH LL
 labeled = label_structure(
     structure
 )
 
+
+# определяем тренд
+market_structure = analyze_market_structure(
+    labeled
+)
+
+
+# CHoCH
 choch = detect_choch(
     labeled
 )
 
-fvgs = find_fvg(candles)
 
+# FVG
+fvgs = find_fvg(
+    candles
+)
+
+print("MARKET:")
+print(market_structure)
+
+# фильтр по тренду
 filtered_fvg = filter_fvg_by_trend(
     fvgs,
-    label_structure
+    market_structure
 )
 
 
