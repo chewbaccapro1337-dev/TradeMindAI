@@ -34,7 +34,7 @@ fvgs = find_fvg(candles)
 
 filtered_fvg = filter_fvg_by_trend(
     fvgs,
-    market_structure
+    label_structure
 )
 
 
