@@ -92,12 +92,12 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await update.message.reply_text(
         "🚀 Добро пожаловать в TradeMind AI!\n\n"
-        "🎁 Всем новым пользователям предоставлен тестовый период 1 день\n\n"
+        "🎁 Новым пользователям предоставлен тестовый период 1 день\n\n"
         "Доступные функции:\n"
         "📊 Журнал сделок\n"
         "📰 Экономический календарь\n"
         "🤖 AI анализ новостей\n"
-        "💧 Карта ликвидности\n",
+        "🧠 AI Анализ BTC\n",
         reply_markup=start_keyboard
     )
 
