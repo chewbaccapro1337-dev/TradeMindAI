@@ -91,6 +91,24 @@ def find_equal_levels(levels, tolerance=5):
 
     return result
 
+def detect_bos(highs, lows, current_price):
+
+    bos = None
+
+    if highs:
+        last_high = highs[-1]["price"]
+
+        if current_price > last_high:
+            bos = "BOS_UP"
+
+    if lows:
+        last_low = lows[-1]["price"]
+
+        if current_price < last_low:
+            bos = "BOS_DOWN"
+
+    return bos
+
 def find_liquidity_zones(candles, distance=50):
 
     prices = []

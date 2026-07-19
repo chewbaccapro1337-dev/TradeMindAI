@@ -1,20 +1,20 @@
 from liquidity import (
     get_candles,
     find_swings,
-    find_equal_levels
+    detect_bos
 )
 
 candles = get_candles()
 
 highs, lows = find_swings(candles)
 
-eqh = find_equal_levels(highs)
-eql = find_equal_levels(lows)
+price = candles[-1]["close"]
 
-print("EQUAL HIGHS")
-print(eqh)
+bos = detect_bos(
+    highs,
+    lows,
+    price
+)
 
-print()
-
-print("EQUAL LOWS")
-print(eql)
+print(price)
+print(bos)
