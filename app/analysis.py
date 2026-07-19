@@ -123,8 +123,8 @@ def analyze_market():
     signal = None
 
     if entry_zone:
-    if entry_zone["type"] == "BEARISH":
-        signal = "SHORT BIAS"
+        if entry_zone["type"] == "BEARISH":
+            signal = "SHORT BIAS"
 
     elif entry_zone["type"] == "BULLISH":
         signal = "LONG BIAS"
