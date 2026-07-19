@@ -371,7 +371,7 @@ def main():
 
     app.add_handler(
     MessageHandler(
-        filters.Regex("^AI Анализ BTC$"),
+        filters.Regex("🧠 AI Анализ BTC"),
         show_liquidity
     )
 )
