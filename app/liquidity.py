@@ -370,96 +370,84 @@ def detect_bos_choch(labeled, current_price, trend):
     }
 
 
-    # последние структурные уровни
-
-    last_hh = None
-    last_hl = None
-    last_lh = None
-    last_ll = None
+    last = labeled[-1]
 
 
-    for x in labeled:
+    # =========================
+    # новый LL после UP
+    # =========================
 
-        if x["label"] == "HH":
-            last_hh = x
+    if last["label"] == "LL":
 
-        elif x["label"] == "HL":
-            last_hl = x
+        previous_trend = None
 
-        elif x["label"] == "LH":
-            last_lh = x
+        for x in reversed(labeled[:-1]):
 
-        elif x["label"] == "LL":
-            last_ll = x
+            if x["trend"] is not None:
+                previous_trend = x["trend"]
+                break
 
 
+        if previous_trend == "UP":
 
-    # ==========================
-    # UP STRUCTURE
-    # ==========================
+            return {
+                "event": "CHoCH",
+                "direction": "BEARISH",
+                "level": last["price"]
+            }
+
+
+
+    # =========================
+    # новый HH после DOWN
+    # =========================
+
+    if last["label"] == "HH":
+
+        previous_trend = None
+
+        for x in reversed(labeled[:-1]):
+
+            if x["trend"] is not None:
+                previous_trend = x["trend"]
+                break
+
+
+        if previous_trend == "DOWN":
+
+            return {
+                "event": "CHoCH",
+                "direction": "BULLISH",
+                "level": last["price"]
+            }
+
+
+
+    # =========================
+    # BOS продолжение
+    # =========================
 
     if trend == "UP":
 
+        if last["label"] == "HH":
 
-        # пробили предыдущий максимум
-        if last_hh:
-
-            if current_price > last_hh["price"]:
-
-                return {
-                    "event": "BOS",
-                    "direction": "BULLISH",
-                    "level": last_hh["price"]
-                }
+            return {
+                "event": "BOS",
+                "direction": "BULLISH",
+                "level": last["price"]
+            }
 
 
-
-        # сломали защищенный минимум
-
-        if last_hl:
-
-            if current_price < last_hl["price"]:
-
-                return {
-                    "event": "CHoCH",
-                    "direction": "BEARISH",
-                    "level": last_hl["price"]
-                }
-
-
-
-    # ==========================
-    # DOWN STRUCTURE
-    # ==========================
 
     if trend == "DOWN":
 
+        if last["label"] == "LL":
 
-        # пробили минимум
-
-        if last_ll:
-
-            if current_price < last_ll["price"]:
-
-                return {
-                    "event": "BOS",
-                    "direction": "BEARISH",
-                    "level": last_ll["price"]
-                }
-
-
-
-        # сломали LH вверх
-
-        if last_lh:
-
-            if current_price > last_lh["price"]:
-
-                return {
-                    "event": "CHoCH",
-                    "direction": "BULLISH",
-                    "level": last_lh["price"]
-                }
+            return {
+                "event": "BOS",
+                "direction": "BEARISH",
+                "level": last["price"]
+            }
 
 
 
