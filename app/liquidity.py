@@ -93,9 +93,44 @@ def build_structure(highs, lows):
             "kind": "LOW"
         })
 
-    swings.sort(key=lambda x: x["index"])
 
-    return swings
+    swings.sort(
+        key=lambda x: x["index"]
+    )
+
+
+    clean = []
+
+    for swing in swings:
+
+        if len(clean) == 0:
+            clean.append(swing)
+            continue
+
+
+        last = clean[-1]
+
+
+        # если два одинаковых типа подряд
+        if last["kind"] == swing["kind"]:
+
+            # оставляем более сильный экстремум
+            if swing["kind"] == "HIGH":
+
+                if swing["price"] > last["price"]:
+                    clean[-1] = swing
+
+            else:
+
+                if swing["price"] < last["price"]:
+                    clean[-1] = swing
+
+        else:
+
+            clean.append(swing)
+
+
+    return clean
 
 def find_equal_levels(levels, tolerance=5):
 
