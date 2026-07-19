@@ -39,7 +39,8 @@ from analysis import (
     ask_photo,
     analyze_photo,
     ANALYZE,
-    analyze_market
+    analyze_market,
+    make_report
 )
 from pathlib import Path
 from dotenv import load_dotenv
@@ -135,7 +136,7 @@ async def show_liquidity(update, context):
         "⏳ Анализирую рынок..."
     )
 
-    report = analyze_market()
+    report =  report = make_report()
 
     await update.message.reply_text(report)
 

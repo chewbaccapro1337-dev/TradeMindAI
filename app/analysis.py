@@ -139,3 +139,87 @@ def analyze_market():
         "entry_zone": entry_zone,
         "signal": signal
     }
+
+def make_report():
+
+    data = analyze_market()
+
+    report = []
+
+    # тренд
+    report.append("📊 BTC MARKET ANALYSIS\n")
+
+    if data["trend"] == "DOWN":
+        report.append("Тренд: 🔴 DOWN")
+    elif data["trend"] == "UP":
+        report.append("Тренд: 🟢 UP")
+    else:
+        report.append("Тренд: ⚪ RANGE")
+
+
+    # цена
+    report.append(
+        f"Цена: {data['price']}"
+    )
+
+
+    # структура
+
+    bos = data["bos_choch"]
+
+    if bos["event"]:
+        report.append(
+            f"Структура: {bos['event']} {bos['direction']}"
+        )
+    else:
+        report.append(
+            "Структура: ⏳ подтверждения нет"
+        )
+
+
+    # ликвидность
+
+    sweep = data["sweep"]
+
+    if sweep:
+
+        report.append(
+            f"""
+Ликвидность:
+⚡ {sweep['type']}
+Уровень: {sweep['level']}
+Экстремум: {sweep['price']}
+"""
+        )
+
+    else:
+
+        report.append(
+            "Ликвидность: не обнаружена"
+        )
+
+
+    # зона
+
+    if data["entry_zone"]:
+
+        zone = data["entry_zone"]
+
+        report.append(
+            f"""
+Зона интереса:
+{zone['low']} - {zone['high']}
+"""
+        )
+
+    else:
+
+        report.append(
+            """
+Зона интереса:
+❌ не найдена
+"""
+        )
+
+
+    return "\n".join(report)
