@@ -2,7 +2,7 @@ from liquidity import (
     get_candles,
     find_swings,
     find_equal_levels,
-    detect_bos,
+    detect_structure_break,
     detect_market_structure,
     build_structure,
     label_structure,
@@ -166,15 +166,10 @@ print()
 
 price = candles[-1]["close"]
 
-bos = detect_bos(
-    highs,
-    lows,
-    price
+structure_break = detect_structure_break(
+    labeled
 )
 
-print("CURRENT PRICE:", price)
-if bos:
-    print(bos["type"])
-    print(bos["level"])
-else:
-    print("NO BOS")
+
+print("\nSTRUCTURE BREAK:")
+print(structure_break)

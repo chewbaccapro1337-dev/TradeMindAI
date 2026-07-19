@@ -346,31 +346,82 @@ def find_equal_levels(levels, tolerance=5):
 
     return result
 
-def detect_bos(highs, lows, current_price):
+def detect_structure_break(labeled):
 
-    bos = None
+    highs = [
+        x for x in labeled
+        if x["kind"] == "HIGH"
+    ]
 
-    for swing in reversed(highs):
+    lows = [
+        x for x in labeled
+        if x["kind"] == "LOW"
+    ]
 
-        if current_price > swing["price"]:
-            bos = {
-                "type": "BOS_UP",
-                "level": swing["price"]
-            }
-            break
 
-    if bos is None:
+    if len(highs) < 2 or len(lows) < 2:
+        return None
 
-        for swing in reversed(lows):
 
-            if current_price < swing["price"]:
-                bos = {
-                    "type": "BOS_DOWN",
-                    "level": swing["price"]
-                }
-                break
+    last_high = highs[-1]
+    prev_high = highs[-2]
 
-    return bos
+    last_low = lows[-1]
+    prev_low = lows[-2]
+
+
+    result = {
+        "bos": None,
+        "choch": None,
+        "level": None
+    }
+
+
+    # Восходящая структура
+    if last_high["price"] > prev_high["price"]:
+
+        protected_low = last_low["price"]
+
+        current_price = (
+            last_high["price"]
+        )
+
+
+        if current_price < protected_low:
+
+            result["choch"] = "BEARISH"
+            result["level"] = protected_low
+
+
+        else:
+
+            result["bos"] = "BULLISH"
+            result["level"] = prev_high["price"]
+
+
+
+    # Нисходящая структура
+    elif last_low["price"] < prev_low["price"]:
+
+        protected_high = last_high["price"]
+
+
+        current_price = last_low["price"]
+
+
+        if current_price > protected_high:
+
+            result["choch"] = "BULLISH"
+            result["level"] = protected_high
+
+
+        else:
+
+            result["bos"] = "BEARISH"
+            result["level"] = prev_low["price"]
+
+
+    return result
 
 def find_liquidity_zones(candles, distance=50):
 
