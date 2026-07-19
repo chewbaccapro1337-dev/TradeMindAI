@@ -246,7 +246,7 @@ def main():
     entry_points=[
         MessageHandler(filters.Regex("^📝 Записать сделку$"), ask_symbol),
         MessageHandler(filters.Regex("^🔒 Закрыть$"), start_close_trade),
-        MessageHandler(filters.Regex("^📷 Анализ сделки$"), ask_photo),
+        MessageHandler(filters.Regex("^📷 AI Анализ$"), ask_photo),
         MessageHandler(filters.Regex("^💎 Подписка$"), subscription)
     ],
     states={
