@@ -272,6 +272,24 @@ def find_fvg(candles, min_size=20):
 
     return fvgs
 
+def filter_fvg_by_trend(fvgs, structure):
+
+    trend = structure["trend"]
+
+    result = []
+
+    for fvg in fvgs:
+
+        if trend == "UP" and fvg["type"] == "BULLISH":
+            result.append(fvg)
+
+
+        elif trend == "DOWN" and fvg["type"] == "BEARISH":
+            result.append(fvg)
+
+
+    return result
+
 def find_equal_levels(levels, tolerance=5):
 
     levels = sorted(levels, key=lambda x: x["price"])

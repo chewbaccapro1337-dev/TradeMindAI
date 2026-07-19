@@ -7,7 +7,8 @@ from liquidity import (
     build_structure,
     label_structure,
     detect_choch,
-    find_fvg
+    find_fvg,
+    filter_fvg_by_trend
 )
 
 candles = get_candles()
@@ -31,6 +32,16 @@ choch = detect_choch(
 
 fvgs = find_fvg(candles)
 
+filtered_fvg = filter_fvg_by_trend(
+    fvgs,
+    market_structure
+)
+
+
+print("\nTREND FVG:")
+
+for fvg in filtered_fvg:
+    print(fvg)
 
 print("\nFVG:")
 
