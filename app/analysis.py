@@ -122,12 +122,13 @@ def analyze_market():
 
     signal = None
 
-    if entry_zone:
-        if entry_zone["type"] == "BEARISH":
-            signal = "SHORT BIAS"
-
-    elif entry_zone["type"] == "BULLISH":
-        signal = "LONG BIAS"
+ if entry_zone:
+     entry_text = (
+          f"Зона интереса: "
+          f"{entry_zone['low']} - {entry_zone['high']}"
+    )
+ else:
+     entry_text = "Подходящая зона интереса не найдена"
 
 
     return {
