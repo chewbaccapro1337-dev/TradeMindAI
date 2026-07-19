@@ -1,4 +1,4 @@
-from app.liquidity import (
+from liquidity import (
     get_candles,
     find_swings,
     find_equal_levels
