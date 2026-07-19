@@ -348,27 +348,6 @@ def find_equal_levels(levels, tolerance=5):
 
 def detect_bos_choch(labeled, current_price):
 
-    last_hl = None
-    last_lh = None
-    last_hh = None
-    last_ll = None
-
-
-    for x in labeled:
-
-        if x["label"] == "HL":
-            last_hl = x
-
-        elif x["label"] == "LH":
-            last_lh = x
-
-        elif x["label"] == "HH":
-            last_hh = x
-
-        elif x["label"] == "LL":
-            last_ll = x
-
-
     result = {
         "bos": None,
         "choch": None,
@@ -376,47 +355,108 @@ def detect_bos_choch(labeled, current_price):
     }
 
 
-    # ======================
-    # BULLISH STRUCTURE
-    # ======================
+    highs = [
+        x for x in labeled
+        if x["kind"] == "HIGH"
+    ]
 
-    if last_hh:
+    lows = [
+        x for x in labeled
+        if x["kind"] == "LOW"
+    ]
+
+
+    if len(highs) < 2 or len(lows) < 2:
+        return result
+
+
+
+    # ==========================
+    # BULLISH STRUCTURE
+    # ==========================
+
+
+    hh = [
+        x for x in highs
+        if x["label"] == "HH"
+    ]
+
+    hl = [
+        x for x in lows
+        if x["label"] == "HL"
+    ]
+
+
+    if hh and hl:
+
+        last_hh = hh[-1]
+        last_hl = hl[-1]
+
+
+        # пробой последнего HH
 
         if current_price > last_hh["price"]:
 
-            result["bos"] = "BULLISH"
-            result["level"] = last_hh["price"]
+            return {
+                "bos": "BULLISH",
+                "choch": None,
+                "level": last_hh["price"]
+            }
 
 
-    # пробой защищенного HL
-    if last_hl:
+
+        # слом HL
 
         if current_price < last_hl["price"]:
 
-            result["choch"] = "BEARISH"
-            result["level"] = last_hl["price"]
+            return {
+                "bos": None,
+                "choch": "BEARISH",
+                "level": last_hl["price"]
+            }
 
 
 
-    # ======================
+    # ==========================
     # BEARISH STRUCTURE
-    # ======================
+    # ==========================
 
-    if last_ll:
+
+    ll = [
+        x for x in lows
+        if x["label"] == "LL"
+    ]
+
+
+    lh = [
+        x for x in highs
+        if x["label"] == "LH"
+    ]
+
+
+    if ll and lh:
+
+        last_ll = ll[-1]
+        last_lh = lh[-1]
+
 
         if current_price < last_ll["price"]:
 
-            result["bos"] = "BEARISH"
-            result["level"] = last_ll["price"]
+            return {
+                "bos": "BEARISH",
+                "choch": None,
+                "level": last_ll["price"]
+            }
 
 
-    # пробой LH
-    if last_lh:
 
         if current_price > last_lh["price"]:
 
-            result["choch"] = "BULLISH"
-            result["level"] = last_lh["price"]
+            return {
+                "bos": None,
+                "choch": "BULLISH",
+                "level": last_lh["price"]
+            }
 
 
     return result

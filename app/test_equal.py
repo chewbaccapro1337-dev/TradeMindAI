@@ -181,10 +181,9 @@ price = candles[-1]["close"]
 
 current_price = candles[-1]["close"]
 
-structure_break = detect_bos_choch(
+current_price = candles[-1]["close"]
+
+bos_choch = detect_bos_choch(
     labeled,
     current_price
 )
-
-print("\nBOS CHOCH:")
-print(structure_break)
