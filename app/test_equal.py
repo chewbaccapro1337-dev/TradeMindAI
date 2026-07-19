@@ -132,10 +132,17 @@ print("SWING LOWS:")
 print(lows[:3])
 
 print()
-equal_lows = find_equal_lows(lows)
 
-eqh = find_equal_levels(highs)
-eql = find_equal_levels(lows)
+equal_highs = find_equal_levels(highs)
+equal_lows = find_equal_levels(lows)
+
+print("\nEQUAL HIGHS")
+for x in equal_highs:
+    print(x)
+
+print("\nEQUAL LOWS")
+for x in equal_lows:
+    print(x)
 
 sweep = detect_liquidity_sweep(
     candles,
