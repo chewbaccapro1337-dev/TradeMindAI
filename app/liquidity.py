@@ -716,7 +716,7 @@ def detect_sweep_structure_break(
 
     return result
 
-    def find_entry_zone(
+def find_entry_zone(
     sweep,
     sweep_structure,
     fvgs
