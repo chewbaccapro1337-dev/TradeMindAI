@@ -226,6 +226,40 @@ def detect_choch(labeled):
 
     return None
 
+def find_fvg(candles):
+
+    fvgs = []
+
+    for i in range(2, len(candles)):
+
+        candle1 = candles[i-2]
+        candle2 = candles[i-1]
+        candle3 = candles[i]
+
+        # Bullish FVG
+        if candle1["high"] < candle3["low"]:
+
+            fvgs.append({
+                "type": "BULLISH",
+                "low": candle1["high"],
+                "high": candle3["low"],
+                "index": i
+            })
+
+
+        # Bearish FVG
+        if candle1["low"] > candle3["high"]:
+
+            fvgs.append({
+                "type": "BEARISH",
+                "low": candle3["high"],
+                "high": candle1["low"],
+                "index": i
+            })
+
+
+    return fvgs
+
 def find_equal_levels(levels, tolerance=5):
 
     levels = sorted(levels, key=lambda x: x["price"])

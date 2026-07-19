@@ -6,7 +6,8 @@ from liquidity import (
     detect_market_structure,
     build_structure,
     label_structure,
-    detect_choch
+    detect_choch,
+    find_fvg
 )
 
 candles = get_candles()
@@ -27,6 +28,14 @@ labeled = label_structure(
 choch = detect_choch(
     labeled
 )
+
+fvgs = find_fvg(candles)
+
+
+print("\nFVG:")
+
+for fvg in fvgs:
+    print(fvg)
 
 
 print()
