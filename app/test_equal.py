@@ -10,7 +10,8 @@ from liquidity import (
     find_fvg,
     filter_fvg_by_trend,
     get_best_fvg,
-    detect_liquidity_sweep
+    detect_liquidity_sweep,
+    detect_sweep_structure_break
 )
 
 candles = get_candles()
@@ -150,6 +151,18 @@ sweep = detect_liquidity_sweep(
     equal_highs
 )
 
+current_price = candles[-1]["close"]
+
+
+sweep_structure = detect_sweep_structure_break(
+    sweep,
+    labeled,
+    current_price
+)
+
+
+print("\nSWEEP STRUCTURE:")
+print(sweep_structure)
 
 print("\nLIQUIDITY SWEEP:")
 print(sweep)

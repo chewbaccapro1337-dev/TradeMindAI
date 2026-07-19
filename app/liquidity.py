@@ -543,3 +543,104 @@ def detect_liquidity_sweep(
 
 
     return sweep
+
+def detect_sweep_structure_break(
+    sweep,
+    labeled,
+    current_price
+):
+
+    if sweep is None:
+        return None
+
+
+    last_hl = None
+    last_lh = None
+
+
+    # ищем последние защищенные уровни
+    for x in labeled:
+
+        if x["label"] == "HL":
+            last_hl = x
+
+        elif x["label"] == "LH":
+            last_lh = x
+
+
+
+    result = {
+        "event": None,
+        "direction": None,
+        "level": None
+    }
+
+
+    # =========================
+    # HIGH SWEEP
+    # =========================
+
+    if sweep["type"] == "HIGH_SWEEP":
+
+
+        # после снятия хай ликвидности
+        # ждем пробой HL вниз
+
+        if last_hl:
+
+            if current_price < last_hl["price"]:
+
+                result["event"] = "CHoCH"
+                result["direction"] = "BEARISH"
+                result["level"] = last_hl["price"]
+
+                return result
+
+
+
+        # если цена вернулась вверх и обновила хай
+
+        if current_price > sweep["price"]:
+
+            result["event"] = "BOS"
+            result["direction"] = "BULLISH"
+            result["level"] = sweep["price"]
+
+            return result
+
+
+
+    # =========================
+    # LOW SWEEP
+    # =========================
+
+    if sweep["type"] == "LOW_SWEEP":
+
+
+        # пробой LH вверх
+
+        if last_lh:
+
+            if current_price > last_lh["price"]:
+
+                result["event"] = "CHoCH"
+                result["direction"] = "BULLISH"
+                result["level"] = last_lh["price"]
+
+                return result
+
+
+
+        # обновление минимума
+
+        if current_price < sweep["price"]:
+
+            result["event"] = "BOS"
+            result["direction"] = "BEARISH"
+            result["level"] = sweep["price"]
+
+            return result
+
+
+
+    return result
