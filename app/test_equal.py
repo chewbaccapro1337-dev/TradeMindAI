@@ -8,7 +8,8 @@ from liquidity import (
     label_structure,
     detect_choch,
     find_fvg,
-    filter_fvg_by_trend
+    filter_fvg_by_trend,
+    get_best_fvg
 )
 
 candles = get_candles()
@@ -56,6 +57,18 @@ filtered_fvg = filter_fvg_by_trend(
     fvgs,
     market_structure
 )
+
+current_price = candles[-1]["close"]
+
+
+best_fvg = get_best_fvg(
+    filtered_fvg,
+    current_price
+)
+
+
+print("\nBEST FVG:")
+print(best_fvg)
 
 
 print("\nTREND FVG:")

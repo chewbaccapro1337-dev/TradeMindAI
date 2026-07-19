@@ -290,6 +290,30 @@ def filter_fvg_by_trend(fvgs, structure):
 
     return result
 
+def get_best_fvg(fvgs, current_price):
+
+    valid = []
+
+    for fvg in fvgs:
+
+        # только зоны ниже цены при восходящем тренде
+        if fvg["high"] < current_price:
+            valid.append(fvg)
+
+
+    if not valid:
+        return None
+
+
+    # выбираем ближайшую к цене
+    best = max(
+        valid,
+        key=lambda x: x["high"]
+    )
+
+
+    return best
+
 def find_equal_levels(levels, tolerance=5):
 
     levels = sorted(levels, key=lambda x: x["price"])
