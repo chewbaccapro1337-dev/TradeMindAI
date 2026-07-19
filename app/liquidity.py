@@ -30,6 +30,35 @@ def get_candles(symbol="BTCUSDT", interval="15m", limit=100):
 
     return candles
 
+def find_swings(candles):
+
+    swing_highs = []
+    swing_lows = []
+
+    for i in range(2, len(candles) - 2):
+
+        high = candles[i]["high"]
+
+        if (
+            high > candles[i-1]["high"]
+            and high > candles[i-2]["high"]
+            and high > candles[i+1]["high"]
+            and high > candles[i+2]["high"]
+        ):
+            swing_highs.append(high)
+
+        low = candles[i]["low"]
+
+        if (
+            low < candles[i-1]["low"]
+            and low < candles[i-2]["low"]
+            and low < candles[i+1]["low"]
+            and low < candles[i+2]["low"]
+        ):
+            swing_lows.append(low)
+
+    return swing_highs, swing_lows
+
 def find_liquidity_zones(candles, distance=50):
 
     prices = []
