@@ -59,6 +59,38 @@ def find_swings(candles):
 
     return swing_highs, swing_lows
 
+def find_equal_levels(levels, tolerance=5):
+
+    levels = sorted(levels)
+
+    groups = []
+    current = [levels[0]]
+
+    for level in levels[1:]:
+
+        if abs(level - current[-1]) <= tolerance:
+            current.append(level)
+
+        else:
+            if len(current) >= 2:
+                groups.append(current)
+
+            current = [level]
+
+    if len(current) >= 2:
+        groups.append(current)
+
+    result = []
+
+    for group in groups:
+
+        result.append({
+            "price": sum(group) / len(group),
+            "strength": len(group)
+        })
+
+    return result
+
 def find_liquidity_zones(candles, distance=50):
 
     prices = []
