@@ -144,7 +144,12 @@ print("\nLIQUIDITY SWEEP")
 print(sweep)
 
 
+print("\nLAST HL/LH")
+
+for x in labeled:
+    if x["label"] == "HL" or x["label"] == "LH":
+        print(x)
+
 
 print("\nPRICE")
 print(current_price)
-
