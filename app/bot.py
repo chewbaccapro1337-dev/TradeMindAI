@@ -133,7 +133,7 @@ async def show_liquidity(update, context):
         "⏳ Анализирую рынок..."
     )
 
-    report = make_report()
+    report = analyze_market()
 
     await update.message.reply_text(report)
 
