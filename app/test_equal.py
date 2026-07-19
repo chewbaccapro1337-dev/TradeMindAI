@@ -11,6 +11,7 @@ from liquidity import (
     detect_sweep_structure_break,
     find_entry_zone
 )
+from strategy import generate_signal
 
 
 # =====================
@@ -174,3 +175,13 @@ for x in labeled:
 
 print("\nPRICE")
 print(current_price)
+
+signal = generate_signal(
+    market_structure["trend"],
+    sweep_structure,
+    entry_zone
+)
+
+
+print("\nSIGNAL")
+print(signal)
