@@ -364,114 +364,103 @@ def find_equal_levels(levels, tolerance=5):
 def detect_bos_choch(labeled, current_price, trend):
 
     result = {
-        "bos": None,
-        "choch": None,
+        "event": None,
+        "direction": None,
         "level": None
     }
 
 
-    highs = [
-        x for x in labeled
-        if x["kind"] == "HIGH"
-    ]
+    # последние структурные уровни
 
-    lows = [
-        x for x in labeled
-        if x["kind"] == "LOW"
-    ]
+    last_hh = None
+    last_hl = None
+    last_lh = None
+    last_ll = None
 
 
-    if len(highs) < 2 or len(lows) < 2:
-        return result
+    for x in labeled:
 
+        if x["label"] == "HH":
+            last_hh = x
 
+        elif x["label"] == "HL":
+            last_hl = x
 
-    # ==========================
-    # BULLISH STRUCTURE
-    # ==========================
+        elif x["label"] == "LH":
+            last_lh = x
 
-
-    hh = [
-        x for x in highs
-        if x["label"] == "HH"
-    ]
-
-    hl = [
-        x for x in lows
-        if x["label"] == "HL"
-    ]
-
-
-    if hh and hl:
-
-        last_hh = hh[-1]
-        last_hl = hl[-1]
-
-
-        # пробой последнего HH
-
-        if current_price > last_hh["price"]:
-
-            return {
-                "bos": "BULLISH",
-                "choch": None,
-                "level": last_hh["price"]
-            }
-
-
-
-        # слом HL
-
-        if current_price < last_hl["price"]:
-
-            return {
-                "bos": None,
-                "choch": "BEARISH",
-                "level": last_hl["price"]
-            }
+        elif x["label"] == "LL":
+            last_ll = x
 
 
 
     # ==========================
-    # BEARISH STRUCTURE
+    # UP STRUCTURE
     # ==========================
 
-
-    ll = [
-        x for x in lows
-        if x["label"] == "LL"
-    ]
+    if trend == "UP":
 
 
-    lh = [
-        x for x in highs
-        if x["label"] == "LH"
-    ]
+        # пробили предыдущий максимум
+        if last_hh:
 
+            if current_price > last_hh["price"]:
 
-    if ll and lh:
-
-        last_ll = ll[-1]
-        last_lh = lh[-1]
-
-
-        if current_price < last_ll["price"]:
-
-            return {
-                "bos": "BEARISH",
-                "choch": None,
-                "level": last_ll["price"]
-            }
+                return {
+                    "event": "BOS",
+                    "direction": "BULLISH",
+                    "level": last_hh["price"]
+                }
 
 
 
-        if current_price > last_lh["price"]:
+        # сломали защищенный минимум
 
-            return {
-                "bos": None,
-                "choch": "BULLISH",
-                "level": last_lh["price"]
-            }
+        if last_hl:
+
+            if current_price < last_hl["price"]:
+
+                return {
+                    "event": "CHoCH",
+                    "direction": "BEARISH",
+                    "level": last_hl["price"]
+                }
+
+
+
+    # ==========================
+    # DOWN STRUCTURE
+    # ==========================
+
+    if trend == "DOWN":
+
+
+        # пробили минимум
+
+        if last_ll:
+
+            if current_price < last_ll["price"]:
+
+                return {
+                    "event": "BOS",
+                    "direction": "BEARISH",
+                    "level": last_ll["price"]
+                }
+
+
+
+        # сломали LH вверх
+
+        if last_lh:
+
+            if current_price > last_lh["price"]:
+
+                return {
+                    "event": "CHoCH",
+                    "direction": "BULLISH",
+                    "level": last_lh["price"]
+                }
+
 
 
     return result

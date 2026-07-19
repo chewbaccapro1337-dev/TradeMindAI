@@ -38,8 +38,13 @@ labeled = label_structure(
     structure
 )
 
-
+print("\nLAST STRUCTURE:")
+print(labeled[-5:])
 print("\nLABELED STRUCTURE")
+
+print("\nLAST PRICE:")
+print(current_price)
+
 
 for s in labeled:
     print(s)
@@ -135,3 +140,4 @@ print(sweep)
 
 print("\nPRICE")
 print(current_price)
+
