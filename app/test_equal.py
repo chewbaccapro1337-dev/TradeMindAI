@@ -2,12 +2,22 @@ from liquidity import (
     get_candles,
     find_swings,
     find_equal_levels,
-    detect_bos
+    detect_bos,
+    detect_market_structure
 )
 
 candles = get_candles()
 
 highs, lows = find_swings(candles)
+
+structure = detect_market_structure(
+    highs,
+    lows
+)
+
+print()
+print("MARKET STRUCTURE")
+print(structure)
 
 print("SWING HIGHS:")
 print(highs[:3])

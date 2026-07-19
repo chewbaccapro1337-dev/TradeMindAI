@@ -167,3 +167,34 @@ def find_liquidity_zones(candles, distance=50):
         })
 
     return result
+
+def detect_market_structure(highs, lows):
+
+    if len(highs) < 2 or len(lows) < 2:
+        return None
+
+    last_high = highs[-1]["price"]
+    prev_high = highs[-2]["price"]
+
+    last_low = lows[-1]["price"]
+    prev_low = lows[-2]["price"]
+
+    if last_high > prev_high and last_low > prev_low:
+
+        trend = "UP"
+
+    elif last_high < prev_high and last_low < prev_low:
+
+        trend = "DOWN"
+
+    else:
+
+        trend = "RANGE"
+
+    return {
+        "trend": trend,
+        "last_high": last_high,
+        "last_low": last_low,
+        "prev_high": prev_high,
+        "prev_low": prev_low
+    }
