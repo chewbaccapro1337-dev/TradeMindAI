@@ -3,147 +3,119 @@ from liquidity import (
     find_swings,
     find_equal_levels,
     detect_bos_choch,
-    detect_market_structure,
     build_structure,
     label_structure,
-    detect_choch,
     find_fvg,
     filter_fvg_by_trend,
     get_best_fvg,
-    detect_liquidity_sweep,
-    detect_sweep_structure_break
+    detect_liquidity_sweep
 )
+
+
+# =====================
+# CANDLES
+# =====================
 
 candles = get_candles()
 
-## получаем swing точки
+
+# =====================
+# SWINGS
+# =====================
+
 highs, lows = find_swings(candles)
 
 
-# строим структуру
+# =====================
+# STRUCTURE
+# =====================
+
 structure = build_structure(
     highs,
     lows
 )
 
 
-# ставим HH HL LH LL
 labeled = label_structure(
     structure
 )
 
 
-# определяем тренд
-market_structure = detect_market_structure(
-    highs,
-    lows
-)
+print("\nLABELED STRUCTURE")
+
+for s in labeled:
+    print(s)
 
 
-# CHoCH
-choch = detect_choch(
-    labeled
-)
 
-
-# FVG
-fvgs = find_fvg(
-    candles
-)
-
-print("MARKET:")
-print(market_structure)
-
-# фильтр по тренду
-filtered_fvg = filter_fvg_by_trend(
-    fvgs,
-    market_structure
-)
+# =====================
+# CURRENT PRICE
+# =====================
 
 current_price = candles[-1]["close"]
 
 
-best_fvg = get_best_fvg(
-    filtered_fvg,
+
+# =====================
+# BOS / CHoCH
+# =====================
+
+bos_choch = detect_bos_choch(
+    labeled,
     current_price
 )
 
 
-print("\nBEST FVG:")
-print(best_fvg)
+print("\nBOS / CHoCH")
+print(bos_choch)
 
 
-print("\nTREND FVG:")
 
-for fvg in filtered_fvg:
-    print(fvg)
+# =====================
+# FVG
+# =====================
 
-print("\nFVG:")
+fvgs = find_fvg(
+    candles
+)
+
+
+print("\nALL FVG")
 
 for fvg in fvgs:
     print(fvg)
 
 
-print()
-print("CHoCH:")
-print(choch)
 
-print()
-print("LABELED STRUCTURE")
+# =====================
+# LIQUIDITY
+# =====================
 
+equal_highs = find_equal_levels(
+    highs
+)
 
-for s in labeled:
-    print(s)
-
-print("STRUCTURE")
-
-for s in structure:
-    print(s)
-
-candles = get_candles()
-
-structure = build_structure(
-    highs,
+equal_lows = find_equal_levels(
     lows
 )
 
-print()
-
-print("STRUCTURE")
-
-for s in structure[:20]:
-    print(s)
-
-
-structure = detect_market_structure(
-    highs,
-    lows
-)
-
-print()
-print("MARKET STRUCTURE")
-print(structure)
-
-print("SWING HIGHS:")
-print(highs[:3])
-
-print()
-
-print("SWING LOWS:")
-print(lows[:3])
-
-print()
-
-equal_highs = find_equal_levels(highs)
-equal_lows = find_equal_levels(lows)
 
 print("\nEQUAL HIGHS")
+
 for x in equal_highs:
     print(x)
 
+
 print("\nEQUAL LOWS")
+
 for x in equal_lows:
     print(x)
+
+
+
+# =====================
+# SWEEP
+# =====================
 
 sweep = detect_liquidity_sweep(
     candles,
@@ -151,39 +123,15 @@ sweep = detect_liquidity_sweep(
     equal_highs
 )
 
-current_price = candles[-1]["close"]
 
-
-sweep_structure = detect_sweep_structure_break(
-    sweep,
-    labeled,
-    current_price
-)
-
-
-print("\nSWEEP STRUCTURE:")
-print(sweep_structure)
-
-print("\nLIQUIDITY SWEEP:")
+print("\nLIQUIDITY SWEEP")
 print(sweep)
 
-print("EQUAL HIGHS")
-print(equal_highs)
 
-print()
 
-print("EQUAL LOWS")
-print(equal_lows)
+# =====================
+# END
+# =====================
 
-print()
-
-price = candles[-1]["close"]
-
-current_price = candles[-1]["close"]
-
-current_price = candles[-1]["close"]
-
-bos_choch = detect_bos_choch(
-    labeled,
-    current_price
-)
+print("\nPRICE:")
+print(current_price)

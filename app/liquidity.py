@@ -365,7 +365,7 @@ def find_equal_levels(levels, tolerance=5):
 
     return result
 
-def detect_bos_choch(labeled, current_price):
+def detect_bos_choch(labeled, current_price, trend):
 
     result = {
         "bos": None,
