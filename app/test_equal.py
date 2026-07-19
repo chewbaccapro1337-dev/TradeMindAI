@@ -32,7 +32,8 @@ labeled = label_structure(
 
 # определяем тренд
 market_structure = detect_market_structure(
-    labeled
+    highs,
+    lows
 )
 
 
