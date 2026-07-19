@@ -245,7 +245,7 @@ def main():
     conv_handler = ConversationHandler(
     entry_points=[
         MessageHandler(filters.Regex("^📝 Записать сделку$"), ask_symbol),
-        MessageHandler(filters.Regex("^🔒 Закрыть сделку$"), start_close_trade),
+        MessageHandler(filters.Regex("^🔒 Закрыть$"), start_close_trade),
         MessageHandler(filters.Regex("^📷 Анализ сделки$"), ask_photo),
         MessageHandler(filters.Regex("^💎 Подписка$"), subscription)
     ],
@@ -365,14 +365,14 @@ def main():
 )
     app.add_handler(
     MessageHandler(
-        filters.Regex("^📒 Последние сделки$"),
+        filters.Regex("^📒 Сделки$"),
         show_last_trades
     )
 )
 
     app.add_handler(
     MessageHandler(
-        filters.Regex("🧠 AI Анализ BTC"),
+        filters.Regex("🧠 AI BTC"),
         show_liquidity
     )
 )
