@@ -42,6 +42,7 @@ print("\nLAST STRUCTURE:")
 print(labeled[-5:])
 print("\nLABELED STRUCTURE")
 
+current_price = candles[-1]["close"]
 print("\nLAST PRICE:")
 print(current_price)
 
