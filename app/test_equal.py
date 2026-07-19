@@ -155,12 +155,12 @@ print("\nLIQUIDITY SWEEP:")
 print(sweep)
 
 print("EQUAL HIGHS")
-print(eqh)
+print(equal_highs)
 
 print()
 
 print("EQUAL LOWS")
-print(eql)
+print(equal_lows)
 
 print()
 
