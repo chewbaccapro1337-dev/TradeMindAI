@@ -520,31 +520,54 @@ def detect_market_structure(highs, lows):
     if len(highs) < 2 or len(lows) < 2:
         return None
 
+
     last_high = highs[-1]["price"]
     prev_high = highs[-2]["price"]
 
     last_low = lows[-1]["price"]
     prev_low = lows[-2]["price"]
 
-    if last_high > prev_high and last_low > prev_low:
 
-        trend = "UP"
-
-    elif last_high < prev_high and last_low < prev_low:
-
-        trend = "DOWN"
-
-    else:
-
-        trend = "RANGE"
-
-    return {
-        "trend": trend,
+    structure = {
+        "trend": None,
         "last_high": last_high,
         "last_low": last_low,
         "prev_high": prev_high,
-        "prev_low": prev_low
+        "prev_low": prev_low,
+        "event": None
     }
+
+
+    # пробой прошлого хая = бычий перелом/продолжение
+
+    if last_high > prev_high:
+
+        structure["trend"] = "UP"
+
+        structure["event"] = {
+            "type": "CHoCH_UP",
+            "price": last_high
+        }
+
+
+    # пробой прошлого лоя = медвежий перелом
+
+    elif last_low < prev_low:
+
+        structure["trend"] = "DOWN"
+
+        structure["event"] = {
+            "type": "CHoCH_DOWN",
+            "price": last_low
+        }
+
+
+    else:
+
+        structure["trend"] = "RANGE"
+
+
+    return structure
 
 def detect_liquidity_sweep(
     candles,
