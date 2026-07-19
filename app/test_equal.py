@@ -76,7 +76,7 @@ print(trend)
 bos_choch = detect_bos_choch(
     labeled,
     current_price,
-    trend
+    market_structure["trend"]
 )
 
 
