@@ -463,6 +463,8 @@ async def show_last_trades(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def show_statistics(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
+    currency = context.user_data.get("currency", "USD")
+
     stats = get_statistics(
         update.effective_user.id
     )
@@ -509,13 +511,13 @@ async def show_statistics(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         f"🎯 Winrate: {winrate:.1f}%\n\n"
 
-        f"💰 Прибыль: +{profit or 0:.2f}$\n"
-        f"💸 Убыток: {loss or 0:.2f}$\n\n"
+        f"💰 Прибыль: +{profit or 0:.2f} {currency}\n"
+        f"💸 Убыток: {loss or 0:.2f} {currency}\n"
 
-        f"📈 Итог: {total_pnl or 0:.2f}$\n\n"
+        f"📈 Итог: {total_pnl or 0:.2f} {currency}\n"
 
-        f"🔥 Лучшая сделка: {best or 0:.2f}$\n"
-        f"💀 Худшая сделка: {worst or 0:.2f}$"
+        ff"🔥 Лучшая сделка: {best or 0:.2f} {currency}\n"
+        f"💀 Худшая сделка: {worst or 0:.2f} {currency}"
     )
 
 
@@ -544,6 +546,7 @@ async def start_close_trade(update: Update, context: ContextTypes.DEFAULT_TYPE):
             risk,
             rr,
             expected_profit,
+            currency,
             created
         ) = trade
 
@@ -552,7 +555,7 @@ async def start_close_trade(update: Update, context: ContextTypes.DEFAULT_TYPE):
             f"📥 Вход: {entry}\n"
             f"🎯 TP: {tp}\n"
             f"🛑 SL: {sl}\n"
-            f"⚠️ Риск: {risk}$\n\n"
+            f"💰 PnL: {pnl:.2f} {currency}"
         )
 
     context.user_data["close_trades"] = trades
@@ -605,6 +608,7 @@ async def close_trade_price(update: Update, context: ContextTypes.DEFAULT_TYPE):
         exit_price = float(update.message.text)
 
         trade = context.user_data["selected_trade"]
+        currency = trade[10] if len(trade) > 10 else "USD"
 
         (
             trade_id,
@@ -637,7 +641,7 @@ async def close_trade_price(update: Update, context: ContextTypes.DEFAULT_TYPE):
             f"📈 {symbol}\n"
             f"📊 {side}\n"
             f"📤 Выход: {exit_price}\n"
-            f"💰 PnL: {pnl:.2f}$",
+            f"💰 PnL: {pnl:.2f} {currency}",
             reply_markup=main_keyboard
         )
 

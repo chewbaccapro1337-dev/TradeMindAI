@@ -210,6 +210,7 @@ def get_open_trades(user_id):
             risk,
             rr,
             expected_profit,
+            currency,
             created_at
         FROM trades
         WHERE user_id = ?
