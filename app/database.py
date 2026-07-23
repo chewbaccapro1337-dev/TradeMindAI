@@ -5,7 +5,10 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-DB_NAME = os.path.join(BASE_DIR, "trademind.db")
+DB_NAME = os.path.join(
+    os.path.dirname(BASE_DIR),
+    "trademind.db"
+)
 
 
 def get_connection():
