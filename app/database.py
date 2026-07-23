@@ -1,7 +1,11 @@
 import sqlite3
 from datetime import datetime, timedelta
 
-DB_NAME = "trademind.db"
+import os
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+DB_NAME = os.path.join(BASE_DIR, "trademind.db")
 
 
 def get_connection():
