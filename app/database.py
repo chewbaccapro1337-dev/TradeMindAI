@@ -87,7 +87,6 @@ def save_trade(
         INSERT INTO trades(
             user_id,
             symbol,
-            currency,
             side,
             entry,
             tp,
@@ -95,6 +94,7 @@ def save_trade(
             risk,
             rr,
             expected_profit,
+            currency,
             position_size,
             comment,
             status
