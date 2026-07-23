@@ -401,7 +401,7 @@ async def get_trade_risk(update: Update, context: ContextTypes.DEFAULT_TYPE):
             f"📊 {user['side']}\n"
             f"🎯 Потенциальная прибыль: {expected_profit:.2f} {currency}\n"
             f"📐 RR: 1:{rr:.2f}\n"
-            f"⚠️ Риск: {risk:.2f} {currency}\n"
+            f"⚠️ Риск: {risk:.2f} {currency}\n",
             reply_markup=main_keyboard
         )
 
