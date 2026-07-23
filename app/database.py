@@ -68,39 +68,40 @@ def create_tables():
 def save_trade(
     user_id,
     symbol,
-    currency,
     side,
     entry,
     tp,
     sl,
     risk,
-    rr=None,
-    expected_profit=None,
-    position_size=None,
-    comment=None
+    rr,
+    expected_profit,
+    position_size,
+    comment,
+    currency
 ):
 
-    conn = get_connection()
+    conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
 
     cursor.execute("""
-        INSERT INTO trades(
-            user_id,
-            symbol,
-            side,
-            entry,
-            tp,
-            sl,
-            risk,
-            rr,
-            expected_profit,
-            currency,
-            position_size,
-            comment,
-            status
-        )
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    """, (
+    INSERT INTO trades (
+        user_id,
+        symbol,
+        side,
+        entry,
+        tp,
+        sl,
+        risk,
+        rr,
+        expected_profit,
+        position_size,
+        comment,
+        status,
+        currency
+    )
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    """,
+    (
         user_id,
         symbol,
         side,
