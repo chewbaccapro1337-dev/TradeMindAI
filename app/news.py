@@ -4,7 +4,7 @@ import requests
 from keyboards import main_keyboard
 from economic_calendar import get_calendar
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
-from news_cache import get_cached_news
+from news_cache import update_news
 from ai import analyze_economic_event
 from subscription import check_subscription
 from news_updater import update_news
