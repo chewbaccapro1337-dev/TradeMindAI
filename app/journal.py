@@ -68,13 +68,13 @@ async def get_currency(update, context):
 
 async def ask_symbol(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
- user_id = update.effective_user.id
+    user_id = update.effective_user.id
 
- if user_id not in trade_data:
-     trade_data[user_id] = {}
+    if user_id not in trade_data:
+        trade_data[user_id] = {}
 
- trade_data[user_id]["module"] = "journal"
- trade_data[user_id]["back"] = BACK_TO_MENU
+    trade_data[user_id]["module"] = "journal"
+    trade_data[user_id]["back"] = BACK_TO_MENU
 
     await update.message.reply_text(
         "📈 Выберите инструмент:",
