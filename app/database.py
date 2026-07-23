@@ -112,7 +112,8 @@ def save_trade(
         expected_profit,
         position_size,
         comment,
-        "OPEN"
+        "OPEN",
+        currency
     ))
 
     conn.commit()
