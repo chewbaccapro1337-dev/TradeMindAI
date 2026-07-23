@@ -135,6 +135,7 @@ def get_last_trades(user_id, limit=20):
             risk,
             rr,
             expected_profit,
+            currency,
             status,
             created_at
         FROM trades
