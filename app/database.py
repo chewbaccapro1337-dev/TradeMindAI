@@ -39,6 +39,8 @@ def create_tables():
         exit REAL,
         pnl REAL,
 
+        currency TEXT,
+
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         closed_at TIMESTAMP
     )
@@ -59,6 +61,7 @@ def create_tables():
 def save_trade(
     user_id,
     symbol,
+    currency,
     side,
     entry,
     tp,
@@ -77,6 +80,7 @@ def save_trade(
         INSERT INTO trades(
             user_id,
             symbol,
+            currency,
             side,
             entry,
             tp,

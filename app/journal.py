@@ -392,7 +392,8 @@ async def get_trade_risk(update: Update, context: ContextTypes.DEFAULT_TYPE):
             rr=rr,
             expected_profit=expected_profit,
             position_size=user.get("position_size"),
-            comment=user.get("comment")
+            comment=user.get("comment"),
+            currency=currency
         )
 
         await update.message.reply_text(
@@ -436,7 +437,7 @@ async def show_last_trades(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     for i, trade in enumerate(trades, start=1):
 
-        symbol, side, entry, tp, sl, risk, rr, expected_profit, status, created = trade
+        symbol, side, entry, tp, sl, risk, rr, expected_profit, currency, status, created = trade
 
         rr = rr if rr is not None else 0
         expected_profit = expected_profit if expected_profit is not None else 0
@@ -451,7 +452,7 @@ async def show_last_trades(update: Update, context: ContextTypes.DEFAULT_TYPE):
             f"🛑 SL: {sl}\n"
             f"⚠️ Риск: {risk:.2f}$\n"
             f"📐 RR: 1:{rr:.2f}\n"
-            f"💰 Потенциал: {expected_profit:.2f}$\n"
+            f"💰 Потенциал: {expected_profit:.2f} {currency}\n"
             f"📌 Статус: {status}\n"
             f"📅 {created}\n"
             "━━━━━━━━━━━━━━\n\n"
