@@ -450,7 +450,7 @@ async def show_last_trades(update: Update, context: ContextTypes.DEFAULT_TYPE):
             f"📥 Вход: {entry}\n"
             f"🎯 TP: {tp}\n"
             f"🛑 SL: {sl}\n"
-            f"⚠️ Риск: {risk:.2f}$\n"
+            f"⚠️ Риск: {risk:.2f} {currency}\n"
             f"📐 RR: 1:{rr:.2f}\n"
             f"💰 Потенциал: {expected_profit:.2f} {currency}\n"
             f"📌 Статус: {status}\n"
