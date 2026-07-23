@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+from datetime import datetime
 from economic_calendar import get_calendar
 
 
@@ -13,13 +14,14 @@ def update_news():
     if not events:
         return False
 
-    with open(
-        NEWS_FILE,
-        "w",
-        encoding="utf-8"
-    ) as f:
+    data = {
+        "updated": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "events": events
+    }
+
+    with open(NEWS_FILE, "w", encoding="utf-8") as f:
         json.dump(
-            events,
+            data,
             f,
             ensure_ascii=False,
             indent=4
@@ -39,7 +41,8 @@ def get_news(currency=None, only_high=False):
         "r",
         encoding="utf-8"
     ) as f:
-        events = json.load(f)
+       data = json.load(f)
+       events = data.get("events", [])
 
 
     if currency:

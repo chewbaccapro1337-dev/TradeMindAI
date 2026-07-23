@@ -7,9 +7,11 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from forex_news import get_news, update_news
 from ai import analyze_economic_event
 from subscription import check_subscription
+from news_updater import update_news
 
 # Главное меню новостей
 async def show_news(update, context):
+
     if not check_subscription(update.effective_user.id):
 
         await update.message.reply_text(
@@ -22,6 +24,8 @@ async def show_news(update, context):
         )
 
         return
+
+    update_news()
 
     keyboard = [
         [

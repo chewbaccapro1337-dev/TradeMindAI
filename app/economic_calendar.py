@@ -1,18 +1,52 @@
-import requests
-from jb_news.news import JBNews
+import feedparser
+from datetime import datetime
 
-API_KEY = "PCMdc1YONIzbla9skEdRl9Z5HRJIbjho"
 
-jb = JBNews()
+FXSTREET_RSS = "https://www.fxstreet.com/rss/news"
 
 
 def get_calendar():
 
-    if jb.calendar(
-        API_KEY,
-        today=True
-    ):
+    events = []
 
-        return jb.calendar_info
+    try:
+        feed = feedparser.parse(FXSTREET_RSS)
 
-    return []
+        for item in feed.entries[:30]:
+
+            title = item.get("title", "")
+            summary = item.get("summary", "")
+
+            text = (title + " " + summary).upper()
+
+            currency = None
+
+            if "USD" in text or "FED" in text or "FOMC" in text:
+                currency = "USD"
+
+            elif "EUR" in text or "ECB" in text:
+                currency = "EUR"
+
+            elif "GBP" in text or "BOE" in text:
+                currency = "GBP"
+
+
+            if currency:
+
+                events.append(
+                    {
+                        "currency": currency,
+                        "impact": "red",
+                        "title": title,
+                        "time": datetime.now().strftime(
+                            "%Y-%m-%d %H:%M"
+                        )
+                    }
+                )
+
+
+    except Exception as e:
+        print("FXStreet error:", e)
+
+
+    return events
