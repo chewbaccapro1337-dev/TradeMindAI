@@ -6,7 +6,8 @@ from database import (
     get_last_trades,
     get_open_trades,
     close_trade,
-    get_statistics
+    get_statistics,
+    get_statistics_by_currency
 )
 from keyboards import (
     main_keyboard,
@@ -463,62 +464,43 @@ async def show_last_trades(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def show_statistics(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
-    currency = context.user_data.get("currency", "USD")
-
-    stats = get_statistics(
+    stats = get_statistics_by_currency(
         update.effective_user.id
     )
 
-
-    if not stats[0]:
+    if not stats:
         await update.message.reply_text(
             "📊 Статистика пока пустая."
         )
         return
 
 
-    (
-        total,
-        wins,
-        losses,
-        profit,
-        loss,
-        total_pnl,
-        avg_win,
-        avg_loss,
-        best,
-        worst
-
-    ) = stats
+    text = "📊 Статистика трейдинга\n\n"
 
 
-    wins = wins or 0
-    losses = losses or 0
+    for row in stats:
 
-    winrate = (
-        wins / total * 100
-        if total
-        else 0
-    )
+        (
+            currency,
+            total,
+            profit,
+            loss,
+            total_pnl,
+            best,
+            worst
+        ) = row
 
 
-    text = (
-        "📊 Статистика трейдинга\n\n"
-
-        f"Всего сделок: {total}\n"
-        f"✅ Победы: {wins}\n"
-        f"❌ Поражения: {losses}\n\n"
-
-        f"🎯 Winrate: {winrate:.1f}%\n\n"
-
-        f"💰 Прибыль: +{profit or 0:.2f} {currency}\n"
-        f"💸 Убыток: {loss or 0:.2f} {currency}\n"
-
-        f"📈 Итог: {total_pnl or 0:.2f} {currency}\n"
-
-        f"🔥 Лучшая сделка: {best or 0:.2f} {currency}\n"
-        f"💀 Худшая сделка: {worst or 0:.2f} {currency}"
-    )
+        text += (
+            f"{'💵' if currency == 'USD' else '₽'} {currency}\n\n"
+            f"Всего сделок: {total}\n"
+            f"💰 Прибыль: +{profit or 0:.2f} {currency}\n"
+            f"💸 Убыток: {loss or 0:.2f} {currency}\n"
+            f"📈 Итог: {total_pnl or 0:.2f} {currency}\n"
+            f"🔥 Лучшая сделка: {best or 0:.2f} {currency}\n"
+            f"💀 Худшая сделка: {worst or 0:.2f} {currency}\n"
+            "━━━━━━━━━━━━\n\n"
+        )
 
 
     await update.message.reply_text(text)

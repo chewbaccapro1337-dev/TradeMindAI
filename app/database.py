@@ -182,6 +182,31 @@ def get_statistics(user_id):
 
     return stats
 
+def get_statistics_by_currency(user_id):
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT
+            currency,
+            COUNT(*),
+            SUM(CASE WHEN pnl > 0 THEN pnl ELSE 0 END),
+            SUM(CASE WHEN pnl < 0 THEN pnl ELSE 0 END),
+            SUM(pnl),
+            MAX(pnl),
+            MIN(pnl)
+        FROM trades
+        WHERE user_id = ?
+        GROUP BY currency
+    """, (user_id,))
+
+    data = cursor.fetchall()
+
+    conn.close()
+
+    return data
+
 def clear_trades(user_id):
 
     conn = get_connection()
