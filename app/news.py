@@ -4,7 +4,7 @@ import requests
 from keyboards import main_keyboard
 from economic_calendar import get_calendar
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
-from forex_news import get_news, update_news
+from news_cache import get_cached_news
 from ai import analyze_economic_event
 from subscription import check_subscription
 from news_updater import update_news
@@ -109,7 +109,7 @@ async def news_button(update, context):
             )
 
     else:
-        events = get_news()
+        events = get_cached_news()
 
 
     if not events:
