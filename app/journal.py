@@ -478,7 +478,7 @@ async def show_statistics(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = "📊 Статистика трейдинга\n\n"
 
 
-    for row in stats:
+    for stat in stats:
 
         (
             currency,
@@ -488,7 +488,7 @@ async def show_statistics(update: Update, context: ContextTypes.DEFAULT_TYPE):
             total_pnl,
             best,
             worst
-        ) = row
+        ) = stat
 
 
         text += (
@@ -499,7 +499,7 @@ async def show_statistics(update: Update, context: ContextTypes.DEFAULT_TYPE):
             f"📈 Итог: {total_pnl or 0:.2f} {currency}\n"
             f"🔥 Лучшая сделка: {best or 0:.2f} {currency}\n"
             f"💀 Худшая сделка: {worst or 0:.2f} {currency}\n"
-            "━━━━━━━━━━━━\n\n"
+            "━━━━━━━━━━━━━━\n\n"
         )
 
 
