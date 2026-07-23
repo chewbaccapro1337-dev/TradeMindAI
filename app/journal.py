@@ -55,12 +55,14 @@ async def get_currency(update, context):
     elif text == "₽ RUB":
         context.user_data["currency"] = "RUB"
 
-    await update.message.reply_text(
-        "Введите цену входа:",
-        reply_markup=back_keyboard
-    )
+    else:
+        await update.message.reply_text(
+            "Выберите валюту кнопкой"
+        )
+        return ACCOUNT_CURRENCY
 
-    return ENTRY
+
+    return await ask_symbol(update, context)
 
 async def ask_symbol(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
@@ -236,9 +238,11 @@ async def get_entry(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return TP
 
     except ValueError:
-       trade_data[update.effective_user.id]["side"] = side
+        await update.message.reply_text(
+            "❌ Введите число.\nПример: 65000"
+        )
 
-        return await ask_currency(update, context)
+        return ENTRY
 
 async def get_tp(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
