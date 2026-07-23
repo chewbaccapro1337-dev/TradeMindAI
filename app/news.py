@@ -1,15 +1,10 @@
-from telegram import Update
-from telegram.ext import ContextTypes
-import requests
-from keyboards import main_keyboard
-from economic_calendar import get_calendar
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
-from news_cache import update_news
-from ai import analyze_economic_event
-from subscription import check_subscription
-from news_updater import update_news
+from telegram.ext import ContextTypes
 
-# Главное меню новостей
+from subscription import check_subscription
+from news_cache import update_news
+
+
 async def show_news(update, context):
 
     if not check_subscription(update.effective_user.id):
@@ -25,7 +20,10 @@ async def show_news(update, context):
 
         return
 
+
+    # обновляем кэш (если старый больше часа — качает новые)
     update_news()
+
 
     keyboard = [
         [
@@ -57,7 +55,10 @@ async def show_news(update, context):
             )
         ],
         [
-            InlineKeyboardButton("🤖 AI анализ", callback_data="news_ai")
+            InlineKeyboardButton(
+                "🤖 AI анализ",
+                callback_data="news_ai"
+            )
         ]
     ]
 
@@ -69,102 +70,76 @@ async def show_news(update, context):
 
 
 
-# Обработка кнопок
 async def news_button(update, context):
 
     query = update.callback_query
     await query.answer()
 
-    update_news()
+
+    events = update_news()
+
 
     if query.data == "news_high":
-        events = get_news(only_high=True)
+
+        events = [
+            e for e in events
+            if e.get("impact") == "red"
+        ]
+
 
     elif query.data == "news_usd":
-        events = get_news(currency="USD")
+
+        events = [
+            e for e in events
+            if e.get("currency") == "USD"
+        ]
+
 
     elif query.data == "news_eur":
-        events = get_news(currency="EUR")
+
+        events = [
+            e for e in events
+            if e.get("currency") == "EUR"
+        ]
+
 
     elif query.data == "news_gbp":
-        events = get_news(currency="GBP")
+
+        events = [
+            e for e in events
+            if e.get("currency") == "GBP"
+        ]
+
 
     elif query.data == "news_ai":
-        events = get_news(
-            only_high=True
-        )
 
-        text = "🤖 AI АНАЛИЗ НОВОСТЕЙ\n\n"
-
-
-        for e in events[:5]:
-
-            ai = analyze_economic_event(e)
-
-            text += (
-                f"🔴 {e['currency']}\n"
-                f"{e['event']}\n\n"
-                f"{ai}\n"
-                "━━━━━━━━━━━━━━\n\n"
-            )
-
-    else:
-        events = get_cached_news()
+        events = events[:10]
 
 
     if not events:
+
         await query.edit_message_text(
-            "📰 Новостей не найдено."
+            "📭 Новостей нет."
         )
+
         return
+
 
 
     text = "📰 Экономический календарь\n\n"
 
 
-    for e in events[:20]:
+    for e in events[:10]:
 
-        if e["impact"] == "red":
-            icon = "🔴"
-
-        elif e["impact"] == "orange":
-            icon = "🟠"
-
-        else:
-            icon = "⚪"
-
+        impact = "🔴" if e.get("impact") == "red" else "🟡"
 
         text += (
-            f"{icon} {e['currency']}\n"
-            f"⏰ {e['time']} МСК\n"
-            f"{e['event']}\n"
+            f"{impact} {e.get('currency')}\n"
+            f"📌 {e.get('title')}\n"
+            f"🕒 {e.get('time')}\n\n"
         )
 
-
-        if e.get("forecast"):
-            text += f"📊 Прогноз: {e['forecast']}\n"
-
-        if e.get("previous"):
-            text += f"◽ Предыдущее: {e['previous']}\n"
-
-        if e.get("actual"):
-            text += f"✅ Факт: {e['actual']}\n"
-
-
-            if e["impact"] == "red":
- 
-                ai = analyze_economic_event(e)
-
-                text += (
-                    "\n🤖 AI Forecast:\n"
-                    f"{ai}\n"
-        )
-
-
-        text += "\n━━━━━━━━━━━━━━\n"
 
     await query.edit_message_text(
         text[:4000]
     )
-
-    return    
