@@ -1,9 +1,125 @@
 {
-  "updated":"2026-07-24 00:00",
-  "events":[
-   {
-    "currency":"USD",
-    "impact":"red"
-   }
-  ]
- }
+    "updated": "2026-07-24 01:36:43",
+    "events": [
+        {
+            "currency": "EUR",
+            "impact": "red",
+            "title": "EUR/JPY extends rally as ECB hike buzz tests Yen risks",
+            "time": "2026-07-24 01:36"
+        },
+        {
+            "currency": "USD",
+            "impact": "red",
+            "title": "New Zealand Dollar falls as strong US labor data supports the Dollar",
+            "time": "2026-07-24 01:36"
+        },
+        {
+            "currency": "GBP",
+            "impact": "red",
+            "title": "GBP/JPY Price Forecast: Holds 218 floor as bulls eye 219 breakout",
+            "time": "2026-07-24 01:36"
+        },
+        {
+            "currency": "USD",
+            "impact": "red",
+            "title": "Singapore Dollar: Sideways range holds against US Dollar – UOB",
+            "time": "2026-07-24 01:36"
+        },
+        {
+            "currency": "USD",
+            "impact": "red",
+            "title": "Australian Dollar trades under pressure amid strong US data",
+            "time": "2026-07-24 01:36"
+        },
+        {
+            "currency": "USD",
+            "impact": "red",
+            "title": "Silver Price Forecast: XAG lower highs structure holds, bears eye $55",
+            "time": "2026-07-24 01:36"
+        },
+        {
+            "currency": "USD",
+            "impact": "red",
+            "title": "AUD/USD Price Forecast: Bulls struggle below the 50-day SMA",
+            "time": "2026-07-24 01:36"
+        },
+        {
+            "currency": "USD",
+            "impact": "red",
+            "title": "Canadian Dollar: Holds near fair value against US Dollar – Scotiabank",
+            "time": "2026-07-24 01:36"
+        },
+        {
+            "currency": "USD",
+            "impact": "red",
+            "title": "Swiss Franc hits 13-month low as rising Oil prices boost bets on Fed hike",
+            "time": "2026-07-24 01:36"
+        },
+        {
+            "currency": "USD",
+            "impact": "red",
+            "title": "Gold tumbles as sellers target $4,000",
+            "time": "2026-07-24 01:36"
+        },
+        {
+            "currency": "USD",
+            "impact": "red",
+            "title": "EUR/USD Price Forecast: Bears target a break below 1.1350 support",
+            "time": "2026-07-24 01:36"
+        },
+        {
+            "currency": "USD",
+            "impact": "red",
+            "title": "Gold falls as Iran war lifts Oil prices, Fed rate hike bets",
+            "time": "2026-07-24 01:36"
+        },
+        {
+            "currency": "USD",
+            "impact": "red",
+            "title": "British Pound slides as Gulf war risk fuels US Dollar rally",
+            "time": "2026-07-24 01:36"
+        },
+        {
+            "currency": "USD",
+            "impact": "red",
+            "title": "Japanese Yen falls near multi-decade low",
+            "time": "2026-07-24 01:36"
+        },
+        {
+            "currency": "EUR",
+            "impact": "red",
+            "title": "European Central Bank: Hiking cycle continues at slower pace – Nordea",
+            "time": "2026-07-24 01:36"
+        },
+        {
+            "currency": "EUR",
+            "impact": "red",
+            "title": "Natural Gas: High prices sustain European power – Rabobank",
+            "time": "2026-07-24 01:36"
+        },
+        {
+            "currency": "USD",
+            "impact": "red",
+            "title": "Federal Reserve: Hike pricing questioned – TD Securities",
+            "time": "2026-07-24 01:36"
+        },
+        {
+            "currency": "EUR",
+            "impact": "red",
+            "title": "Euro slips against British Pound as ECB keeps interest rates unchanged",
+            "time": "2026-07-24 01:36"
+        },
+        {
+            "currency": "EUR",
+            "impact": "red",
+            "title": "ECB Press Conference: Lagarde speaks on policy outlook after leaving key rates unchanged",
+            "time": "2026-07-24 01:36"
+        },
+        {
+            "currency": "EUR",
+            "impact": "red",
+            "title": "Lagarde speech: Some asked whether we should consider a hike",
+            "time": "2026-07-24 01:36"
+        }
+    ]
+}
