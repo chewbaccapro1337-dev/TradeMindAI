@@ -248,7 +248,7 @@ def main():
 
     conv_handler = ConversationHandler(
     entry_points=[
-        MessageHandler(filters.Regex("^📝 Записать сделку$"), ask_symbol),
+        MessageHandler(filters.Regex("^📝 Записать сделку$"), ask_currency),
         MessageHandler(filters.Regex("^🔒 Закрыть$"), start_close_trade),
         MessageHandler(filters.Regex("^📷 AI Анализ$"), ask_photo),
         MessageHandler(filters.Regex("^💎 Подписка$"), subscription)

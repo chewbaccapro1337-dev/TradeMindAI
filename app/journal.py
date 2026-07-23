@@ -13,6 +13,7 @@ from keyboards import (
     back_keyboard,
     buy_sell_keyboard,
     symbol_keyboard,
+    currency_keyboard,
 )
 from database import save_trade
 from session import session_data
@@ -27,6 +28,7 @@ from states import (
     COMMENT,
     SELECT_CLOSE_TRADE,
     CLOSE_PRICE,
+    ACCOUNT_CURRENCY,
 )
 
 trade_data = session_data
@@ -66,10 +68,13 @@ async def get_currency(update, context):
 
 async def ask_symbol(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
-    trade_data[update.effective_user.id] = {
-        "module": "journal",
-        "back": BACK_TO_MENU
-    }
+ user_id = update.effective_user.id
+
+ if user_id not in trade_data:
+     trade_data[user_id] = {}
+
+ trade_data[user_id]["module"] = "journal"
+ trade_data[user_id]["back"] = BACK_TO_MENU
 
     await update.message.reply_text(
         "📈 Выберите инструмент:",
@@ -77,6 +82,7 @@ async def ask_symbol(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
     return SYMBOL
+    
 async def back(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     user_id = update.effective_user.id
