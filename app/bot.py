@@ -12,6 +12,8 @@ import os
 from risk import calculate_risk
 from database import create_tables
 from journal import (
+    ask_currency,
+    get_currency,
     ask_symbol,
     get_symbol,
     get_side,
@@ -27,6 +29,7 @@ from journal import (
     select_close_trade,
     close_trade_price,
     clear_history
+
 )
 from keyboards import (
     main_keyboard,
@@ -63,7 +66,8 @@ from states import (
     COMMENT,
     ANALYZE,
     SELECT_CLOSE_TRADE,
-    CLOSE_PRICE
+    CLOSE_PRICE,
+    ACCOUNT_CURRENCY
 )
 from liquidity_report import make_report
 from subscription import has_subscription
@@ -284,6 +288,15 @@ def main():
             & ~filters.Regex("^⬅️ Назад$")
             & ~filters.Regex("^❌ Отмена$"),
             get_side
+        )
+     ],
+    ACCOUNT_CURRENCY: [
+        MessageHandler(
+         filters.TEXT
+         & ~filters.COMMAND
+         & ~filters.Regex("^⬅️ Назад$")
+         & ~filters.Regex("^❌ Отмена$"),
+         get_currency
         )
      ],
     ENTRY: [
