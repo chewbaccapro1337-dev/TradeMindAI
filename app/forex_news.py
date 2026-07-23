@@ -1,16 +1,44 @@
 import json
 from pathlib import Path
+from economic_calendar import get_calendar
 
 
 NEWS_FILE = Path("/root/TradeMindAI/news.json")
 
 
+def update_news():
+
+    events = get_calendar()
+
+    if not events:
+        return False
+
+    with open(
+        NEWS_FILE,
+        "w",
+        encoding="utf-8"
+    ) as f:
+        json.dump(
+            events,
+            f,
+            ensure_ascii=False,
+            indent=4
+        )
+
+    return True
+
+
+
 def get_news(currency=None, only_high=False):
 
     if not NEWS_FILE.exists():
-        return []
+        update_news()
 
-    with open(NEWS_FILE, "r", encoding="utf-8") as f:
+    with open(
+        NEWS_FILE,
+        "r",
+        encoding="utf-8"
+    ) as f:
         events = json.load(f)
 
 
