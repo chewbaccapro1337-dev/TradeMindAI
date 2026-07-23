@@ -555,7 +555,7 @@ async def start_close_trade(update: Update, context: ContextTypes.DEFAULT_TYPE):
             f"📥 Вход: {entry}\n"
             f"🎯 TP: {tp}\n"
             f"🛑 SL: {sl}\n"
-            f"💰 PnL: {pnl:.2f} {currency}"
+            f"⚠️ Риск: {risk} {currency}\n\n"
         )
 
     context.user_data["close_trades"] = trades
@@ -620,6 +620,7 @@ async def close_trade_price(update: Update, context: ContextTypes.DEFAULT_TYPE):
             risk,
             rr,
             expected_profit,
+            currency,
             created
         ) = trade
 
