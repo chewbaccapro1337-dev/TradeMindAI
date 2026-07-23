@@ -3,7 +3,7 @@ from telegram.ext import ContextTypes
 
 from subscription import check_subscription
 from news_cache import update_news
-
+from news_cache import get_cached_news
 
 async def show_news(update, context):
 
@@ -76,7 +76,7 @@ async def news_button(update, context):
     await query.answer()
 
 
-    events = update_news()
+    events = get_cached_news()
 
 
     if query.data == "news_high":
