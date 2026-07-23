@@ -516,7 +516,7 @@ async def show_statistics(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         f"📈 Итог: {total_pnl or 0:.2f} {currency}\n"
 
-        ff"🔥 Лучшая сделка: {best or 0:.2f} {currency}\n"
+        f"🔥 Лучшая сделка: {best or 0:.2f} {currency}\n"
         f"💀 Худшая сделка: {worst or 0:.2f} {currency}"
     )
 
