@@ -2,7 +2,7 @@ from pathlib import Path
 import json
 from datetime import datetime
 
-from app.economic_calendar import get_calendar
+from economic_calendar import get_calendar
 
 
 CACHE = Path("/root/TradeMindAI/news.json")
