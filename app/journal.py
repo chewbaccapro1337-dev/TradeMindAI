@@ -298,8 +298,9 @@ async def get_sl(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         trade_data[update.effective_user.id]["sl"] = sl
 
+        currency = context.user_data.get("currency", "USD")
         await update.message.reply_text(
-            "💵 Введите риск сделки ($):",
+            f"💵 Введите риск сделки ({currency}):",
             reply_markup=back_keyboard
         )
 
@@ -362,6 +363,8 @@ async def get_trade_risk(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         user["risk"] = risk
 
+        currency = context.user_data.get("currency", "USD")
+
         reward = (
             abs(user["tp"] - user["entry"])
             if user["side"] == "BUY"
@@ -396,9 +399,9 @@ async def get_trade_risk(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "✅ Сделка сохранена!\n\n"
             f"📈 {user['symbol']}\n"
             f"📊 {user['side']}\n"
-            f"🎯 Потенциальная прибыль: {expected_profit:.2f}$\n"
+            f"🎯 Потенциальная прибыль: {expected_profit:.2f} {currency}\n"
             f"📐 RR: 1:{rr:.2f}\n"
-            f"⚠️ Риск: {risk:.2f}$\n",
+            f"⚠️ Риск: {risk:.2f} {currency}\n"
             reply_markup=main_keyboard
         )
 
