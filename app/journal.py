@@ -483,6 +483,8 @@ async def show_statistics(update: Update, context: ContextTypes.DEFAULT_TYPE):
         (
             currency,
             total,
+            wins,
+            losses,
             profit,
             loss,
             total_pnl,
@@ -490,10 +492,19 @@ async def show_statistics(update: Update, context: ContextTypes.DEFAULT_TYPE):
             worst
         ) = stat
 
+        # ВОТ СЮДА ДОБАВЛЯЕМ РАСЧЁТ
+        winrate = (
+            wins / total * 100
+            if total
+            else 0
+        )
 
         text += (
             f"{'💵' if currency == 'USD' else '₽'} {currency}\n\n"
             f"Всего сделок: {total}\n"
+            f"✅ Победы: {wins}\n"
+            f"❌ Поражения: {losses}\n"
+            f"🎯 Winrate: {winrate:.1f}%\n\n"
             f"💰 Прибыль: +{profit or 0:.2f} {currency}\n"
             f"💸 Убыток: {loss or 0:.2f} {currency}\n"
             f"📈 Итог: {total_pnl or 0:.2f} {currency}\n"

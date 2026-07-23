@@ -191,6 +191,8 @@ def get_statistics_by_currency(user_id):
         SELECT
             currency,
             COUNT(*),
+            SUM(CASE WHEN pnl > 0 THEN 1 ELSE 0 END),
+            SUM(CASE WHEN pnl < 0 THEN 1 ELSE 0 END),
             SUM(CASE WHEN pnl > 0 THEN pnl ELSE 0 END),
             SUM(CASE WHEN pnl < 0 THEN pnl ELSE 0 END),
             SUM(pnl),
