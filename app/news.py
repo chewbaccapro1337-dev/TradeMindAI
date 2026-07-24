@@ -2,7 +2,7 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from subscription import check_subscription
 
 from news_cache import get_cached_news
-from economic_calendar import get_calendar
+from calendar_cache import get_calendar_cached
 
 
 
@@ -101,7 +101,7 @@ async def news_button(update, context):
 
     else:
 
-        events = get_calendar()
+        events = get_calendar_cached()
 
         title = "📅 Экономический календарь\n\n"
 
@@ -158,7 +158,7 @@ async def news_button(update, context):
 
     elif query.data == "news_ai":
 
-        events = get_calendar()
+        events = get_calendar_cached()
 
         title = "🤖 AI ECONOMIC ANALYSIS\n\n"
 

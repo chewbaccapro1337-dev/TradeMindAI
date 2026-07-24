@@ -1,15 +1,15 @@
 from pathlib import Path
 from datetime import datetime, timedelta
+from calendar_cache import get_calendar_cached
 import json
 
-from economic_calendar import get_calendar
 
 
 NEWS_FILE = Path("/root/TradeMindAI/news.json")
 
 
 def update_news():
-    events = get_calendar()
+    events = get_calendar_cached()
 
     if not events:
         return []
