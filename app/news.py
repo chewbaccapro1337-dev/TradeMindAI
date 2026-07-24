@@ -123,11 +123,11 @@ async def news_button(update, context):
 
     elif query.data == "news_ai":
 
-       if not events:
-           await query.edit_message_text(
-              "📭 Новостей нет."
-           )
-           return
+        if not events:
+            await query.edit_message_text(
+                "📭 Новостей нет."
+            )
+            return
 
         event = events[0]
 
@@ -138,7 +138,7 @@ async def news_button(update, context):
         analysis = analyze_economic_event(event)
 
         await query.message.reply_text(
-           "🤖 AI анализ новости:\n\n" + analysis
+            "🤖 AI анализ новости:\n\n" + analysis
         )
 
         return
