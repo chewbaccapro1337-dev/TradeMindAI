@@ -6,6 +6,7 @@ from telegram.ext import (
     MessageHandler,
     ConversationHandler,
     filters,
+    PreCheckoutQueryHandler
 )
 from dotenv import load_dotenv
 import os
@@ -74,6 +75,7 @@ from subscription import has_subscription
 from database import add_subscription
 from admin import users, grant, revoke
 from analysis import analyze_market
+from datetime import datetime, timedelta
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / ".env")
@@ -235,6 +237,30 @@ async def buy_pro(update, context):
         prices=prices
     )
 
+async def pre_checkout(update, context):
+
+    query = update.pre_checkout_query
+
+    await query.answer(ok=True)
+
+async def successful_payment(update, context):
+
+    user_id = update.effective_user.id
+
+    payment = update.message.successful_payment
+
+    print(
+        "Оплата получена:",
+        user_id,
+        payment.total_amount,
+        payment.currency
+    )
+
+    await update.message.reply_text(
+        "✅ Оплата прошла!\n\n"
+        "TradeMind AI Pro активирован на 30 дней ⭐"
+    )
+
 def main():
 
     proxy_url = "socks5://qMLzj4:r5NZWQ@168.81.42.247:8000"
@@ -386,6 +412,19 @@ def main():
     MessageHandler(filters.Regex("^❌ Отмена$"), cancel),
     MessageHandler(filters.Regex("^⬅️ Назад$"), back),
 ]
+
+    app.add_handler(
+     PreCheckoutQueryHandler(pre_checkout)
+    )
+
+
+    app.add_handler(
+        MessageHandler(
+          filters.SUCCESSFUL_PAYMENT,
+          successful_payment
+        )
+    )
+
 )
     app.add_handler(CommandHandler("start", start))
     app.add_handler(
