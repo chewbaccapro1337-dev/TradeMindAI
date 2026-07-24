@@ -135,7 +135,7 @@ async def news_button(update, context):
             "🤖 Анализирую новость..."
         )
 
-print(event)
+        print(event)
 
         analysis = analyze_economic_event(event)
 
