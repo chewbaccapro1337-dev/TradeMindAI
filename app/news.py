@@ -2,8 +2,7 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ContextTypes
 
 from subscription import check_subscription
-from news_cache import update_news
-from news_cache import get_cached_news
+from news_cache import get_cached_news, get_cache
 
 async def show_news(update, context):
 
@@ -22,7 +21,7 @@ async def show_news(update, context):
 
 
     # обновляем кэш (если старый больше часа — качает новые)
-    update_news()
+    get_cached_news()
 
 
     keyboard = [
