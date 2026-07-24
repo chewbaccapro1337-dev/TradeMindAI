@@ -291,48 +291,61 @@ def make_report():
 
     # ликвидность
 
-    # Пулы ликвидности
+        # Пулы ликвидности
 
-buy = data.get("buy_side")
-sell = data.get("sell_side")
+    buy = data.get("buy_side")
+    sell = data.get("sell_side")
 
-report.append(
-    "\n📍 Liquidity Pools:\n"
-)
 
-if buy:
     report.append(
-        f"""
+        "\n📍 Liquidity Pools:\n"
+    )
+
+
+    if buy:
+
+        report.append(
+            f"""
 🟢 Buy Side
 Цена: {buy['price']:.2f}
 Сила: {buy['strength']}
 """
-    )
+        )
 
-else:
-    report.append(
-        "🟢 Buy Side: не найдена"
-    )
+    else:
+
+        report.append(
+            """
+🟢 Buy Side
+Не найдена
+"""
+        )
 
 
-if sell:
-    report.append(
-        f"""
+    if sell:
+
+        report.append(
+            f"""
 🔴 Sell Side
 Цена: {sell['price']:.2f}
 Сила: {sell['strength']}
 """
-    )
+        )
 
-else:
-    report.append(
-        "🔴 Sell Side: не найдена"
-    )
+    else:
+
+        report.append(
+            """
+🔴 Sell Side
+Не найдена
+"""
+        )
 
 
-# Sweep
+    # Sweep
 
-    sweep = data["sweep"]
+    sweep = data.get("sweep")
+
 
     if sweep:
 
@@ -340,9 +353,14 @@ else:
             f"""
 ⚡ Liquidity Sweep:
 
+Тип:
 {sweep['type']}
+
 Уровень:
 {sweep['level']}
+
+Цена:
+{sweep['price']}
 """
         )
 
@@ -351,14 +369,15 @@ else:
         report.append(
             """
 ⚡ Liquidity Sweep:
+
 Не обнаружен
 """
         )
 
 
-    # зона
+    # Зона интереса
 
-    if data["entry_zone"]:
+    if data.get("entry_zone"):
 
         zone = data["entry_zone"]
 
@@ -367,6 +386,7 @@ else:
 🎯 Сетап найден
 
 Зона интереса:
+
 {zone['low']} - {zone['high']}
 """
         )
@@ -376,6 +396,7 @@ else:
         report.append(
             """
 🎯 Сетап:
+
 ⏳ ожидание подтверждения
 """
         )
