@@ -2,51 +2,65 @@ import feedparser
 from datetime import datetime
 
 
-FXSTREET_RSS = "https://www.fxstreet.com/rss/news"
+FEEDS = [
+    "https://www.fxstreet.com/rss/news",
+]
 
 
 def get_calendar():
 
     events = []
 
-    try:
-        feed = feedparser.parse(FXSTREET_RSS)
+
+    for url in FEEDS:
+
+        feed = feedparser.parse(url)
+
 
         for item in feed.entries[:30]:
 
-            title = item.get("title", "")
-            summary = item.get("summary", "")
+            title = item.get(
+                "title",
+                ""
+            )
 
-            text = (title + " " + summary).upper()
+
+            published = item.get(
+                "published",
+                ""
+            )
+
+
+            text = title.lower()
+
 
             currency = None
 
-            if "USD" in text or "FED" in text or "FOMC" in text:
+
+            if "usd" in text or "dollar" in text:
                 currency = "USD"
 
-            elif "EUR" in text or "ECB" in text:
+            elif "eur" in text or "euro" in text:
                 currency = "EUR"
 
-            elif "GBP" in text or "BOE" in text:
+            elif "gbp" in text or "pound" in text:
                 currency = "GBP"
+
 
 
             if currency:
 
-                events.append(
-                    {
-                        "currency": currency,
-                        "impact": "red",
-                        "title": title,
-                        "time": datetime.now().strftime(
-                            "%Y-%m-%d %H:%M"
-                        )
-                    }
-                )
+                events.append({
 
+                    "currency": currency,
 
-    except Exception as e:
-        print("FXStreet error:", e)
+                    "impact": "red",
+
+                    "title": title,
+
+                    "time": published
+
+                })
 
 
     return events

@@ -2,11 +2,14 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ContextTypes
 
 from subscription import check_subscription
-from news_cache import get_cached_news, get_cache
+from news_cache import get_cached_news
+
 
 async def show_news(update, context):
 
-    if not check_subscription(update.effective_user.id):
+    user_id = update.effective_user.id
+
+    if not check_subscription(user_id):
 
         await update.message.reply_text(
             "🔒 Тестовый доступ закончился.\n\n"
@@ -20,39 +23,45 @@ async def show_news(update, context):
         return
 
 
-    # обновляем кэш (если старый больше часа — качает новые)
+    # проверяем кеш и обновляем если надо
     get_cached_news()
 
 
     keyboard = [
+
         [
             InlineKeyboardButton(
                 "🔴 High Impact",
                 callback_data="news_high"
             )
         ],
+
         [
             InlineKeyboardButton(
                 "💵 USD",
                 callback_data="news_usd"
             ),
+
             InlineKeyboardButton(
                 "💶 EUR",
                 callback_data="news_eur"
             )
         ],
+
         [
             InlineKeyboardButton(
                 "💷 GBP",
                 callback_data="news_gbp"
             )
         ],
+
         [
             InlineKeyboardButton(
                 "📅 Все новости",
                 callback_data="news_all"
             )
         ],
+
         [
             InlineKeyboardButton(
                 "🤖 AI анализ",
@@ -72,10 +81,12 @@ async def show_news(update, context):
 async def news_button(update, context):
 
     query = update.callback_query
+
     await query.answer()
 
 
     events = get_cached_news()
+
 
 
     if query.data == "news_high":
@@ -112,7 +123,15 @@ async def news_button(update, context):
 
     elif query.data == "news_ai":
 
+        # пока просто отдаём события для AI
         events = events[:10]
+
+
+
+    elif query.data == "news_all":
+
+        events = events
+
 
 
     if not events:
@@ -128,15 +147,22 @@ async def news_button(update, context):
     text = "📰 Экономический календарь\n\n"
 
 
+
     for e in events[:10]:
 
-        impact = "🔴" if e.get("impact") == "red" else "🟡"
+        impact = (
+            "🔴"
+            if e.get("impact") == "red"
+            else "🟡"
+        )
+
 
         text += (
             f"{impact} {e.get('currency')}\n"
             f"📌 {e.get('title')}\n"
             f"🕒 {e.get('time')}\n\n"
         )
+
 
 
     await query.edit_message_text(
