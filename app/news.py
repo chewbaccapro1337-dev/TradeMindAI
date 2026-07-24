@@ -129,8 +129,6 @@ async def news_button(update, context):
            )
            return
 
-        from ai import analyze_economic_event
-
         event = events[0]
 
         await query.edit_message_text(
