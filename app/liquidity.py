@@ -335,6 +335,34 @@ def get_best_fvg(fvgs, current_price):
 
     return best
 
+def filter_fvg_by_confirmation(fvgs, sweep_structure):
+
+    if sweep_structure is None:
+        return []
+
+
+    result = []
+
+
+    if sweep_structure["direction"] == "BULLISH":
+
+        for fvg in fvgs:
+
+            if fvg["type"] == "BULLISH":
+                result.append(fvg)
+
+
+
+    elif sweep_structure["direction"] == "BEARISH":
+
+        for fvg in fvgs:
+
+            if fvg["type"] == "BEARISH":
+                result.append(fvg)
+
+
+    return result
+
 def find_equal_levels(levels, tolerance=5):
 
     levels = sorted(levels, key=lambda x: x["price"])

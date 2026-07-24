@@ -131,11 +131,20 @@ def analyze_market():
 
     if sweep and sweep_structure:
 
-        entry_zone = find_entry_zone(
-             sweep,
-             sweep_structure,
-             fvgs
-        )
+       fvgs = find_fvg(candles)
+
+
+       confirmed_fvgs = filter_fvg_by_confirmation(
+         fvgs,
+         sweep_structure
+       )
+
+
+       entry_zone = find_entry_zone(
+          sweep,
+          sweep_structure,
+          confirmed_fvgs
+       )
 
     signal = None
 
@@ -155,7 +164,7 @@ def analyze_market():
      "sweep": sweep,
      "entry_zone": entry_zone,
      "signal": signal,
-     "fvgs": fvgs,
+     "fvgs": confirmed_fvgs,
      "structure": labeled,
      "market_structure": market_structure,
      "sweep_structure": sweep_structure,
