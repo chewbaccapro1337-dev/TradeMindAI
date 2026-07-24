@@ -207,6 +207,25 @@ def make_report():
 """
         )
 
+    # Market Structure
+
+    structure = data.get("structure")
+
+    if structure:
+
+        text = []
+
+        for x in structure[-5:]:
+
+            text.append(
+                f"{x['label']}: {x['price']}"
+            )
+
+        report.append(
+            "🏗 Структура рынка:\n" +
+            "\n".join(text)
+        )
+
     # ликвидность
 
     sweep = data["sweep"]
