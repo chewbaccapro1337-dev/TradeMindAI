@@ -523,6 +523,9 @@ def find_buy_sell_liquidity(candles):
     for h in highs:
 
         if h > current_price:
+            distance = h - current_price
+            if distance < 100:
+               continue
 
             cluster = [
                 x for x in highs
@@ -555,17 +558,25 @@ def find_buy_sell_liquidity(candles):
 
         if l < current_price:
 
+            distance = current_price - l
+
+    # убираем уровни слишком близко к цене
+            if distance < 100:
+               continue
+
+
             cluster = [
-                x for x in lows
-                if abs(x - l) <= 50
+              x for x in lows
+              if abs(x - l) <= 50
             ]
 
             if len(cluster) >= 2:
 
-                low_zones.append({
-                    "price": sum(cluster) / len(cluster),
-                    "strength": len(cluster)
-                })
+               low_zones.append({
+                   "price": sum(cluster) / len(cluster),
+                 "strength": len(cluster)
+               })
+
 
 
     if low_zones:
