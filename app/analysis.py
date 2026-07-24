@@ -122,13 +122,15 @@ def analyze_market():
      current_price
     )  
 
-    entry_zone = find_entry_zone(
-        sweep,
-        sweep_structure,
-        fvgs,
-        market_structure["trend"]
-    )
+    entry_zone = None
 
+    if sweep and sweep_structure:
+
+        entry_zone = find_entry_zone(
+             sweep,
+             sweep_structure,
+             fvgs
+        )
 
     signal = None
 
@@ -317,6 +319,8 @@ def make_report():
 
         report.append(
             f"""
+🎯 Сетап найден
+
 Зона интереса:
 {zone['low']} - {zone['high']}
 """
@@ -326,8 +330,8 @@ def make_report():
 
         report.append(
             """
-Зона интереса:
-❌ не найдена
+🎯 Сетап:
+⏳ ожидание подтверждения
 """
         )
 
