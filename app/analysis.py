@@ -122,7 +122,8 @@ def analyze_market():
     entry_zone = find_entry_zone(
         sweep,
         sweep_structure,
-        fvgs
+        fvgs,
+        market_structure["trend"]
     )
 
 

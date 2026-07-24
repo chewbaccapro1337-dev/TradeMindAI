@@ -719,47 +719,28 @@ def detect_sweep_structure_break(
 def find_entry_zone(
     sweep,
     sweep_structure,
-    fvgs
+    fvgs,
+    trend=None
 ):
-
-    if sweep is None:
-        return None
-
-    if sweep_structure is None:
-        return None
-
-
-    if sweep_structure["event"] not in ["CHoCH", "BOS"]:
-        return None
-
 
     zones = []
 
 
     for fvg in fvgs:
 
-        # после HIGH SWEEP ищем bearish FVG
-        if (
-            sweep_structure["direction"] == "BEARISH"
-            and fvg["type"] == "BEARISH"
-        ):
+        # медвежий сценарий
+        if trend == "DOWN" and fvg["type"] == "BEARISH":
             zones.append(fvg)
 
 
-        # после LOW SWEEP ищем bullish FVG
-        if (
-            sweep_structure["direction"] == "BULLISH"
-            and fvg["type"] == "BULLISH"
-        ):
+        # бычий сценарий
+        if trend == "UP" and fvg["type"] == "BULLISH":
             zones.append(fvg)
-
 
 
     if not zones:
         return None
 
-
-    # берём последний актуальный FVG
 
     return zones[-1]
 
