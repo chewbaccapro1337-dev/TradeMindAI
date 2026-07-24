@@ -562,79 +562,65 @@ def find_buy_sell_liquidity(candles):
 
     return buy_side, sell_side
 
-def find_buy_sell_liquidity(
-    candles,
-    tolerance=20
-):
+def detect_market_structure(highs, lows):
 
-    current_price = candles[-1]["close"]
+    if len(highs) < 3 or len(lows) < 3:
+        return None
 
 
-    highs = []
-    lows = []
+    last_high = highs[-1]["price"]
+    prev_high = highs[-2]["price"]
+
+    last_low = lows[-1]["price"]
+    prev_low = lows[-2]["price"]
 
 
-    for i, c in enumerate(candles):
+    # ищем последовательность HH + HL
 
-        highs.append({
-            "price": c["high"],
-            "index": i
-        })
+    if (
+        highs[-1]["price"] > highs[-2]["price"]
+        and lows[-1]["price"] > lows[-2]["price"]
+    ):
 
-        lows.append({
-            "price": c["low"],
-            "index": i
-        })
+        trend = "UP"
 
 
-    equal_highs = find_equal_levels(
-        highs,
-        tolerance
-    )
+    # ищем последовательность LH + LL
 
-    equal_lows = find_equal_levels(
-        lows,
-        tolerance
-    )
+    elif (
+        highs[-1]["price"] < highs[-2]["price"]
+        and lows[-1]["price"] < lows[-2]["price"]
+    ):
 
-
-    buy_side = None
-    sell_side = None
+        trend = "DOWN"
 
 
-    # Buy Side = равные максимумы выше цены
+    else:
 
-    valid_highs = [
-        x for x in equal_highs
-        if x["price"] > current_price
-    ]
+        # если сделали sweep вверх,
+        # считаем предыдущий тренд бычьим
 
+        if last_high > prev_high:
 
-    if valid_highs:
+            trend = "UP"
 
-        buy_side = max(
-            valid_highs,
-            key=lambda x: x["strength"]
-        )
+        elif last_low < prev_low:
 
+            trend = "DOWN"
 
-    # Sell Side = равные минимумы ниже цены
+        else:
 
-    valid_lows = [
-        x for x in equal_lows
-        if x["price"] < current_price
-    ]
+            trend = "RANGE"
 
 
-    if valid_lows:
 
-        sell_side = max(
-            valid_lows,
-            key=lambda x: x["strength"]
-        )
-
-
-    return buy_side, sell_side
+    return {
+        "trend": trend,
+        "last_high": last_high,
+        "last_low": last_low,
+        "prev_high": prev_high,
+        "prev_low": prev_low
+    }
 
 def detect_liquidity_sweep(
     candles,
