@@ -332,28 +332,29 @@ else:
 
 # Sweep
 
-sweep = data["sweep"]
+    sweep = data["sweep"]
 
-if sweep:
+    if sweep:
 
-    report.append(
-        f"""
+        report.append(
+            f"""
 ⚡ Liquidity Sweep:
 
 {sweep['type']}
 Уровень:
 {sweep['level']}
 """
-    )
+        )
 
-else:
+    else:
 
-    report.append(
-        """
+        report.append(
+            """
 ⚡ Liquidity Sweep:
 Не обнаружен
 """
-    )
+        )
+
 
     # зона
 
