@@ -14,6 +14,7 @@ from liquidity import (
     detect_liquidity_sweep,
     detect_market_structure,
     find_entry_zone,
+    detect_sweep_structure_break
 )
 
 ANALYZE = 20
@@ -111,11 +112,16 @@ def analyze_market():
         equal_lows,
         equal_highs
     )
-
+    
+    sweep_structure = detect_sweep_structure_break(
+     sweep,
+     labeled,
+     current_price
+    )  
 
     entry_zone = find_entry_zone(
         sweep,
-        bos_choch,
+        sweep_structure,
         fvgs
     )
 
@@ -141,6 +147,7 @@ def analyze_market():
      "fvgs": fvgs,
      "structure": labeled,
      "market_structure": market_structure
+     "sweep_structure": sweep_structure,
     }
 
 def make_report():

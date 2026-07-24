@@ -729,7 +729,7 @@ def find_entry_zone(
         return None
 
 
-    if sweep_structure["event"] != "CHoCH":
+    if sweep_structure["event"] not in ["CHoCH", "BOS"]:
         return None
 
 
