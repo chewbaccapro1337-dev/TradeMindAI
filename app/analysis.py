@@ -291,25 +291,69 @@ def make_report():
 
     # ликвидность
 
-    sweep = data["sweep"]
+    # Пулы ликвидности
 
-    if sweep:
+buy = data.get("buy_side")
+sell = data.get("sell_side")
 
-        report.append(
-            f"""
-Ликвидность:
-⚡ {sweep['type']}
-Уровень: {sweep['level']}
-Экстремум: {sweep['price']}
+report.append(
+    "\n📍 Liquidity Pools:\n"
+)
+
+if buy:
+    report.append(
+        f"""
+🟢 Buy Side
+Цена: {buy['price']:.2f}
+Сила: {buy['strength']}
 """
-        )
+    )
 
-    else:
+else:
+    report.append(
+        "🟢 Buy Side: не найдена"
+    )
 
-        report.append(
-            "Ликвидность: не обнаружена"
-        )
 
+if sell:
+    report.append(
+        f"""
+🔴 Sell Side
+Цена: {sell['price']:.2f}
+Сила: {sell['strength']}
+"""
+    )
+
+else:
+    report.append(
+        "🔴 Sell Side: не найдена"
+    )
+
+
+# Sweep
+
+sweep = data["sweep"]
+
+if sweep:
+
+    report.append(
+        f"""
+⚡ Liquidity Sweep:
+
+{sweep['type']}
+Уровень:
+{sweep['level']}
+"""
+    )
+
+else:
+
+    report.append(
+        """
+⚡ Liquidity Sweep:
+Не обнаружен
+"""
+    )
 
     # зона
 
