@@ -379,6 +379,32 @@ def make_report():
 """
         )
 
+    sweep_structure = data.get("sweep_structure")
+
+    if sweep_structure:
+
+        report.append(
+            f"""
+🏗 После Sweep:
+
+{sweep_structure['event']}
+Направление:
+{sweep_structure['direction']}
+
+Уровень:
+{sweep_structure['level']}
+"""
+        )
+
+    else:
+
+        report.append(
+            """
+🏗 После Sweep:
+
+Подтверждения структуры нет
+"""
+        )
 
     # Зона интереса
 
