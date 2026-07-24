@@ -407,25 +407,25 @@ def main():
     )
      ],
     },
-  fallbacks=[
+fallbacks=[
     CommandHandler("cancel", cancel),
     MessageHandler(filters.Regex("^❌ Отмена$"), cancel),
     MessageHandler(filters.Regex("^⬅️ Назад$"), back),
 ]
 
-    app.add_handler(
-     PreCheckoutQueryHandler(pre_checkout)
-    )
-
-
-    app.add_handler(
-        MessageHandler(
-          filters.SUCCESSFUL_PAYMENT,
-          successful_payment
-        )
-    )
-
 )
+
+app.add_handler(
+    PreCheckoutQueryHandler(pre_checkout)
+)
+
+app.add_handler(
+    MessageHandler(
+        filters.SUCCESSFUL_PAYMENT,
+        successful_payment
+    )
+)
+
     app.add_handler(CommandHandler("start", start))
     app.add_handler(
     MessageHandler(
