@@ -19,6 +19,7 @@ from liquidity import (
     detect_pool_sweep,
     filter_fvg_by_confirmation,
 )
+from subscription import check_subscription
 
 ANALYZE = 20
 
