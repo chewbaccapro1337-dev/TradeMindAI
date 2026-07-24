@@ -502,7 +502,7 @@ def find_liquidity_zones(candles, distance=50):
 
     return result
 
-def find_buy_sell_liquidity(candles):
+def find_buy_sell_liquidity(candles, min_distance=200):
 
     current_price = candles[-1]["close"]
 
@@ -926,3 +926,45 @@ def generate_market_explanation(
 
 
     return "\n".join(explanation)
+
+def detect_pool_sweep(candles, buy_side, sell_side):
+
+    current_price = candles[-1]["close"]
+
+    # снятие Sell Side (нижняя ликвидность)
+    if sell_side:
+
+        level = sell_side["price"]
+
+        recent_low = min(
+            c["low"] for c in candles[-10:]
+        )
+
+        if recent_low < level and current_price > level:
+
+            return {
+                "type": "LOW_SWEEP",
+                "level": level,
+                "price": recent_low
+            }
+
+
+    # снятие Buy Side (верхняя ликвидность)
+    if buy_side:
+
+        level = buy_side["price"]
+
+        recent_high = max(
+            c["high"] for c in candles[-10:]
+        )
+
+        if recent_high > level and current_price < level:
+
+            return {
+                "type": "HIGH_SWEEP",
+                "level": level,
+                "price": recent_high
+            }
+
+
+    return None

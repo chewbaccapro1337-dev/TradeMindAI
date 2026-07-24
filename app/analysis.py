@@ -15,7 +15,8 @@ from liquidity import (
     detect_market_structure,
     find_entry_zone,
     detect_sweep_structure_break,
-    find_buy_sell_liquidity
+    find_buy_sell_liquidity,
+    detect_pool_sweep,
 )
 
 ANALYZE = 20
@@ -110,10 +111,14 @@ def analyze_market():
     )
 
 
-    sweep = detect_liquidity_sweep(
-        candles,
-        equal_lows,
-        equal_highs
+    buy_side, sell_side = find_buy_sell_liquidity(
+     candles
+    )
+
+    sweep = detect_pool_sweep(
+     candles,
+     buy_side,
+     sell_side
     )
     
     sweep_structure = detect_sweep_structure_break(
