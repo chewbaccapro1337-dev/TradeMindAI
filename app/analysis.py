@@ -217,6 +217,9 @@ def make_report():
     if fvgs:
 
         fvg = fvgs[-1]
+        distance = (
+           fvg["low"] - data["price"]
+        )
 
         report.append(
             f"""
@@ -225,6 +228,8 @@ def make_report():
 Тип: {fvg['type']}
 Зона: {fvg['low']} - {fvg['high']}
 Размер: {round(fvg['size'], 2)}
+Расстояние от цены:
+{round(distance, 2)}
 """
         )
 
@@ -306,57 +311,6 @@ def make_report():
 
     # ликвидность
 
-        # Пулы ликвидности
-
-    buy = data.get("buy_side")
-    sell = data.get("sell_side")
-
-
-    report.append(
-        "\n📍 Liquidity Pools:\n"
-    )
-
-
-    if buy:
-
-        report.append(
-            f"""
-🟢 Buy Side
-Цена: {buy['price']:.2f}
-Сила: {buy['strength']}
-"""
-        )
-
-    else:
-
-        report.append(
-            """
-🟢 Buy Side
-Не найдена
-"""
-        )
-
-
-    if sell:
-
-        report.append(
-            f"""
-🔴 Sell Side
-Цена: {sell['price']:.2f}
-Сила: {sell['strength']}
-"""
-        )
-
-    else:
-
-        report.append(
-            """
-🔴 Sell Side
-Не найдена
-"""
-        )
-
-
     # Sweep
 
     sweep = data.get("sweep")
@@ -391,7 +345,7 @@ def make_report():
 
     sweep_structure = data.get("sweep_structure")
 
-    if sweep_structure:
+    if sweep_structure and sweep_structure["event"]:
 
         report.append(
             f"""
