@@ -37,6 +37,7 @@ async def analyze_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(
             "🔒 AI Анализ фото доступен только по подписке"
         )
+        return ConversationHandler.END
 
     if not update.message.photo:
         await update.message.reply_text(
