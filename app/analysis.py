@@ -132,12 +132,15 @@ def analyze_market():
 
 
     return {
-        "trend": market_structure["trend"],
-        "price": current_price,
-        "bos_choch": bos_choch,
-        "sweep": sweep,
-        "entry_zone": entry_zone,
-        "signal": signal
+     "trend": market_structure["trend"],
+     "price": current_price,
+     "bos_choch": bos_choch,
+     "sweep": sweep,
+     "entry_zone": entry_zone,
+     "signal": signal,
+     "fvgs": fvgs,
+     "structure": labeled,
+     "market_structure": market_structure
     }
 
 def make_report():
