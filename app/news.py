@@ -1,9 +1,11 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ContextTypes
-
+from ai_analysis import analyze_economic_event
 from subscription import check_subscription
 from news_cache import get_cached_news
 
+
+analysis = analyze_economic_event(event)
 
 async def show_news(update, context):
 
