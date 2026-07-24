@@ -5,7 +5,6 @@ from subscription import check_subscription
 from news_cache import get_cached_news
 
 
-
 async def show_news(update, context):
 
     user_id = update.effective_user.id
@@ -124,8 +123,27 @@ async def news_button(update, context):
 
     elif query.data == "news_ai":
 
-        # пока просто отдаём события для AI
-        events = events[:10]
+       if not events:
+           await query.edit_message_text(
+              "📭 Новостей нет."
+           )
+           return
+
+        from ai import analyze_economic_event
+
+        event = events[0]
+
+        await query.edit_message_text(
+            "🤖 Анализирую новость..."
+        )
+
+        analysis = analyze_economic_event(event)
+
+        await query.message.reply_text(
+           "🤖 AI анализ новости:\n\n" + analysis
+        )
+
+        return
 
 
 
