@@ -506,62 +506,78 @@ def find_buy_sell_liquidity(candles):
 
     current_price = candles[-1]["close"]
 
-    highs = []
-    lows = []
-
-    for c in candles:
-        highs.append(c["high"])
-        lows.append(c["low"])
+    highs = [c["high"] for c in candles]
+    lows = [c["low"] for c in candles]
 
 
     buy_side = None
     sell_side = None
 
 
-    # Buy Side = ликвидность выше текущей цены
-    above = [
-        h for h in highs
-        if h > current_price
-    ]
+    # =====================
+    # BUY SIDE (выше цены)
+    # =====================
+
+    high_zones = []
+
+    for h in highs:
+
+        if h > current_price:
+
+            cluster = [
+                x for x in highs
+                if abs(x - h) <= 50
+            ]
+
+            if len(cluster) >= 2:
+
+                high_zones.append({
+                    "price": sum(cluster) / len(cluster),
+                    "strength": len(cluster)
+                })
 
 
-    if above:
-        level = min(above)
+    if high_zones:
 
-        buy_side = {
-            "price": level,
-            "strength": len(
-                [
-                    x for x in highs
-                    if abs(x-level) <= 50
-                ]
-            )
-        }
+        buy_side = max(
+            high_zones,
+            key=lambda x: x["strength"]
+        )
 
 
-    # Sell Side = ликвидность ниже текущей цены
-    below = [
-        l for l in lows
-        if l < current_price
-    ]
+    # =====================
+    # SELL SIDE (ниже цены)
+    # =====================
+
+    low_zones = []
+
+    for l in lows:
+
+        if l < current_price:
+
+            cluster = [
+                x for x in lows
+                if abs(x - l) <= 50
+            ]
+
+            if len(cluster) >= 2:
+
+                low_zones.append({
+                    "price": sum(cluster) / len(cluster),
+                    "strength": len(cluster)
+                })
 
 
-    if below:
-        level = max(below)
+    if low_zones:
 
-        sell_side = {
-            "price": level,
-            "strength": len(
-                [
-                    x for x in lows
-                    if abs(x-level) <= 50
-                ]
-            )
-        }
+        sell_side = max(
+            low_zones,
+            key=lambda x: x["strength"]
+        )
 
 
     return buy_side, sell_side
-
+    
 def detect_market_structure(highs, lows):
 
     if len(highs) < 3 or len(lows) < 3:
