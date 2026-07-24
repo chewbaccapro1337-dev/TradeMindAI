@@ -9,23 +9,10 @@ from news_ai_cache import (
 
 load_dotenv()
 
-load_dotenv()
-
-print("OPENAI KEY:", bool(os.getenv("OPENAI_API_KEY")))
-print("BASE URL:", os.getenv("OPENAI_BASE_URL"))
-
-api_key = os.getenv("OPENAI_API_KEY")
-base_url = os.getenv("OPENAI_BASE_URL")
-
-if base_url:
-    client = OpenAI(
-        api_key=api_key,
-        base_url=base_url
-    )
-else:
-    client = OpenAI(
-        api_key=api_key
-    )
+client = OpenAI(
+    api_key=os.getenv("OPENAI_API_KEY"),
+    base_url=os.getenv("OPENAI_BASE_URL")
+)
 
 
 def analyze_trade(image_path: str):
@@ -172,7 +159,7 @@ def analyze_economic_event(event):
 
     key = (
         f"{event['currency']}_"
-        f"{event['event']}_"
+        f"{event['title']}_"
         f"{event.get('actual')}"
     )
 
@@ -186,13 +173,15 @@ def analyze_economic_event(event):
     prompt = f"""
 Ты профессиональный трейдер.
 
+
+
 Проанализируй экономическую новость:
 
 Валюта:
 {event['currency']}
 
 Событие:
-{event['event']}
+{event['title']}
 
 Прогноз:
 {event.get('forecast')}
