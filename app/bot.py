@@ -256,6 +256,12 @@ async def successful_payment(update, context):
         payment.currency
     )
 
+    # выдаём PRO на 30 дней
+    add_subscription(
+        user_id,
+        30
+    )
+
     await update.message.reply_text(
         "✅ Оплата прошла!\n\n"
         "TradeMind AI Pro активирован на 30 дней ⭐"
