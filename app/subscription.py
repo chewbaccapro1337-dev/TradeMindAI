@@ -43,7 +43,7 @@ def check_subscription(user_id):
 
     return False
 
-def has_subscription(user_id):
+def check_subscription(user_id):
 
     conn = sqlite3.connect(DB_NAME)
     cur = conn.cursor()

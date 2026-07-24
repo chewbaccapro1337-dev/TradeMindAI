@@ -71,7 +71,7 @@ from states import (
     ACCOUNT_CURRENCY
 )
 from liquidity_report import make_report
-from subscription import has_subscription
+from subscription import check_subscription
 from database import add_subscription
 from admin import users, grant, revoke
 from analysis import analyze_market
