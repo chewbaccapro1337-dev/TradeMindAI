@@ -135,6 +135,8 @@ async def news_button(update, context):
             "🤖 Анализирую новость..."
         )
 
+print(event)
+
         analysis = analyze_economic_event(event)
 
         await query.message.reply_text(
