@@ -32,6 +32,11 @@ async def ask_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def analyze_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
+    if not check_subscription(update.effective_user.id):
+        await update.message.reply_text(
+            "🔒 AI Анализ фото доступен только по подписке"
+        )
+
     if not update.message.photo:
         await update.message.reply_text(
             "❌ Отправьте изображение."
