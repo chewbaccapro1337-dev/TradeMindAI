@@ -1,65 +1,73 @@
-import feedparser
-from datetime import datetime
+import requests
+from bs4 import BeautifulSoup
 
 
-FEEDS = [
-    "https://nfs.faireconomy.media/ff_calendar_thisweek.xml"
-]
+URL = "https://www.myfxbook.com/forex-economic-calendar"
 
 
 def get_calendar():
 
     events = []
 
-    feed = feedparser.parse(FEEDS[0])
+    headers = {
+        "User-Agent": "Mozilla/5.0"
+    }
 
 
-    for item in feed.entries:
+    try:
 
-        title = item.get("title", "")
-        description = item.get("description", "")
-
-
-        text = title + " " + description
-
-
-        currency = None
-
-        if "USD" in text:
-            currency = "USD"
-
-        elif "EUR" in text:
-            currency = "EUR"
-
-        elif "GBP" in text:
-            currency = "GBP"
-
-
-        if not currency:
-            continue
-
-
-        impact = "yellow"
-
-
-        if "High" in text or "HIGH" in text:
-            impact = "red"
-
-
-        time = item.get(
-            "published",
-            ""
+        r = requests.get(
+            URL,
+            headers=headers,
+            timeout=10
         )
 
 
-        events.append(
-            {
-                "currency": currency,
-                "impact": impact,
-                "title": title,
-                "time": time
-            }
+        soup = BeautifulSoup(
+            r.text,
+            "html.parser"
         )
+
+
+        rows = soup.find_all(
+            "tr"
+        )
+
+
+        for row in rows:
+
+            cols = row.find_all("td")
+
+
+            if len(cols) < 5:
+                continue
+
+
+            currency = cols[1].text.strip()
+            impact = cols[2].text.strip()
+            title = cols[3].text.strip()
+            time = cols[0].text.strip()
+
+
+            if currency in [
+                "USD",
+                "EUR",
+                "GBP"
+            ]:
+
+                events.append(
+                    {
+                        "currency": currency,
+                        "impact": "red" if "High" in impact else "yellow",
+                        "title": title,
+                        "time": time
+                    }
+                )
+
+
+    except Exception as e:
+
+        print("Calendar error:", e)
 
 
     return events
