@@ -3,7 +3,7 @@ from telegram.ext import ContextTypes
 from ai import analyze_economic_event
 from subscription import check_subscription
 from news_cache import get_cached_news
-
+from calendar_cache import get_calendar_cached
 
 async def show_news(update, context):
 
@@ -91,11 +91,23 @@ async def news_button(update, context):
 
     if query.data == "news_high":
 
-        events = [
-            e for e in events
-            if e.get("impact") == "red"
-        ]
+        from calendar_cache import get_calendar
 
+        events = get_calendar()
+
+        text = "🔴 HIGH IMPACT ECONOMIC CALENDAR\n\n"
+
+        for e in events[:10]:
+
+            text += (
+                f"🌍 {e['currency']}\n"
+                f"🕒 {e['time']}\n"
+                f"📌 {e['title']}\n"
+                f"🔥 Impact: HIGH\n\n"
+            )
+
+        await query.edit_message_text(text[:4000])
+        return
 
     elif query.data == "news_usd":
 
