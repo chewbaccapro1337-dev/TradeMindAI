@@ -1,6 +1,6 @@
 from telegram import Update
 from telegram.ext import ContextTypes
-from database import get_connection
+from database import get_connection, add_subscription
 
 
 ADMIN_ID = 1176830974   # сюда свой Telegram ID
@@ -78,29 +78,7 @@ async def grant(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
 
 
-    conn = get_connection()
-    cursor = conn.cursor()
-
-
-    cursor.execute(
-        """
-        INSERT OR REPLACE INTO subscriptions
-        (user_id, expires_at)
-        VALUES (
-            ?,
-            datetime('now', ?)
-        )
-        """,
-        (
-            user_id,
-            f"+{days} days"
-        )
-    )
-
-
-    conn.commit()
-    conn.close()
-
+    add_subscription(user_id, days)
 
     await update.message.reply_text(
         "✅ Подписка выдана"
