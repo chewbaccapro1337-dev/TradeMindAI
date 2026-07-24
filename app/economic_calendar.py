@@ -3,7 +3,7 @@ from datetime import datetime
 
 
 FEEDS = [
-    "https://www.fxstreet.com/rss/news",
+    "https://nfs.faireconomy.media/ff_calendar_thisweek.xml"
 ]
 
 
@@ -11,56 +11,55 @@ def get_calendar():
 
     events = []
 
-
-    for url in FEEDS:
-
-        feed = feedparser.parse(url)
+    feed = feedparser.parse(FEEDS[0])
 
 
-        for item in feed.entries[:30]:
+    for item in feed.entries:
 
-            title = item.get(
-                "title",
-                ""
-            )
+        title = item.get("title", "")
+        description = item.get("description", "")
 
 
-            published = item.get(
-                "published",
-                ""
-            )
+        text = title + " " + description
 
 
-            text = title.lower()
+        currency = None
+
+        if "USD" in text:
+            currency = "USD"
+
+        elif "EUR" in text:
+            currency = "EUR"
+
+        elif "GBP" in text:
+            currency = "GBP"
 
 
-            currency = None
+        if not currency:
+            continue
 
 
-            if "usd" in text or "dollar" in text:
-                currency = "USD"
-
-            elif "eur" in text or "euro" in text:
-                currency = "EUR"
-
-            elif "gbp" in text or "pound" in text:
-                currency = "GBP"
+        impact = "yellow"
 
 
+        if "High" in text or "HIGH" in text:
+            impact = "red"
 
-            if currency:
 
-                events.append({
+        time = item.get(
+            "published",
+            ""
+        )
 
-                    "currency": currency,
 
-                    "impact": "red",
-
-                    "title": title,
-
-                    "time": published
-
-                })
+        events.append(
+            {
+                "currency": currency,
+                "impact": impact,
+                "title": title,
+                "time": time
+            }
+        )
 
 
     return events
