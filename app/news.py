@@ -1,30 +1,25 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import ContextTypes
-from ai import analyze_economic_event
 from subscription import check_subscription
+
 from news_cache import get_cached_news
-from calendar_cache import get_calendar_cached
+from economic_calendar import get_calendar
+
+
 
 async def show_news(update, context):
 
-    user_id = update.effective_user.id
-
-    if not check_subscription(user_id):
+    if not check_subscription(update.effective_user.id):
 
         await update.message.reply_text(
             "🔒 Тестовый доступ закончился.\n\n"
             "TradeMind AI Premium:\n"
             "🤖 AI анализ\n"
             "📰 Новости\n"
-            "💧 Liquidity Map\n\n"
+            "💧 BTC AI\n\n"
             "Для продолжения оформите подписку."
         )
 
         return
-
-
-    # проверяем кеш и обновляем если надо
-    get_cached_news()
 
 
     keyboard = [
@@ -68,6 +63,7 @@ async def show_news(update, context):
                 callback_data="news_ai"
             )
         ]
+
     ]
 
 
@@ -78,6 +74,8 @@ async def show_news(update, context):
 
 
 
+
+
 async def news_button(update, context):
 
     query = update.callback_query
@@ -85,29 +83,45 @@ async def news_button(update, context):
     await query.answer()
 
 
-    events = get_cached_news()
+    # =========================
+    # Все новости
+    # =========================
 
+    if query.data == "news_all":
+
+        events = get_cached_news()
+
+        title = "📰 Последние новости\n\n"
+
+
+
+    # =========================
+    # Экономический календарь
+    # =========================
+
+    else:
+
+        events = get_calendar()
+
+        title = "📅 Экономический календарь\n\n"
+
+
+
+    # =========================
+    # Фильтры
+    # =========================
 
 
     if query.data == "news_high":
 
-        from calendar_cache import get_calendar
+        events = [
+            e for e in events
+            if e.get("impact") == "red"
+        ]
 
-        events = get_calendar()
+        title = "🔴 HIGH IMPACT EVENTS\n\n"
 
-        text = "🔴 HIGH IMPACT ECONOMIC CALENDAR\n\n"
 
-        for e in events[:10]:
-
-            text += (
-                f"🌍 {e['currency']}\n"
-                f"🕒 {e['time']}\n"
-                f"📌 {e['title']}\n"
-                f"🔥 Impact: HIGH\n\n"
-            )
-
-        await query.edit_message_text(text[:4000])
-        return
 
     elif query.data == "news_usd":
 
@@ -115,6 +129,9 @@ async def news_button(update, context):
             e for e in events
             if e.get("currency") == "USD"
         ]
+
+        title = "💵 USD ECONOMIC CALENDAR\n\n"
+
 
 
     elif query.data == "news_eur":
@@ -124,6 +141,9 @@ async def news_button(update, context):
             if e.get("currency") == "EUR"
         ]
 
+        title = "💶 EUR ECONOMIC CALENDAR\n\n"
+
+
 
     elif query.data == "news_gbp":
 
@@ -132,66 +152,57 @@ async def news_button(update, context):
             if e.get("currency") == "GBP"
         ]
 
+        title = "💷 GBP ECONOMIC CALENDAR\n\n"
+
+
 
     elif query.data == "news_ai":
 
-        if not events:
-            await query.edit_message_text(
-                "📭 Новостей нет."
-            )
-            return
+        events = get_calendar()
 
-        event = events[0]
+        title = "🤖 AI ECONOMIC ANALYSIS\n\n"
 
-        await query.edit_message_text(
-            "🤖 Анализирую новость..."
-        )
-
-        print(event)
-
-        analysis = analyze_economic_event(event)
-
-        await query.message.reply_text(
-            "🤖 AI анализ новости:\n\n" + analysis
-        )
-
-        return
-
-
-
-    elif query.data == "news_all":
-
-        events = events
 
 
 
     if not events:
 
         await query.edit_message_text(
-            "📭 Новостей нет."
+            "📭 Событий нет."
         )
 
         return
 
 
 
-    text = "📰 Экономический календарь\n\n"
+
+    text = title
 
 
 
     for e in events[:10]:
 
-        impact = (
-            "🔴"
-            if e.get("impact") == "red"
-            else "🟡"
-        )
+        if e.get("impact") == "red":
+
+            impact = "🔴 HIGH"
+
+        elif e.get("impact") == "orange":
+
+            impact = "🟠 MEDIUM"
+
+        else:
+
+            impact = "🟡 LOW"
+
 
 
         text += (
-            f"{impact} {e.get('currency')}\n"
-            f"📌 {e.get('title')}\n"
-            f"🕒 {e.get('time')}\n\n"
+
+            f"{impact}\n"
+            f"🌍 {e.get('currency')}\n"
+            f"🕒 {e.get('time')}\n"
+            f"📌 {e.get('title')}\n\n"
+
         )
 
 
