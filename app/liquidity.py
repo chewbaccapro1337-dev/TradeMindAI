@@ -243,7 +243,11 @@ def detect_choch(labeled):
 
     return None
 
-def find_fvg(candles, min_size=20):
+def find_fvg(
+    candles,
+    min_size=20,
+    max_size=150
+):
 
     fvgs = []
 
@@ -259,7 +263,7 @@ def find_fvg(candles, min_size=20):
 
             gap = candle3["low"] - candle1["high"]
 
-            if gap >= min_size:
+            if min_size <= gap <= max_size:
 
                 fvgs.append({
                     "type": "BULLISH",
@@ -276,7 +280,7 @@ def find_fvg(candles, min_size=20):
 
             gap = candle1["low"] - candle3["high"]
 
-            if gap >= min_size:
+            if min_size <= gap <= max_size:
 
                 fvgs.append({
                     "type": "BEARISH",
@@ -558,65 +562,79 @@ def find_buy_sell_liquidity(candles):
 
     return buy_side, sell_side
 
-def detect_market_structure(highs, lows):
+def find_buy_sell_liquidity(
+    candles,
+    tolerance=20
+):
 
-    if len(highs) < 3 or len(lows) < 3:
-        return None
-
-
-    last_high = highs[-1]["price"]
-    prev_high = highs[-2]["price"]
-
-    last_low = lows[-1]["price"]
-    prev_low = lows[-2]["price"]
+    current_price = candles[-1]["close"]
 
 
-    # ищем последовательность HH + HL
-
-    if (
-        highs[-1]["price"] > highs[-2]["price"]
-        and lows[-1]["price"] > lows[-2]["price"]
-    ):
-
-        trend = "UP"
+    highs = []
+    lows = []
 
 
-    # ищем последовательность LH + LL
+    for i, c in enumerate(candles):
 
-    elif (
-        highs[-1]["price"] < highs[-2]["price"]
-        and lows[-1]["price"] < lows[-2]["price"]
-    ):
+        highs.append({
+            "price": c["high"],
+            "index": i
+        })
 
-        trend = "DOWN"
-
-
-    else:
-
-        # если сделали sweep вверх,
-        # считаем предыдущий тренд бычьим
-
-        if last_high > prev_high:
-
-            trend = "UP"
-
-        elif last_low < prev_low:
-
-            trend = "DOWN"
-
-        else:
-
-            trend = "RANGE"
+        lows.append({
+            "price": c["low"],
+            "index": i
+        })
 
 
+    equal_highs = find_equal_levels(
+        highs,
+        tolerance
+    )
 
-    return {
-        "trend": trend,
-        "last_high": last_high,
-        "last_low": last_low,
-        "prev_high": prev_high,
-        "prev_low": prev_low
-    }
+    equal_lows = find_equal_levels(
+        lows,
+        tolerance
+    )
+
+
+    buy_side = None
+    sell_side = None
+
+
+    # Buy Side = равные максимумы выше цены
+
+    valid_highs = [
+        x for x in equal_highs
+        if x["price"] > current_price
+    ]
+
+
+    if valid_highs:
+
+        buy_side = max(
+            valid_highs,
+            key=lambda x: x["strength"]
+        )
+
+
+    # Sell Side = равные минимумы ниже цены
+
+    valid_lows = [
+        x for x in equal_lows
+        if x["price"] < current_price
+    ]
+
+
+    if valid_lows:
+
+        sell_side = max(
+            valid_lows,
+            key=lambda x: x["strength"]
+        )
+
+
+    return buy_side, sell_side
 
 def detect_liquidity_sweep(
     candles,
