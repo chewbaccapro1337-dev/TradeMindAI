@@ -498,6 +498,66 @@ def find_liquidity_zones(candles, distance=50):
 
     return result
 
+def find_buy_sell_liquidity(candles):
+
+    current_price = candles[-1]["close"]
+
+    highs = []
+    lows = []
+
+    for c in candles:
+        highs.append(c["high"])
+        lows.append(c["low"])
+
+
+    buy_side = None
+    sell_side = None
+
+
+    # Buy Side = ликвидность выше текущей цены
+    above = [
+        h for h in highs
+        if h > current_price
+    ]
+
+
+    if above:
+        level = min(above)
+
+        buy_side = {
+            "price": level,
+            "strength": len(
+                [
+                    x for x in highs
+                    if abs(x-level) <= 50
+                ]
+            )
+        }
+
+
+    # Sell Side = ликвидность ниже текущей цены
+    below = [
+        l for l in lows
+        if l < current_price
+    ]
+
+
+    if below:
+        level = max(below)
+
+        sell_side = {
+            "price": level,
+            "strength": len(
+                [
+                    x for x in lows
+                    if abs(x-level) <= 50
+                ]
+            )
+        }
+
+
+    return buy_side, sell_side
+
 def detect_market_structure(highs, lows):
 
     if len(highs) < 3 or len(lows) < 3:

@@ -14,7 +14,8 @@ from liquidity import (
     detect_liquidity_sweep,
     detect_market_structure,
     find_entry_zone,
-    detect_sweep_structure_break
+    detect_sweep_structure_break,
+    find_buy_sell_liquidity
 )
 
 ANALYZE = 20
@@ -85,6 +86,8 @@ def analyze_market():
 
     current_price = candles[-1]["close"]
 
+    buy_side, sell_side = find_buy_sell_liquidity(candles)
+
 
     bos_choch = detect_bos_choch(
         labeled,
@@ -148,7 +151,9 @@ def analyze_market():
      "fvgs": fvgs,
      "structure": labeled,
      "market_structure": market_structure,
-     "sweep_structure": sweep_structure
+     "sweep_structure": sweep_structure,
+     "buy_side": buy_side,
+     "sell_side": sell_side
     }
 
 def make_report():
@@ -212,6 +217,54 @@ def make_report():
             """
 📦 FVG:
 Не найден
+"""
+        )
+
+    buy = data.get("buy_side")
+    sell = data.get("sell_side")
+
+
+    report.append(
+        "\n📍 Ликвидность:"
+    )
+
+
+    if buy:
+
+        report.append(
+            f"""
+🟢 Buy Side
+Цена: {buy['price']}
+Сила: {buy['strength']}
+"""
+        )
+
+    else:
+
+        report.append(
+            """
+🟢 Buy Side
+Не найдена
+"""
+        )
+
+
+    if sell:
+
+        report.append(
+            f"""
+🔴 Sell Side
+Цена: {sell['price']}
+Сила: {sell['strength']}
+"""
+        )
+
+    else:
+
+        report.append(
+            """
+🔴 Sell Side
+Не найдена
 """
         )
 
