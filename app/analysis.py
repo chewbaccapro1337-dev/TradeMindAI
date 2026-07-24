@@ -180,6 +180,33 @@ def make_report():
         )
 
 
+    # FVG
+
+    fvgs = data.get("fvgs")
+
+    if fvgs:
+
+        fvg = fvgs[-1]
+
+        report.append(
+            f"""
+📦 FVG:
+
+Тип: {fvg['type']}
+Зона: {fvg['low']} - {fvg['high']}
+Размер: {round(fvg['size'], 2)}
+"""
+        )
+
+    else:
+
+        report.append(
+            """
+📦 FVG:
+Не найден
+"""
+        )
+
     # ликвидность
 
     sweep = data["sweep"]
