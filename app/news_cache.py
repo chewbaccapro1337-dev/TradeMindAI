@@ -1,6 +1,6 @@
 from pathlib import Path
-import json
 from datetime import datetime, timedelta
+import json
 
 from economic_calendar import get_calendar
 
@@ -9,26 +9,27 @@ NEWS_FILE = Path("/root/TradeMindAI/news.json")
 
 
 def update_news():
-
     events = get_calendar()
 
-    if events:
-        data = {
-            "updated": datetime.now().strftime("%Y-%m-%d %H:%M"),
-            "events": events
-        }
+    if not events:
+        return []
 
-        with open(
-            NEWS_FILE,
-            "w",
-            encoding="utf-8"
-        ) as f:
-            json.dump(
-                data,
-                f,
-                ensure_ascii=False,
-                indent=4
-            )
+    data = {
+        "updated": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "events": events
+    }
+
+    with open(
+        NEWS_FILE,
+        "w",
+        encoding="utf-8"
+    ) as f:
+        json.dump(
+            data,
+            f,
+            ensure_ascii=False,
+            indent=4
+        )
 
     return events
 
@@ -45,10 +46,16 @@ def get_cached_news():
     ) as f:
         data = json.load(f)
 
-    updated = datetime.strptime(
-        data["updated"],
-        "%Y-%m-%d %H:%M"
-    )
+    try:
+        updated = datetime.strptime(
+            data["updated"],
+            "%Y-%m-%d %H:%M:%S"
+        )
+    except ValueError:
+        updated = datetime.strptime(
+            data["updated"],
+            "%Y-%m-%d %H:%M"
+        )
 
     if datetime.now() - updated > timedelta(hours=1):
         return update_news()
@@ -59,7 +66,10 @@ def get_cached_news():
 def get_cache():
 
     if not NEWS_FILE.exists():
-        update_news()
+        return {
+            "updated": None,
+            "events": []
+        }
 
     with open(
         NEWS_FILE,
