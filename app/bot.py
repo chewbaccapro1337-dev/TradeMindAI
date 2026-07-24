@@ -98,7 +98,6 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await update.message.reply_text(
         "🚀 Добро пожаловать в TradeMind AI!\n\n"
-        "🎁 Новым пользователям предоставлен тестовый период 1 день\n\n"
         "Доступные функции:\n"
         "📊 Журнал сделок\n"
         "📰 Экономический календарь\n"
@@ -135,6 +134,12 @@ async def risk(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
 
 async def show_liquidity(update, context):
+
+    if not check_subscription(update.effective_user.id):
+        await update.message.reply_text(
+            "🔒 BTC анализ доступен только по подписке"
+        )
+        return
 
     print("КНОПКА AI АНАЛИЗ НАЖАТА")
 
