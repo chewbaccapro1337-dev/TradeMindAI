@@ -146,8 +146,8 @@ def analyze_market():
      "signal": signal,
      "fvgs": fvgs,
      "structure": labeled,
-     "market_structure": market_structure
-     "sweep_structure": sweep_structure,
+     "market_structure": market_structure,
+     "sweep_structure": sweep_structure
     }
 
 def make_report():
