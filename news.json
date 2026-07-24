@@ -1,5 +1,8 @@
 {
-    "updated": "2026-07-24 01:36:43",
+    updated = datetime.strptime(
+    data["updated"],
+    "%Y-%m-%d %H:%M:%S"
+)
     "events": [
         {
             "currency": "EUR",
