@@ -1,6 +1,7 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import ContextTypes
-from subscription import check_subscription
+from subscription import check_subscription, get_subscription_info
+from datetime import datetime
 
 
 ADMIN_ID = 1176830974
@@ -9,13 +10,15 @@ async def subscription(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     user_id = update.effective_user.id
 
-    active = check_subscription(user_id)
+    expires = get_subscription_info(user_id)
 
-
-    if active:
-        status = "🟢 Активна"
+    if expires and expires > datetime.now():
+       status = (
+        f"🟢 Активна\n"
+        f"До: {expires.strftime('%d.%m.%Y %H:%M')}"
+    )
     else:
-        status = "🔴 Завершена"
+        status = "🔴 Не активна"
 
 
     keyboard = [

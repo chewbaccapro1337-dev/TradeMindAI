@@ -30,3 +30,30 @@ def check_subscription(user_id):
         return False
 
     return expires_date > datetime.now()
+
+
+def get_subscription_info(user_id):
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        SELECT expires_at
+        FROM subscriptions
+        WHERE user_id=?
+        """,
+        (user_id,)
+    )
+
+    result = cursor.fetchone()
+
+    conn.close()
+
+    if not result:
+        return None
+
+    try:
+        return datetime.fromisoformat(result[0])
+    except Exception:
+        return None
