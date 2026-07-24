@@ -3,7 +3,7 @@ from subscription import check_subscription
 
 from news_cache import get_cached_news
 from calendar_cache import get_calendar_cached
-
+from calendar_ai import analyze_calendar
 
 
 async def show_news(update, context):
@@ -158,7 +158,13 @@ async def news_button(update, context):
 
     elif query.data == "news_ai":
 
-        events = get_calendar_cached()
+        analysis = analyze_calendar(events)
+
+        await query.edit_message_text(
+            analysis[:4000]
+        )
+
+        return
 
         title = "🤖 AI ECONOMIC ANALYSIS\n\n"
 
