@@ -70,7 +70,7 @@ from states import (
     CLOSE_PRICE,
     ACCOUNT_CURRENCY
 )
-from liquidity_report import make_report
+from analysis import make_report
 from subscription import check_subscription
 from database import add_subscription
 from admin import users, grant, revoke
