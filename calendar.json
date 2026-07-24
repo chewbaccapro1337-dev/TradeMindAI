@@ -1,5 +1,5 @@
 {
-    "updated": "2026-07-24 13:08:31",
+    "updated": "2026-07-24 18:39:13",
     "events": [
         {
             "currency": "GBP",
@@ -20,94 +20,10 @@
             "time": "5:00pm"
         },
         {
-            "currency": "GBP",
-            "impact": "yellow",
-            "title": "GfK Consumer Confidence",
-            "time": "2:01am"
-        },
-        {
-            "currency": "EUR",
-            "impact": "yellow",
-            "title": "German GfK Consumer Climate",
-            "time": "9:00am"
-        },
-        {
-            "currency": "GBP",
-            "impact": "orange",
-            "title": "Retail Sales m/m",
-            "time": ""
-        },
-        {
-            "currency": "EUR",
-            "impact": "orange",
-            "title": "French Flash Manufacturing PMI",
-            "time": "10:15am"
-        },
-        {
-            "currency": "EUR",
-            "impact": "orange",
-            "title": "French Flash Services PMI",
-            "time": ""
-        },
-        {
-            "currency": "EUR",
-            "impact": "orange",
-            "title": "German Flash Manufacturing PMI",
-            "time": "10:30am"
-        },
-        {
-            "currency": "EUR",
-            "impact": "orange",
-            "title": "German Flash Services PMI",
-            "time": ""
-        },
-        {
-            "currency": "EUR",
-            "impact": "yellow",
-            "title": "Flash Manufacturing PMI",
-            "time": "11:00am"
-        },
-        {
-            "currency": "EUR",
-            "impact": "yellow",
-            "title": "Flash Services PMI",
-            "time": ""
-        },
-        {
-            "currency": "GBP",
-            "impact": "orange",
-            "title": "Flash Manufacturing PMI",
-            "time": "11:30am"
-        },
-        {
-            "currency": "GBP",
-            "impact": "orange",
-            "title": "Flash Services PMI",
-            "time": ""
-        },
-        {
-            "currency": "EUR",
-            "impact": "yellow",
-            "title": "Belgian NBB Business Climate",
-            "time": "4:00pm"
-        },
-        {
             "currency": "USD",
-            "impact": "yellow",
-            "title": "Flash Manufacturing PMI",
-            "time": "4:45pm"
-        },
-        {
-            "currency": "USD",
-            "impact": "yellow",
-            "title": "Flash Services PMI",
-            "time": ""
-        },
-        {
-            "currency": "USD",
-            "impact": "yellow",
-            "title": "New Home Sales",
-            "time": "5:00pm"
+            "impact": "orange",
+            "title": "President Trump Speaks",
+            "time": "3:55am"
         }
     ]
 }
