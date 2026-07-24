@@ -1,4 +1,4 @@
-from telegram import Update, ReplyKeyboardMarkup
+from telegram import Update, ReplyKeyboardMarkup, LabeledPrice
 from telegram.ext import (
     ApplicationBuilder,
     CommandHandler,
@@ -217,6 +217,24 @@ async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     return ConversationHandler.END
 
+async def buy_pro(update, context):
+
+    prices = [
+        LabeledPrice(
+            label="TradeMind AI Pro - 30 дней",
+            amount=500
+        )
+    ]
+
+    await context.bot.send_invoice(
+        chat_id=update.effective_chat.id,
+        title="TradeMind AI Pro",
+        description="Доступ к расширенным функциям бота на 30 дней",
+        payload="pro_30_days",
+        currency="XTR",
+        prices=prices
+    )
+
 def main():
 
     proxy_url = "socks5://qMLzj4:r5NZWQ@168.81.42.247:8000"
@@ -376,6 +394,7 @@ def main():
         open_main_menu
     )
 )
+
     app.add_handler(
     MessageHandler(
         filters.Regex("^📒 Сделки$"),
@@ -446,6 +465,13 @@ def main():
     )
 )
 
+    app.add_handler(
+    MessageHandler(
+        filters.Regex("^⭐ Купить Pro$"),
+        buy_pro
+    )
+)
+
     app.run_polling(
        timeout=60,
        drop_pending_updates=False
@@ -459,31 +485,31 @@ async def market_analysis(update, context):
 
 
     text = f"""
-📊 BTC ANALYSIS
+ 📊 BTC ANALYSIS
 
-Тренд:
-{data['trend']}
-
-
-Цена:
-{data['price']}
+ Тренд:
+ {data['trend']}
 
 
-Структура:
-{data['bos_choch']}
+ Цена:
+ {data['price']}
 
 
-Ликвидность:
-{data['sweep']}
+ Структура:
+ {data['bos_choch']}
 
 
-Зона интереса:
-{data['entry_zone']}
+ Ликвидность:
+ {data['sweep']}
 
 
-Сигнал:
-{data['signal']}
-"""
+ Зона интереса:
+ {data['entry_zone']}
+
+
+ Сигнал:
+ {data['signal']}
+ """
 
 
     await update.message.reply_text(
