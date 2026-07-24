@@ -1,101 +1,113 @@
 {
-    "updated": "2026-07-24 10:49:24",
+    "updated": "2026-07-24 13:16:23",
     "events": [
         {
-            "currency": "USD",
-            "impact": "red",
-            "title": "Gold bounces off daily low on softer USD; not out of the woods amid Fed rate hike bets",
-            "time": "Fri, 24 Jul 2026 04:05:06 GMT"
-        },
-        {
             "currency": "GBP",
-            "impact": "red",
-            "title": "British Pound steadies against Japanese Yen following outperformance in UK Retail Sales",
-            "time": "Fri, 24 Jul 2026 07:06:54 GMT"
-        },
-        {
-            "currency": "USD",
-            "impact": "red",
-            "title": "USD/CAD Price Forecast: Softens below 1.4100, but bullish outlook stays intact above key support",
-            "time": "Fri, 24 Jul 2026 07:06:03 GMT"
+            "impact": "yellow",
+            "title": "Rightmove HPI m/m",
+            "time": "2:01am"
         },
         {
             "currency": "EUR",
-            "impact": "red",
-            "title": "Euro extends rally against British Pound despite strong UK Retail Sales data",
-            "time": "Fri, 24 Jul 2026 06:53:29 GMT"
+            "impact": "yellow",
+            "title": "German PPI m/m",
+            "time": "9:00am"
         },
         {
             "currency": "USD",
-            "impact": "red",
-            "title": "US Dollar Index: Higher yields and FOMC focus lift DXY – MUFG",
-            "time": "Fri, 24 Jul 2026 06:49:50 GMT"
+            "impact": "yellow",
+            "title": "CB Leading Index m/m",
+            "time": "5:00pm"
         },
         {
             "currency": "GBP",
-            "impact": "red",
-            "title": "British Pound remains depressed near 1.3300 despite upbeat UK Retail Sales data",
-            "time": "Fri, 24 Jul 2026 06:28:25 GMT"
-        },
-        {
-            "currency": "USD",
-            "impact": "red",
-            "title": "Indonesian Rupiah advances as US Dollar struggles despite increasing risk aversion",
-            "time": "Fri, 24 Jul 2026 06:28:16 GMT"
-        },
-        {
-            "currency": "USD",
-            "impact": "red",
-            "title": "AUD/USD Price Forecast: Surging US bond yields warrant downside",
-            "time": "Fri, 24 Jul 2026 06:20:16 GMT"
-        },
-        {
-            "currency": "USD",
-            "impact": "red",
-            "title": "Euro: Weakens despite ECB rate hike signals against US Dollar – UOB",
-            "time": "Fri, 24 Jul 2026 06:15:11 GMT"
+            "impact": "yellow",
+            "title": "GfK Consumer Confidence",
+            "time": "2:01am"
         },
         {
             "currency": "EUR",
-            "impact": "red",
-            "title": "Euro gains traction above 1.1350 as markets price in upcoming ECB rate hike",
-            "time": "Fri, 24 Jul 2026 05:01:51 GMT"
-        },
-        {
-            "currency": "USD",
-            "impact": "red",
-            "title": "Swiss Franc remains weaker as US Dollar receives support amid US-Iran tensions",
-            "time": "Fri, 24 Jul 2026 04:59:20 GMT"
-        },
-        {
-            "currency": "USD",
-            "impact": "red",
-            "title": "New Zealand Dollar trades with positive bias but lacks follow-through amid bullish USD",
-            "time": "Fri, 24 Jul 2026 04:42:18 GMT"
-        },
-        {
-            "currency": "EUR",
-            "impact": "red",
-            "title": "EUR/JPY Price Forecast: Eyes rising wedge top near 187.00",
-            "time": "Fri, 24 Jul 2026 04:02:39 GMT"
-        },
-        {
-            "currency": "USD",
-            "impact": "red",
-            "title": "United States Dollar Index holds gains near 101.50 on revival of hawkish Fed bets",
-            "time": "Fri, 24 Jul 2026 03:22:58 GMT"
-        },
-        {
-            "currency": "USD",
-            "impact": "red",
-            "title": "Silver Price Forecast: XAG/USD holds gains above $57.50 despite rising Fed rate hike odds",
-            "time": "Fri, 24 Jul 2026 02:39:21 GMT"
+            "impact": "yellow",
+            "title": "German GfK Consumer Climate",
+            "time": "9:00am"
         },
         {
             "currency": "GBP",
-            "impact": "red",
-            "title": "British Pound rebounds above 1.3300 ahead of UK Retail Sales data",
-            "time": "Fri, 24 Jul 2026 02:19:45 GMT"
+            "impact": "orange",
+            "title": "Retail Sales m/m",
+            "time": ""
+        },
+        {
+            "currency": "EUR",
+            "impact": "orange",
+            "title": "French Flash Manufacturing PMI",
+            "time": "10:15am"
+        },
+        {
+            "currency": "EUR",
+            "impact": "orange",
+            "title": "French Flash Services PMI",
+            "time": ""
+        },
+        {
+            "currency": "EUR",
+            "impact": "orange",
+            "title": "German Flash Manufacturing PMI",
+            "time": "10:30am"
+        },
+        {
+            "currency": "EUR",
+            "impact": "orange",
+            "title": "German Flash Services PMI",
+            "time": ""
+        },
+        {
+            "currency": "EUR",
+            "impact": "yellow",
+            "title": "Flash Manufacturing PMI",
+            "time": "11:00am"
+        },
+        {
+            "currency": "EUR",
+            "impact": "yellow",
+            "title": "Flash Services PMI",
+            "time": ""
+        },
+        {
+            "currency": "GBP",
+            "impact": "orange",
+            "title": "Flash Manufacturing PMI",
+            "time": "11:30am"
+        },
+        {
+            "currency": "GBP",
+            "impact": "orange",
+            "title": "Flash Services PMI",
+            "time": ""
+        },
+        {
+            "currency": "EUR",
+            "impact": "yellow",
+            "title": "Belgian NBB Business Climate",
+            "time": "4:00pm"
+        },
+        {
+            "currency": "USD",
+            "impact": "yellow",
+            "title": "Flash Manufacturing PMI",
+            "time": "4:45pm"
+        },
+        {
+            "currency": "USD",
+            "impact": "yellow",
+            "title": "Flash Services PMI",
+            "time": ""
+        },
+        {
+            "currency": "USD",
+            "impact": "yellow",
+            "title": "New Home Sales",
+            "time": "5:00pm"
         }
     ]
 }
