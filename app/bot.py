@@ -415,11 +415,11 @@ fallbacks=[
 
 )
 
-app.add_handler(
+    app.add_handler(
     PreCheckoutQueryHandler(pre_checkout)
 )
 
-app.add_handler(
+    app.add_handler(
     MessageHandler(
         filters.SUCCESSFUL_PAYMENT,
         successful_payment
