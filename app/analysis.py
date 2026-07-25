@@ -71,6 +71,27 @@ async def analyze_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     return ConversationHandler.END
 
+async def ai_chat_start(update, context):
+
+    await update.message.reply_text(
+        "🤖 Режим AI Ассистента.\n\n"
+        "Пиши любой вопрос о трейдинге, рынке или работе бота.\n\n"
+        "Для выхода нажми ❌ Отмена."
+    )
+
+    return AI_CHAT
+
+
+async def ai_chat(update, context):
+
+    text = update.message.text
+
+    await update.message.reply_text(
+        f"Ты написал:\n\n{text}"
+    )
+
+    return AI_CHAT
+
 def analyze_market():
 
     candles = get_candles()

@@ -306,7 +306,8 @@ def main():
         MessageHandler(filters.Regex("^📝 Записать сделку$"), ask_currency),
         MessageHandler(filters.Regex("^🔒 Закрыть$"), start_close_trade),
         MessageHandler(filters.Regex("^📷 AI Анализ$"), ask_photo),
-        MessageHandler(filters.Regex("^💎 Подписка$"), subscription)
+        MessageHandler(filters.Regex("^💎 Подписка$"), subscription),
+        MessageHandler(filters.Regex("^🤖 AI Ассистент$") ai_chat_start),
     ],
     states={
         BALANCE: [
@@ -437,6 +438,22 @@ def main():
           analyze_photo
         )
      ],
+
+ AI_CHAT: [
+        MessageHandler(
+         filters.Regex("^⬅️ Назад$"),
+         back
+        ),
+        MessageHandler(
+         filters.Regex("^❌ Отмена$"),
+         cancel
+        ),
+        MessageHandler(
+         filters.TEXT & ~filters.COMMAND,
+         ai_chat
+        )
+     ],
+
     },
 fallbacks=[
     CommandHandler("cancel", cancel),
