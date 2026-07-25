@@ -346,13 +346,25 @@ def main():
         )
      ],
     ACCOUNT_CURRENCY: [
-        MessageHandler(
+
+     MessageHandler(
+         filters.Regex("^⬅️ Назад$"),
+         back
+    ),
+
+     MessageHandler(
+         filters.Regex("^❌ Отмена$"),
+         cancel
+    ),
+
+     MessageHandler(
          filters.TEXT
          & ~filters.COMMAND
          & ~filters.Regex("^⬅️ Назад$")
          & ~filters.Regex("^❌ Отмена$"),
          get_currency
-        )
+    ),
+
      ],
     ENTRY: [
         MessageHandler(
