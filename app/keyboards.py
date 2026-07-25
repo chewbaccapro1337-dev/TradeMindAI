@@ -48,7 +48,7 @@ symbol_keyboard = ReplyKeyboardMarkup(
 currency_keyboard = ReplyKeyboardMarkup(
     [
         ["💵 USD", "₽ RUB"],
-        ["⬅️ Назад", "❌ Отмена"]
+        ["❌ Отмена"]
     ],
     resize_keyboard=True
 )
