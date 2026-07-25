@@ -413,9 +413,17 @@ def main():
 
  ANALYZE: [
         MessageHandler(
+          filters.Regex("^⬅️ Назад$"),
+          back
+        ),
+        MessageHandler(
+          filters.Regex("^❌ Отмена$"),
+          cancel
+        ),
+        MessageHandler(
           filters.PHOTO,
           analyze_photo
-    )
+        )
      ],
     },
 fallbacks=[
