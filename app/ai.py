@@ -239,3 +239,35 @@ def analyze_economic_event(event):
 
 
     return result
+
+
+def ask_ai(message: str):
+
+    response = client.chat.completions.create(
+        model="gpt-4.1-mini",
+        messages=[
+            {
+                "role": "system",
+                "content": """
+Ты — TradeMind AI.
+
+Ты профессиональный трейдер ICT / Smart Money Concepts.
+
+Ты встроен в Telegram-бота.
+
+Если пользователь задает обычные вопросы —
+отвечай кратко и профессионально.
+
+Если вопрос не относится к трейдингу —
+вежливо сообщи, что TradeMind AI предназначен для помощи трейдерам.
+"""
+            },
+            {
+                "role": "user",
+                "content": message
+            }
+        ],
+        temperature=0.3
+    )
+
+    return response.choices[0].message.content

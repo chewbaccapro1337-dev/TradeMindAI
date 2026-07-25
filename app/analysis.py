@@ -20,6 +20,7 @@ from liquidity import (
     filter_fvg_by_confirmation,
 )
 from subscription import check_subscription
+from assistant import process_message
 
 ANALYZE = 20
 
@@ -86,9 +87,9 @@ async def ai_chat(update, context):
 
     text = update.message.text
 
-    await update.message.reply_text(
-        f"Ты написал:\n\n{text}"
-    )
+    response = process_message(text)
+
+    await update.message.reply_text(response)
 
     return AI_CHAT
 
