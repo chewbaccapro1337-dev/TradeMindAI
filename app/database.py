@@ -64,6 +64,7 @@ def create_tables():
     conn.close()
 
     create_ai_memory_table()
+    create_trader_profile_table()
 
 
 def save_trade(
@@ -370,3 +371,64 @@ def get_ai_memory(user_id, limit=10):
     conn.close()
 
     return list(reversed(rows))
+
+def create_trader_profile_table():
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS trader_profile (
+        user_id INTEGER PRIMARY KEY,
+        name TEXT,
+        experience TEXT,
+        strategy TEXT,
+        market TEXT,
+        risk TEXT,
+        notes TEXT
+    )
+    """)
+
+    conn.commit()
+    conn.close()
+
+def save_profile_field(user_id, field, value):
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        f"""
+        INSERT INTO trader_profile(user_id, {field})
+        VALUES (?, ?)
+        ON CONFLICT(user_id)
+        DO UPDATE SET {field}=excluded.{field}
+        """,
+        (
+            user_id,
+            value
+        )
+    )
+
+    conn.commit()
+    conn.close()
+
+def get_profile(user_id):
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        SELECT *
+        FROM trader_profile
+        WHERE user_id=?
+        """,
+        (user_id,)
+    )
+
+    result = cursor.fetchone()
+
+    conn.close()
+
+    return result
