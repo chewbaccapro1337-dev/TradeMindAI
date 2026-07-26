@@ -29,3 +29,28 @@ def news_tool(user_id):
     from news import build_news_text
 
     return build_news_text()
+
+def market_brief_tool(user_id):
+
+    from analysis import make_report
+    from news import build_news_text
+
+
+    btc = make_report()
+
+    news = build_news_text()
+
+
+    return f"""
+📊 TradeMind Market Brief
+
+{news}
+
+
+━━━━━━━━━━━━━━
+
+
+₿ BTC Анализ:
+
+{btc}
+"""

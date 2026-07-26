@@ -7,7 +7,8 @@ from tools import (
     btc_analysis_tool,
     statistics_tool,
     last_trades_tool,
-    news_tool
+    news_tool,
+    market_brief_tool
 )
 
 TOOLS = {
@@ -18,7 +19,9 @@ TOOLS = {
 
     "last_trades": last_trades_tool,
 
-    "news": news_tool
+    "news": news_tool,
+    
+    "market_brief": market_brief_tool
 
 }
 
@@ -142,6 +145,15 @@ news
 - FOMC
 - NFP
 - инфляция
+
+market_brief
+
+если пользователь спрашивает:
+- что по рынку сегодня
+- дай обзор рынка
+- план на сегодня
+- что сейчас происходит
+- стоит ли торговать сегодня
 
 risk
 если пользователь хочет рассчитать риск или размер позиции.
