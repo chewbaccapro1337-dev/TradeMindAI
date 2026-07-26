@@ -678,3 +678,12 @@ async def clear_history(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "📊 Статистика сброшена.",
         reply_markup=main_keyboard
     )
+
+def get_trades_for_ai(user_id, limit=50):
+
+    trades = get_last_trades(
+        user_id,
+        limit
+    )
+
+    return trades

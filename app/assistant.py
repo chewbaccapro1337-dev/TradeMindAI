@@ -29,6 +29,18 @@ def process_message(user_id, text: str):
 
        return build_last_trades_text(user_id)
 
+    elif action["action"] == "trade_coach":
+        from journal import get_trades_for_ai
+        from ai import ask_trade_coach
+
+        trades = get_trades_for_ai(
+            user_id
+        )
+        
+        return ask_trade_coach(
+            trades
+        )
+
     elif action["action"] == "news":
 
         return "Новости пока в разработке."
@@ -128,6 +140,9 @@ statistics
 
 last_trades
 если пользователь хочет увидеть последние сделки, последнюю сделку, историю сделок.
+
+trade_coach
+если пользователь хочет анализ своих ошибок, улучшение торговли, разбор своих сделок
 
 news
 если пользователь хочет экономические новости или календарь.

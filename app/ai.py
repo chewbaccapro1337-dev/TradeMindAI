@@ -376,3 +376,41 @@ def extract_profile(message: str):
         response.choices[0].message.content
     )
 
+def ask_trade_coach(trades):
+
+    prompt = f"""
+Ты профессиональный трейдер ICT.
+
+Проанализируй статистику и сделки трейдера.
+
+Сделки:
+
+{trades}
+
+
+Сделай разбор:
+
+1. Главные ошибки
+2. Сильные стороны
+3. Повторяющиеся проблемы
+4. Что улучшить
+5. План развития
+
+
+Ответ в стиле профессионального наставника.
+"""
+
+
+    response = client.chat.completions.create(
+        model="gpt-4.1-mini",
+        messages=[
+            {
+                "role":"user",
+                "content":prompt
+            }
+        ],
+        temperature=0.3
+    )
+
+
+    return response.choices[0].message.content
