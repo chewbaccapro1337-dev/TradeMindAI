@@ -1,4 +1,4 @@
-from statistics import show_statistics
+from journal import show_statistics
 from ai import ask_ai
 
 
