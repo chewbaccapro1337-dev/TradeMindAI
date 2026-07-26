@@ -4,7 +4,7 @@ from subscription import check_subscription
 from news_cache import get_cached_news
 from calendar_cache import get_calendar_cached
 from calendar_ai import analyze_calendar
-
+from economic_calendar import get_calendar
 
 async def show_news(update, context):
 
