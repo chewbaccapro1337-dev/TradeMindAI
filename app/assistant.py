@@ -9,16 +9,24 @@ def process_message(user_id, text: str):
 
     text_lower = text.lower()
 
-    if "btc" in text_lower or "битк" in text_lower:
+    action = detect_action(text)
+
+
+    if action["action"] == "btc_analysis":
+
         from analysis import make_report
+
         return make_report()
 
-    if "стат" in text_lower:
+
+    if action["action"] == "statistics":
+
         return "Статистика пока в разработке."
 
-    if "новост" in text_lower:
-        return "Новости пока в разработке."
 
+        if action["action"] == "news":
+
+        return "Новости пока в разработке."
 
     # сохраняем вопрос пользователя
     save_ai_message(
