@@ -111,12 +111,12 @@ def parse_trade_voice(user_id, text):
 
 
     return (
-        f"✅ Сделка добавлена\n\n"
-        f"{symbol} {side}\n\n"
-        f"📥 Вход: {entry}\n"
-        f"🎯 TP: {tp}\n"
-        f"🛑 SL: {sl}\n"
-        f"⚠️ Риск: {risk}$\n"
-        f"📐 RR: 1:{rr:.2f}\n"
-        f"💰 Потенциал: {expected_profit:.2f}$"
+     f"✅ Сделка добавлена\n\n"
+     f"{symbol} {side}\n\n"
+     f"📥 Вход: {entry}\n"
+     f"🎯 TP: {tp}\n"
+     f"🛑 SL: {sl}\n"
+     f"⚠️ Риск: {risk}{currency_symbol}\n"
+     f"📐 RR: 1:{rr:.2f}\n"
+     f"💰 Потенциал: {risk*rr:.2f}{currency_symbol}"
     )
