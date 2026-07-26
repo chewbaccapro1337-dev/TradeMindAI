@@ -18,8 +18,9 @@ def process_message(user_id, text: str):
 
 
     elif action["action"] == "statistics":
-
-        return "Статистика пока в разработке."
+       
+        from journal import build_statistics_text
+        return build_statistics_text(user_id)
 
 
     elif action["action"] == "news":

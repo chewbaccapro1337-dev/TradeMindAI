@@ -462,21 +462,14 @@ async def show_last_trades(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await update.message.reply_text(text[:4000])
 
-async def show_statistics(update: Update, context: ContextTypes.DEFAULT_TYPE):
+def build_statistics_text(user_id):
 
-    stats = get_statistics_by_currency(
-        update.effective_user.id
-    )
+    stats = get_statistics_by_currency(user_id)
 
     if not stats:
-        await update.message.reply_text(
-            "📊 Статистика пока пустая."
-        )
-        return
-
+        return "📊 Статистика пока пустая."
 
     text = "📊 Статистика трейдинга\n\n"
-
 
     for stat in stats:
 
@@ -492,7 +485,6 @@ async def show_statistics(update: Update, context: ContextTypes.DEFAULT_TYPE):
             worst
         ) = stat
 
-        # ВОТ СЮДА ДОБАВЛЯЕМ РАСЧЁТ
         winrate = (
             wins / total * 100
             if total
@@ -513,6 +505,13 @@ async def show_statistics(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "━━━━━━━━━━━━━━\n\n"
         )
 
+    return text
+
+async def show_statistics(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
+    text = build_statistics_text(
+        update.effective_user.id
+    )
 
     await update.message.reply_text(text)
 
