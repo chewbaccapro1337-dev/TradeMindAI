@@ -10,6 +10,7 @@ from tools import (
     news_tool,
     market_brief_tool,
     create_trade_tool,
+    close_trade_tool
 )
 
 TOOLS = {
@@ -25,6 +26,8 @@ TOOLS = {
     "market_brief": market_brief_tool,
 
     "create_trade": create_trade_tool,
+
+    "close_trade": close_trade_tool,
 
 }
 
@@ -224,6 +227,14 @@ create_trade
 "action":"create_trade"
 }
 
+close_trade
+
+если пользователь говорит:
+- закрой сделку
+- закрой последнюю сделку
+- я закрыл позицию
+- закрыл BTC
+- вышел из сделки
 
 btc_analysis
 

@@ -507,3 +507,69 @@ def get_last_trades_for_ai(user_id, limit=10):
     conn.close()
 
     return rows
+
+def close_last_trade(user_id, exit_price):
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        SELECT id, entry, side, risk, rr
+        FROM trades
+        WHERE user_id = ?
+        AND status = 'OPEN'
+        ORDER BY id DESC
+        LIMIT 1
+        """,
+        (user_id,)
+    )
+
+    trade = cursor.fetchone()
+
+
+    if not trade:
+        conn.close()
+        return None
+
+
+    trade_id, entry, side, risk, rr = trade
+
+
+    if side == "BUY":
+        result = exit_price - entry
+    else:
+        result = entry - exit_price
+
+
+    pnl = risk * (result / abs(entry - exit_price))
+
+
+    cursor.execute(
+        """
+        UPDATE trades
+        SET 
+        status='CLOSED',
+        exit=?,
+        pnl=?,
+        closed_at=datetime('now')
+        WHERE id=?
+        """,
+        (
+            exit_price,
+            pnl,
+            trade_id
+        )
+    )
+
+
+    conn.commit()
+    conn.close()
+
+
+    return {
+        "side": side,
+        "entry": entry,
+        "exit": exit_price,
+        "pnl": pnl
+    }

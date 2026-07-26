@@ -65,3 +65,42 @@ def create_trade_tool(user_id, text=None):
         user_id,
         text
     )
+
+def close_trade_tool(user_id, text):
+
+    from database import close_last_trade
+
+
+    import re
+
+
+    price = re.search(
+        r"(\d+)",
+        text
+    )
+
+
+    if not price:
+        return "❌ Не понял цену закрытия"
+
+
+    exit_price = float(price.group(1))
+
+
+    result = close_last_trade(
+        user_id,
+        exit_price
+    )
+
+
+    if not result:
+        return "📭 Нет открытых сделок"
+
+
+    return (
+        "✅ Сделка закрыта\n\n"
+        f"📌 {result['side']}\n"
+        f"📥 Вход: {result['entry']}\n"
+        f"📤 Выход: {result['exit']}\n"
+        f"💰 PNL: {result['pnl']:.2f}$"
+    )
