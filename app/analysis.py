@@ -1,8 +1,10 @@
 from telegram import Update
 from telegram.ext import ContextTypes, ConversationHandler
 from keyboards import back_keyboard, main_keyboard
+from dotenv import load_dotenv
 import os
 from ai import analyze_trade
+from openai import OpenAI
 from liquidity import (
     get_candles,
     find_swings,
@@ -21,6 +23,7 @@ from liquidity import (
 )
 from subscription import check_subscription
 from assistant import process_message
+from states import AI_CHAT
 
 ANALYZE = 20
 
