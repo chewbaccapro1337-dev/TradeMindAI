@@ -508,22 +508,44 @@ def get_last_trades_for_ai(user_id, limit=10):
 
     return rows
 
-def close_last_trade(user_id, exit_price):
+def close_last_trade(user_id, exit_price, symbol=None):
 
     conn = get_connection()
     cursor = conn.cursor()
 
-    cursor.execute(
-        """
-        SELECT id, entry, side, risk, rr
-        FROM trades
-        WHERE user_id = ?
-        AND status = 'OPEN'
-        ORDER BY id DESC
-        LIMIT 1
-        """,
-        (user_id,)
-    )
+
+    if symbol:
+
+        cursor.execute(
+            """
+            SELECT id, entry, side, risk, rr, symbol
+            FROM trades
+            WHERE user_id = ?
+            AND symbol = ?
+            AND status = 'OPEN'
+            ORDER BY id DESC
+            LIMIT 1
+            """,
+            (
+                user_id,
+                symbol
+            )
+        )
+
+    else:
+
+        cursor.execute(
+            """
+            SELECT id, entry, side, risk, rr, symbol
+            FROM trades
+            WHERE user_id = ?
+            AND status = 'OPEN'
+            ORDER BY id DESC
+            LIMIT 1
+            """,
+            (user_id,)
+        )
+
 
     trade = cursor.fetchone()
 
@@ -533,16 +555,61 @@ def close_last_trade(user_id, exit_price):
         return None
 
 
-    trade_id, entry, side, risk, rr = trade
+    trade_id, entry, side, risk, rr, trade_symbol = trade
 
 
     if side == "BUY":
-        result = exit_price - entry
+
+        price_move = exit_price - entry
+
     else:
-        result = entry - exit_price
+
+        price_move = entry - exit_price
 
 
-    pnl = risk * (result / abs(entry - exit_price))
+
+    # нормальный расчет PNL через RR
+    if abs(entry - exit_price) != 0:
+
+        pnl = risk * (
+            price_move /
+            abs(entry - exit_price)
+        )
+
+    else:
+
+        pnl = 0
+
+
+
+    cursor.execute(
+        """
+        UPDATE trades
+        SET exit = ?,
+            pnl = ?,
+            status = 'CLOSED',
+            closed_at = datetime('now')
+        WHERE id = ?
+        """,
+        (
+            exit_price,
+            pnl,
+            trade_id
+        )
+    )
+
+
+    conn.commit()
+    conn.close()
+
+
+    return {
+        "symbol": trade_symbol,
+        "entry": entry,
+        "exit": exit_price,
+        "side": side,
+        "pnl": pnl
+    }
 
 
     cursor.execute(

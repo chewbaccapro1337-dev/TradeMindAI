@@ -27,8 +27,37 @@ def parse_trade_voice(user_id, text):
 
     side = "BUY"
 
-    if "шорт" in text or "short" in text or "sell" in text:
-        side = "SELL"
+
+    short_words = [
+     "шорт",
+     "short",
+     "sell",
+     "селл",
+     "продай",
+     "продажа"
+    ]
+
+
+    long_words = [
+     "лонг",
+     "long",
+     "buy",
+     "бай",
+     "купи",
+     "покупка"
+    ]
+
+
+    for word in short_words:
+        if word in text:
+            side = "SELL"
+            break
+
+
+    for word in long_words:
+        if word in text:
+            side = "BUY"
+            break
 
 
     entry_match = re.search(

@@ -70,12 +70,31 @@ def close_trade_tool(user_id, text):
 
     from database import close_last_trade
 
-
     import re
 
 
+    text_lower = text.lower()
+
+
+    symbol = None
+
+
+    if "eur" in text_lower or "евро" in text_lower:
+        symbol = "EURUSD"
+
+    elif "gbp" in text_lower or "фунт" in text_lower:
+        symbol = "GBPUSD"
+
+    elif "btc" in text_lower or "биток" in text_lower:
+        symbol = "BTCUSDT"
+
+    elif "eth" in text_lower:
+        symbol = "ETHUSDT"
+
+
+
     price = re.search(
-        r"(\d+)",
+        r"(\d+(?:\.\d+)?)",
         text
     )
 
@@ -84,12 +103,15 @@ def close_trade_tool(user_id, text):
         return "❌ Не понял цену закрытия"
 
 
-    exit_price = float(price.group(1))
+    exit_price = float(
+        price.group(1)
+    )
 
 
     result = close_last_trade(
         user_id,
-        exit_price
+        exit_price,
+        symbol
     )
 
 
@@ -99,8 +121,9 @@ def close_trade_tool(user_id, text):
 
     return (
         "✅ Сделка закрыта\n\n"
-        f"📌 {result['side']}\n"
+        f"📌 {result['symbol']}\n"
+        f"📈 {result['side']}\n"
         f"📥 Вход: {result['entry']}\n"
         f"📤 Выход: {result['exit']}\n"
-        f"💰 PNL: {result['pnl']:.2f}$"
+        f"💰 PNL: {result['pnl']:.2f}"
     )
