@@ -22,7 +22,7 @@ def parse_trade_voice(user_id, text):
      symbol = "ETHUSDT"
 
     elif "sol" in text:
-     symbol = "SOLUSDT""
+     symbol = "SOLUSDT"
 
 
     side = "BUY"
