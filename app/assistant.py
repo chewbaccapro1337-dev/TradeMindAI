@@ -21,32 +21,89 @@ TOOLS = {
 
     "news": news_tool,
     
-    "market_brief": market_brief_tool
+    "market_brief": market_brief_tool,
+
+    "create_trade": create_trade_tool,
 
 }
 
 def process_message(user_id, text: str):
 
-    text_lower = text.lower()
-
     action = detect_action(text)
 
     print("DETECTED ACTION:", action)
+
 
     tool = TOOLS.get(
         action["action"]
     )
 
+
     if tool:
 
-        if action["action"] == "news":
-            print("ACTION:", action)
-            return tool(
+        print(
+            "RUN TOOL:",
+            action["action"]
+        )
+
+        return tool(
+            user_id,
+            text
+        )
+
+
+    # сохраняем вопрос пользователя
+    save_ai_message(
+        user_id,
+        "user",
+        text
+    )
+
+
+    # достаем память
+    memory = get_ai_memory(
+        user_id,
+        limit=10
+    )
+
+
+    # извлекаем профиль
+    profile_data = extract_profile(text)
+
+
+    for field, value in profile_data.items():
+
+        if value:
+
+            update_trader_profile(
                 user_id,
-                action.get("symbol")
+                field,
+                value
             )
 
-        return tool(user_id)
+
+    profile = get_trader_profile(
+        user_id
+    )
+
+
+    # отправляем в AI
+    response = ask_ai(
+        text,
+        memory,
+        profile
+    )
+
+
+    # сохраняем ответ
+    save_ai_message(
+        user_id,
+        "assistant",
+        response
+    )
+
+
+    return response
 
     # сохраняем вопрос пользователя
     save_ai_message(

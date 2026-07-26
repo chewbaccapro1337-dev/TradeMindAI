@@ -1,4 +1,4 @@
-def btc_analysis_tool(user_id):
+def btc_analysis_tool(user_id, text=None):
 
     from analysis import make_report
 
@@ -32,7 +32,7 @@ def news_tool(user_id, symbol=None):
 
     return build_news_text(symbol)
 
-def market_brief_tool(user_id):
+def market_brief_tool(user_id, text=None):
 
     from analysis import make_report
     from news import build_news_text
@@ -56,3 +56,12 @@ def market_brief_tool(user_id):
 
 {btc}
 """
+
+def create_trade_tool(user_id, text=None):
+
+    from trade_voice import parse_trade_voice
+
+    return parse_trade_voice(
+        user_id,
+        text
+    )
