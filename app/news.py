@@ -247,26 +247,6 @@ def build_news_text(query=None):
                 if e.get("currency") in currencies
             ]
 
-    if query:
-
-        query = query.lower()
-
-
-        if "eurusd" in query or "евро" in query:
-
-            events = [
-                e for e in events
-                if e["currency"] in ["EUR", "USD"]
-            ]
-
-
-        elif "gbpusd" in query:
-
-            events = [
-                e for e in events
-                if e["currency"] in ["GBP", "USD"]
-            ]
-
     if not events:
         return "📅 Важных новостей не найдено."
 
