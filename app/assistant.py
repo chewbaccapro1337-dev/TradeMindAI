@@ -1,10 +1,6 @@
 from journal import show_statistics
 from ai import ask_ai, extract_profile
 from database import save_ai_message, get_ai_memory, get_profile, update_profile
-from tools import (
-    get_btc_analysis,
-    get_statistics
-)
 import json
 from ai import client
 
