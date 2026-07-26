@@ -1,6 +1,6 @@
 from telegram import Update
 from telegram.ext import ContextTypes, ConversationHandler
-from keyboards import back_keyboard, main_keyboard, reply_markup=ai_keyboard
+from keyboards import back_keyboard, main_keyboard, ai_keyboard
 from dotenv import load_dotenv
 import os
 from ai import analyze_trade
