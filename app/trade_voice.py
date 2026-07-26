@@ -66,7 +66,7 @@ def parse_trade_voice(user_id, text):
     tp = float(tp_match.group(1))
     risk = float(risk_match.group(1))
 
-    currency=currency
+    currency = "USD"
 
     if "руб" in text or "рублей" in text or "₽" in text:
      currency = "RUB"
