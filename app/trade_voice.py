@@ -71,6 +71,7 @@ def parse_trade_voice(user_id, text):
     if "руб" in text or "рублей" in text or "₽" in text:
      currency = "RUB"
 
+    print("VOICE CURRENCY:", currency)
 
     # расчет RR
     rr = abs(tp - entry) / abs(entry - sl)
