@@ -1,6 +1,6 @@
 from journal import show_statistics
 from ai import ask_ai, extract_profile
-from database import save_ai_message, get_ai_memory, get_profile, update_profile, get_last_trades_for_ai
+from database import save_ai_message, get_ai_memory, get_profile, update_trader_profile, get_last_trades_for_ai
 import json
 from ai import client
 from tools import (
