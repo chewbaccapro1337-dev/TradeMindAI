@@ -135,6 +135,7 @@ def analyze_market():
         candles
     )
 
+    confirmed_fvgs = []
 
     equal_highs = find_equal_levels(
         highs
