@@ -8,11 +8,21 @@ def parse_trade_voice(user_id, text):
 
     symbol = "BTCUSDT"
 
-    if "eth" in text:
-        symbol = "ETHUSDT"
+
+    if "eur" in text or "евро" in text:
+     symbol = "EURUSD"
+
+    elif "gbp" in text or "фунт" in text:
+     symbol = "GBPUSD"
+
+    elif "jpy" in text or "йена" in text:
+     symbol = "USDJPY"
+
+    elif "eth" in text:
+     symbol = "ETHUSDT"
 
     elif "sol" in text:
-        symbol = "SOLUSDT"
+     symbol = "SOLUSDT""
 
 
     side = "BUY"
@@ -22,23 +32,23 @@ def parse_trade_voice(user_id, text):
 
 
     entry_match = re.search(
-        r"вход\s*(\d+)",
-        text
+     r"вход\s*(\d+(?:\.\d+)?)",
+     text
     )
 
     sl_match = re.search(
-        r"стоп\s*(\d+)",
-        text
+     r"стоп\s*(\d+(?:\.\d+)?)",
+     text
     )
 
     tp_match = re.search(
-        r"тейк\s*(\d+)",
-        text
+     r"тейк\s*(\d+(?:\.\d+)?)",
+     text
     )
 
     risk_match = re.search(
-        r"риск\s*(\d+)",
-        text
+     r"риск\s*(\d+(?:\.\d+)?)",
+     text
     )
 
 
@@ -55,6 +65,11 @@ def parse_trade_voice(user_id, text):
     sl = float(sl_match.group(1))
     tp = float(tp_match.group(1))
     risk = float(risk_match.group(1))
+
+    currency=currency
+
+    if "руб" in text or "рублей" in text or "₽" in text:
+     currency = "RUB"
 
 
     # расчет RR
