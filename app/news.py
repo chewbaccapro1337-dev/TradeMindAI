@@ -222,6 +222,31 @@ def build_news_text(query=None):
     from calendar_cache import get_calendar_cached
     events = get_calendar_cached()
 
+    if symbol:
+
+        symbol = symbol.upper()
+
+
+        currency_map = {
+            "EURUSD": ["EUR", "USD"],
+            "GBPUSD": ["GBP", "USD"],
+            "USDJPY": ["USD", "JPY"],
+            "AUDUSD": ["AUD", "USD"],
+            "USDCAD": ["USD", "CAD"],
+            "USDCHF": ["USD", "CHF"]
+        }
+
+
+        currencies = currency_map.get(symbol)
+
+
+        if currencies:
+
+            events = [
+                e for e in events
+                if e.get("currency") in currencies
+            ]
+
     if query:
 
         query = query.lower()
