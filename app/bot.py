@@ -457,6 +457,7 @@ def main():
      MessageHandler(
          filters.TEXT
          & ~filters.COMMAND
+         & ~filters.Regex("^⬅️ Назад$")
          & ~filters.Regex("^❌ Отмена$"),
          ai_chat
         )
