@@ -222,6 +222,8 @@ def build_news_text(symbol=None):
     from calendar_cache import get_calendar_cached
     events = get_calendar_cached()
 
+    print("SYMBOL IN NEWS:", symbol)
+
     if symbol:
 
         symbol = symbol.upper()

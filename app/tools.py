@@ -26,9 +26,9 @@ def last_trades_tool(user_id):
 
 def news_tool(user_id, symbol=None):
 
-    print("NEWS SYMBOL:", symbol)
-
     from news import build_news_text
+
+    print("NEWS SYMBOL:", symbol)
 
     return build_news_text(symbol)
 

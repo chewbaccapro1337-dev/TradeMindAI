@@ -35,7 +35,7 @@ def process_message(user_id, text: str):
         action["action"]
     )
     if tool:
-        return tool(user_id, text)
+        return tool(user_id,action.get("symbol"))
 
     # сохраняем вопрос пользователя
     save_ai_message(
