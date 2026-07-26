@@ -3,7 +3,7 @@ from ai import ask_ai, extract_profile
 from database import save_ai_message, get_ai_memory, get_profile, update_profile
 import json
 from ai import client
-
+from analysis import make_report
 
 def process_message(user_id, text: str):
 
@@ -13,8 +13,6 @@ def process_message(user_id, text: str):
 
 
     if action["action"] == "btc_analysis":
-
-        from analysis import make_report
 
         return make_report()
 
