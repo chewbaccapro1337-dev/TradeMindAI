@@ -79,6 +79,7 @@ from database import add_subscription
 from admin import users, grant, revoke
 from analysis import analyze_market
 from datetime import datetime, timedelta
+from voice import transcribe_voice
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / ".env")
@@ -273,6 +274,39 @@ async def successful_payment(update, context):
     await update.message.reply_text(
         "✅ Оплата прошла!\n\n"
         "TradeMind AI Pro активирован на 30 дней ⭐"
+    )
+
+async def voice_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
+    user_id = update.effective_user.id
+
+    voice = update.message.voice
+
+
+    file = await context.bot.get_file(
+        voice.file_id
+    )
+
+
+    path = f"voice_{user_id}.ogg"
+
+
+    await file.download_to_drive(
+        path
+    )
+
+
+    text = transcribe_voice(path)
+
+
+    response = process_message(
+        user_id,
+        text
+    )
+
+
+    await update.message.reply_text(
+        response
     )
 
 def main():
@@ -517,6 +551,14 @@ fallbacks=[
         show_news
     )
 )
+ 
+    app.add_handler(
+    MessageHandler(
+        filters.VOICE,
+        voice_message
+    )
+)
+ 
     app.add_handler(
     CallbackQueryHandler(
         news_button,
