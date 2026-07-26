@@ -32,98 +32,65 @@ def news_tool(user_id, symbol=None):
 
     return build_news_text(symbol)
 
-def market_brief_tool(user_id, text=None):
+def market_brief_tool(user_id):
 
     from analysis import make_report
     from news import build_news_text
+    from openai import OpenAI
+    import os
 
+    client = OpenAI(
+        api_key=os.getenv("OPENAI_API_KEY")
+    )
 
     btc = make_report()
-
     news = build_news_text()
 
+    prompt = f"""
+Ты главный аналитик TradeMind AI.
 
-    return f"""
-📊 TradeMind Market Brief
+Проанализируй данные ниже.
+
+Не копируй их.
+
+Сделай полноценный обзор рынка.
+
+Структура ответа:
+
+📊 Общая картина рынка
+
+🌍 Фундамент
+
+₿ Bitcoin
+
+🎯 Что лучше делать сегодня интрадей трейдеру
+
+⚠️ Основные риски
+
+📌 Итог
+
+Новости:
 
 {news}
 
-
-━━━━━━━━━━━━━━
-
-
-₿ BTC Анализ:
+BTC:
 
 {btc}
 """
 
-def create_trade_tool(user_id, text=None):
-
-    from trade_voice import parse_trade_voice
-
-    return parse_trade_voice(
-        user_id,
-        text
+    response = client.chat.completions.create(
+        model="gpt-4.1-mini",
+        temperature=0.3,
+        messages=[
+            {
+                "role": "system",
+                "content": "Ты профессиональный аналитик крипто и форекс рынка."
+            },
+            {
+                "role": "user",
+                "content": prompt
+            }
+        ]
     )
 
-def close_trade_tool(user_id, text):
-
-    from database import close_last_trade
-
-    import re
-
-
-    text_lower = text.lower()
-
-
-    symbol = None
-
-
-    if "eur" in text_lower or "евро" in text_lower:
-        symbol = "EURUSD"
-
-    elif "gbp" in text_lower or "фунт" in text_lower:
-        symbol = "GBPUSD"
-
-    elif "btc" in text_lower or "биток" in text_lower:
-        symbol = "BTCUSDT"
-
-    elif "eth" in text_lower:
-        symbol = "ETHUSDT"
-
-
-
-    price = re.search(
-        r"(\d+(?:\.\d+)?)",
-        text
-    )
-
-
-    if not price:
-        return "❌ Не понял цену закрытия"
-
-
-    exit_price = float(
-        price.group(1)
-    )
-
-
-    result = close_last_trade(
-        user_id,
-        exit_price,
-        symbol
-    )
-
-
-    if not result:
-        return "📭 Нет открытых сделок"
-
-
-    return (
-        "✅ Сделка закрыта\n\n"
-        f"📌 {result['symbol']}\n"
-        f"📈 {result['side']}\n"
-        f"📥 Вход: {result['entry']}\n"
-        f"📤 Выход: {result['exit']}\n"
-        f"💰 PNL: {result['pnl']:.2f}"
-    )
+    return response.choices[0].message.content
