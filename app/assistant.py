@@ -38,13 +38,14 @@ def process_message(user_id, text: str):
     if tool:
 
         if action["action"] == "news":
+            print("ACTION:", action)
             return tool(
-                user_id,
+                user_id,а
                 action.get("symbol")
             )
 
         return tool(user_id)
-        
+
     # сохраняем вопрос пользователя
     save_ai_message(
         user_id,
