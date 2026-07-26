@@ -8,7 +8,8 @@ from tools import (
     statistics_tool,
     last_trades_tool,
     news_tool,
-    market_brief_tool
+    market_brief_tool,
+    create_trade_tool,
 )
 
 TOOLS = {
