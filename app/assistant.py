@@ -31,6 +31,8 @@ def process_message(user_id, text: str):
 
     action = detect_action(text)
 
+    print("DETECTED ACTION:", action)
+
     tool = TOOLS.get(
         action["action"]
     )
