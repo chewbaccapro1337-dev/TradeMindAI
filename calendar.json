@@ -1,113 +1,47 @@
 {
-    "updated": "2026-07-24 13:08:31",
+    "updated": "2026-07-26 17:13:58",
     "events": [
         {
-            "currency": "GBP",
-            "impact": "yellow",
-            "title": "Rightmove HPI m/m",
-            "time": "2:01am"
-        },
-        {
             "currency": "EUR",
             "impact": "yellow",
-            "title": "German PPI m/m",
-            "time": "9:00am"
-        },
-        {
-            "currency": "USD",
-            "impact": "yellow",
-            "title": "CB Leading Index m/m",
-            "time": "5:00pm"
-        },
-        {
-            "currency": "GBP",
-            "impact": "yellow",
-            "title": "GfK Consumer Confidence",
-            "time": "2:01am"
-        },
-        {
-            "currency": "EUR",
-            "impact": "yellow",
-            "title": "German GfK Consumer Climate",
-            "time": "9:00am"
-        },
-        {
-            "currency": "GBP",
-            "impact": "orange",
-            "title": "Retail Sales m/m",
-            "time": ""
-        },
-        {
-            "currency": "EUR",
-            "impact": "orange",
-            "title": "French Flash Manufacturing PMI",
-            "time": "10:15am"
-        },
-        {
-            "currency": "EUR",
-            "impact": "orange",
-            "title": "French Flash Services PMI",
-            "time": ""
-        },
-        {
-            "currency": "EUR",
-            "impact": "orange",
-            "title": "German Flash Manufacturing PMI",
-            "time": "10:30am"
-        },
-        {
-            "currency": "EUR",
-            "impact": "orange",
-            "title": "German Flash Services PMI",
-            "time": ""
-        },
-        {
-            "currency": "EUR",
-            "impact": "yellow",
-            "title": "Flash Manufacturing PMI",
+            "title": "German ifo Business Climate",
             "time": "11:00am"
         },
         {
             "currency": "EUR",
             "impact": "yellow",
-            "title": "Flash Services PMI",
-            "time": ""
-        },
-        {
-            "currency": "GBP",
-            "impact": "orange",
-            "title": "Flash Manufacturing PMI",
-            "time": "11:30am"
-        },
-        {
-            "currency": "GBP",
-            "impact": "orange",
-            "title": "Flash Services PMI",
+            "title": "M3 Money Supply y/y",
             "time": ""
         },
         {
             "currency": "EUR",
             "impact": "yellow",
-            "title": "Belgian NBB Business Climate",
-            "time": "4:00pm"
-        },
-        {
-            "currency": "USD",
-            "impact": "yellow",
-            "title": "Flash Manufacturing PMI",
-            "time": "4:45pm"
-        },
-        {
-            "currency": "USD",
-            "impact": "yellow",
-            "title": "Flash Services PMI",
+            "title": "Private Loans y/y",
             "time": ""
         },
         {
+            "currency": "EUR",
+            "impact": "yellow",
+            "title": "ECOFIN Meetings",
+            "time": "All Day"
+        },
+        {
+            "currency": "GBP",
+            "impact": "yellow",
+            "title": "CBI Realized Sales",
+            "time": "1:00pm"
+        },
+        {
             "currency": "USD",
             "impact": "yellow",
-            "title": "New Home Sales",
-            "time": "5:00pm"
+            "title": "Core Durable Goods Orders m/m",
+            "time": "3:30pm"
+        },
+        {
+            "currency": "USD",
+            "impact": "yellow",
+            "title": "Durable Goods Orders m/m",
+            "time": ""
         }
     ]
 }
