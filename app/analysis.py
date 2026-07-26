@@ -100,9 +100,9 @@ async def ai_chat(update, context):
 
     return AI_CHAT
 
-def analyze_market():
+def analyze_market(symbol="BTCUSDT"):
 
-    candles = get_candles()
+    get_candles(symbol)
 
     highs, lows = find_swings(candles)
 
@@ -210,14 +210,16 @@ def analyze_market():
      "sell_side": sell_side
     }
 
-def make_report():
+def make_report(symbol="BTCUSDT"):
 
-    data = analyze_market()
+    data = analyze_market(symbol)
 
     report = []
 
     # тренд
-    report.append("📊 BTC MARKET ANALYSIS\n")
+    report.append(
+        f"📊 {symbol} MARKET ANALYSIS\n"
+    )
 
     if data["trend"] == "DOWN":
         report.append("Тренд: 🔴 DOWN")
