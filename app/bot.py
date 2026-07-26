@@ -443,20 +443,25 @@ def main():
      ],
 
  AI_CHAT: [
-        MessageHandler(
+
+     MessageHandler(
          filters.Regex("^⬅️ Назад$"),
          back
         ),
-        MessageHandler(
+
+     MessageHandler(
          filters.Regex("^❌ Отмена$"),
          cancel
         ),
-        MessageHandler(
-         filters.TEXT & ~filters.COMMAND,
+
+     MessageHandler(
+         filters.TEXT
+        & ~filters.COMMAND
+         & ~filters.Regex("^⬅️ Назад$")
+         & ~filters.Regex("^❌ Отмена$"),
          ai_chat
         )
      ],
-
     },
 fallbacks=[
     CommandHandler("cancel", cancel),
