@@ -83,7 +83,7 @@ def process_message(user_id, text: str):
             )
 
 
-    profile = get_trader_profile(
+    profile = get_profile(
         user_id
     )
 
