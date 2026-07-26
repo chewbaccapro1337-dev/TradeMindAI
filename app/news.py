@@ -4,7 +4,7 @@ from subscription import check_subscription
 from news_cache import get_cached_news
 from calendar_cache import get_calendar_cached
 from calendar_ai import analyze_calendar
-from economic_calendar import get_calendar
+
 
 async def show_news(update, context):
 
@@ -219,7 +219,8 @@ async def news_button(update, context):
 
 def build_news_text():
 
-    events = get_calendar()
+    from calendar_cache import get_calendar_cached
+    events = get_calendar_cached()
 
     if not events:
         return "📅 Важных новостей не найдено."
