@@ -305,3 +305,67 @@ def add_subscription(user_id, days):
 
     conn.commit()
     conn.close()
+
+def create_ai_memory_table():
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS ai_memory (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER,
+        role TEXT,
+        message TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+    """)
+
+    conn.commit()
+    conn.close()
+
+def save_ai_message(user_id, role, message):
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        INSERT INTO ai_memory
+        (user_id, role, message)
+        VALUES (?, ?, ?)
+        """,
+        (
+            user_id,
+            role,
+            message
+        )
+    )
+
+    conn.commit()
+    conn.close()
+
+def get_ai_memory(user_id, limit=10):
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        SELECT role, message
+        FROM ai_memory
+        WHERE user_id=?
+        ORDER BY id DESC
+        LIMIT ?
+        """,
+        (
+            user_id,
+            limit
+        )
+    )
+
+    rows = cursor.fetchall()
+
+    conn.close()
+
+    return list(reversed(rows))
