@@ -10,6 +10,17 @@ def process_message(user_id, text: str):
 
     action = detect_action(text)
 
+    TOOLS = {
+
+     "btc_analysis":
+         btc_analysis_tool,
+
+     "statistics":
+         statistics_tool,
+ 
+     "last_trades":
+         last_trades_tool
+    }
 
     if action["action"] == "btc_analysis":
 
@@ -17,10 +28,11 @@ def process_message(user_id, text: str):
         return make_report()
 
 
-    elif action["action"] == "statistics":
-       
-        from journal import build_statistics_text
-        return build_statistics_text(user_id)
+    tool = TOOLS.get(
+        action["action"]
+    )
+    if tool:
+        return tool(user_id)
 
     
     elif action["action"] == "last_trades":

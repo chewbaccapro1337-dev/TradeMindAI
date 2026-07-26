@@ -1,12 +1,24 @@
 from analysis import make_report
-from journal import show_statistics
+from journal import (
+    build_statistics_text,
+    build_last_trades_text
+)
 
 
-def get_btc_analysis():
+def btc_analysis_tool(user_id):
 
     return make_report()
 
 
-def get_statistics():
+def statistics_tool(user_id):
 
-    return "Статистика пока в разработке."
+    return build_statistics_text(
+        user_id
+    )
+
+
+def last_trades_tool(user_id):
+
+    return build_last_trades_text(
+        user_id
+    )
