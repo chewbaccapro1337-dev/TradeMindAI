@@ -32,7 +32,7 @@ def news_tool(user_id, symbol=None):
 
     return build_news_text(symbol)
 
-def market_brief_tool(user_id):
+def market_brief_tool(user_id, *_):
 
     from analysis import make_report
     from news import build_news_text
