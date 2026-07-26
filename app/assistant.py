@@ -6,7 +6,8 @@ from ai import client
 from tools import (
     btc_analysis_tool,
     statistics_tool,
-    last_trades_tool
+    last_trades_tool,
+    news_tool
 )
 
 TOOLS = {
@@ -15,7 +16,9 @@ TOOLS = {
 
     "statistics": statistics_tool,
 
-    "last_trades": last_trades_tool
+    "last_trades": last_trades_tool,
+
+    "news": news_tool
 
 }
 
@@ -131,7 +134,14 @@ trade_coach
 если пользователь хочет анализ своих ошибок, улучшение торговли, разбор своих сделок
 
 news
-если пользователь хочет экономические новости или календарь.
+если пользователь спрашивает:
+- новости
+- календарь
+- важные события
+- CPI
+- FOMC
+- NFP
+- инфляция
 
 risk
 если пользователь хочет рассчитать риск или размер позиции.

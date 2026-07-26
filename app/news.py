@@ -216,3 +216,27 @@ async def news_button(update, context):
     await query.edit_message_text(
         text[:4000]
     )
+
+def build_news_text():
+
+    events = get_calendar()
+
+    if not events:
+        return "📅 Важных новостей не найдено."
+
+
+    text = "📰 Экономический календарь\n\n"
+
+
+    for event in events[:10]:
+
+        text += (
+            f"🔥 {event['title']}\n"
+            f"💵 Валюта: {event['currency']}\n"
+            f"📊 Важность: {event.get('impact')}\n"
+            f"⏰ Время: {event.get('time')}\n\n"
+            "━━━━━━━━━━━━━━\n\n"
+        )
+
+
+    return text[:4000]

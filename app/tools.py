@@ -23,3 +23,9 @@ def last_trades_tool(user_id):
     return build_last_trades_text(
         user_id
     )
+
+def news_tool(user_id):
+
+    from news import build_news_text
+
+    return build_news_text()
