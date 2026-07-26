@@ -417,20 +417,16 @@ async def get_trade_risk(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
 
         return TRADE_RISK
-async def show_last_trades(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
-    print("SHOW LAST TRADES CALLED")
+def build_last_trades_text(user_id):
 
     trades = get_last_trades(
-        update.effective_user.id,
+        user_id,
         limit=20
     )
 
     if not trades:
-        await update.message.reply_text(
-            "📭 У вас пока нет сохранённых сделок."
-        )
-        return
+        return "📭 У вас пока нет сохранённых сделок."
 
 
     text = "📒 Последние 20 сделок:\n\n"
@@ -438,13 +434,28 @@ async def show_last_trades(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     for i, trade in enumerate(trades, start=1):
 
-        symbol, side, entry, tp, sl, risk, rr, expected_profit, currency, status, created = trade
+        (
+            symbol,
+            side,
+            entry,
+            tp,
+            sl,
+            risk,
+            rr,
+            expected_profit,
+            currency,
+            status,
+            created
+        ) = trade
+
 
         rr = rr if rr is not None else 0
         expected_profit = expected_profit if expected_profit is not None else 0
         status = status if status is not None else "OPEN"
 
+
         status_icon = "🟢" if status == "OPEN" else "⚪"
+
 
         text += (
             f"{i}. {status_icon} {symbol} | {side}\n"
@@ -460,7 +471,15 @@ async def show_last_trades(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
 
 
-    await update.message.reply_text(text[:4000])
+    return text[:4000]
+
+async def show_last_trades(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
+    text = build_last_trades_text(
+        update.effective_user.id
+    )
+
+    await update.message.reply_text(text)
 
 def build_statistics_text(user_id):
 

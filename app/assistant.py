@@ -22,6 +22,12 @@ def process_message(user_id, text: str):
         from journal import build_statistics_text
         return build_statistics_text(user_id)
 
+    
+    elif action["action"] == "last_trades":
+
+       from journal import build_last_trades_text
+
+       return build_last_trades_text(user_id)
 
     elif action["action"] == "news":
 
@@ -102,9 +108,11 @@ def detect_action(text):
                 "content": """
 Ты управляющий модуль TradeMind AI.
 
-Определи действие пользователя.
+Твоя задача определить, какой инструмент нужно использовать.
 
-Верни JSON:
+Верни только JSON.
+
+Формат:
 
 {
 "action":"..."
@@ -112,17 +120,34 @@ def detect_action(text):
 
 Доступные действия:
 
-btc_analysis -
-если нужен анализ BTC
+btc_analysis
+если пользователь хочет анализ BTC, ETH, рынка, графика, структуры рынка, тренда.
 
-statistics -
-если нужна статистика
+statistics
+если пользователь хочет общую статистику торговли.
 
-news -
-если нужны новости
+last_trades
+если пользователь хочет увидеть последние сделки, последнюю сделку, историю сделок.
 
-chat -
-обычный разговор
+news
+если пользователь хочет экономические новости или календарь.
+
+risk
+если пользователь хочет рассчитать риск или размер позиции.
+
+trade_analysis
+если пользователь хочет проанализировать сделку.
+
+profile
+если спрашивает информацию о себе.
+
+memory
+если спрашивает что ты помнишь.
+
+chat
+для всех остальных сообщений.
+
+Ничего кроме JSON не выводи.
 
 """
             },
