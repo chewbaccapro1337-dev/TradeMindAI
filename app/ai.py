@@ -242,7 +242,7 @@ def analyze_economic_event(event):
     return result
 
 
-def ask_ai(message: str, memory=None, profile=None):
+def ask_ai(message, memory=None, profile=None, trades=None):
 
     messages = [
         {
@@ -268,8 +268,8 @@ def ask_ai(message: str, memory=None, profile=None):
 
         messages.append(
             {
-                 "role": "system",
-                 "content": f"""
+              "role": "system",
+              "content": f"""
     Информация о пользователе:
     
     Используй эти данные при ответах, если они относятся к вопросу. Если поле пустое, просто игнорируй его.
@@ -283,6 +283,22 @@ def ask_ai(message: str, memory=None, profile=None):
     """
             }
         ) 
+
+    if trades:
+
+        messages.append(
+            {
+             "role": "system",
+             "content":
+             f"""
+    Последние сделки пользователя:
+
+    {trades}
+
+    Используй их только если пользователь спрашивает о своих сделках, ошибках, статистике или просит анализ.
+    """
+        }
+    )
 
     if memory:
 
@@ -359,3 +375,4 @@ def extract_profile(message: str):
     return json.loads(
         response.choices[0].message.content
     )
+

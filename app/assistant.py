@@ -1,6 +1,6 @@
 from journal import show_statistics
 from ai import ask_ai, extract_profile
-from database import save_ai_message, get_ai_memory, get_profile, update_profile
+from database import save_ai_message, get_ai_memory, get_profile, update_profile, get_last_trades_for_ai
 import json
 from ai import client
 
@@ -45,6 +45,7 @@ def process_message(user_id, text: str):
     # извлекаем информацию о пользователе
     profile_data = extract_profile(text)
 
+    
 
     # сохраняем найденные данные
     for field, value in profile_data.items():
@@ -63,12 +64,17 @@ def process_message(user_id, text: str):
         user_id
     )
 
+    trades = get_last_trades_for_ai(
+     user_id,
+     10
+    )
 
     # отправляем запрос AI
     response = ask_ai(
         text,
         memory,
-        profile
+        profile,
+        trades
     )
 
 

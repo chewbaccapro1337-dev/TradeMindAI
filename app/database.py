@@ -466,3 +466,31 @@ def update_profile(user_id, field, value):
 
     conn.commit()
     conn.close()
+
+def get_last_trades_for_ai(user_id, limit=10):
+
+    conn = get_connection()
+
+    cur = conn.cursor()
+
+    cur.execute("""
+        SELECT
+            symbol,
+            side,
+            entry,
+            tp,
+            sl,
+            pnl,
+            status,
+            created_at
+        FROM trades
+        WHERE user_id=?
+        ORDER BY id DESC
+        LIMIT ?
+    """, (user_id, limit))
+
+    rows = cur.fetchall()
+
+    conn.close()
+
+    return rows
