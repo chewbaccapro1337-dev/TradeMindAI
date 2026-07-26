@@ -217,10 +217,30 @@ async def news_button(update, context):
         text[:4000]
     )
 
-def build_news_text():
+def build_news_text(query=None):
 
     from calendar_cache import get_calendar_cached
     events = get_calendar_cached()
+
+    if query:
+
+        query = query.lower()
+
+
+        if "eurusd" in query or "евро" in query:
+
+            events = [
+                e for e in events
+                if e["currency"] in ["EUR", "USD"]
+            ]
+
+
+        elif "gbpusd" in query:
+
+            events = [
+                e for e in events
+                if e["currency"] in ["GBP", "USD"]
+            ]
 
     if not events:
         return "📅 Важных новостей не найдено."

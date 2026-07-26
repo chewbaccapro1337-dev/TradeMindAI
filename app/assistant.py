@@ -35,7 +35,7 @@ def process_message(user_id, text: str):
         action["action"]
     )
     if tool:
-        return tool(user_id)
+        return tool(user_id, text)
 
     # сохраняем вопрос пользователя
     save_ai_message(
@@ -126,6 +126,12 @@ def detect_action(text):
 
 btc_analysis
 если пользователь хочет анализ BTC, ETH, рынка, графика, структуры рынка, тренда.
+"что по битку"
+
+{
+"action":"btc_analysis",
+"symbol":"BTCUSDT"
+}
 
 statistics
 если пользователь хочет общую статистику торговли.
@@ -138,6 +144,21 @@ trade_coach
 
 news
 если пользователь спрашивает:
+определи валютную пару.
+"новости по EURUSD"
+
+{
+"action":"news",
+"symbol":"EURUSD"
+}
+
+"дай новости"
+
+{
+"action":"news",
+"symbol":null
+}
+
 - новости
 - календарь
 - важные события
