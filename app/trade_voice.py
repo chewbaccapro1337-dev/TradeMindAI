@@ -109,6 +109,10 @@ def parse_trade_voice(user_id, text):
         currency=currency
     )
 
+    currency_symbol = "$"
+
+    if currency == "RUB":
+     currency_symbol = "₽"
 
     return (
      f"✅ Сделка добавлена\n\n"
