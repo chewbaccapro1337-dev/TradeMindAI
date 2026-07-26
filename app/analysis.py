@@ -1,6 +1,6 @@
 from telegram import Update
 from telegram.ext import ContextTypes, ConversationHandler
-from keyboards import back_keyboard, main_keyboard
+from keyboards import back_keyboard, main_keyboard, reply_markup=ai_keyboard
 from dotenv import load_dotenv
 import os
 from ai import analyze_trade
@@ -81,7 +81,7 @@ async def ai_chat_start(update, context):
         "🤖 Режим AI Ассистента.\n\n"
         "Пиши любой вопрос о трейдинге, рынке или работе бота.\n\n"
         "Для выхода нажми ❌ Отмена.",
-        reply_markup=back_keyboard
+        reply_markup=ai_keyboard
     )
 
     return AI_CHAT

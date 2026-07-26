@@ -53,3 +53,10 @@ currency_keyboard = ReplyKeyboardMarkup(
     ],
     resize_keyboard=True
 )
+
+ai_keyboard = ReplyKeyboardMarkup(
+    [
+        ["❌ Отмена"]
+    ],
+    resize_keyboard=True
+)
