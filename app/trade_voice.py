@@ -11,36 +11,38 @@ def parse_trade_voice(user_id, text):
     if "eth" in text:
         symbol = "ETHUSDT"
 
+    elif "sol" in text:
+        symbol = "SOLUSDT"
+
 
     side = "BUY"
 
-    if "шорт" in text or "sell" in text:
+    if "шорт" in text or "short" in text or "sell" in text:
         side = "SELL"
 
 
-
-    entry = re.search(
+    entry_match = re.search(
         r"вход\s*(\d+)",
         text
     )
 
-    sl = re.search(
+    sl_match = re.search(
         r"стоп\s*(\d+)",
         text
     )
 
-    tp = re.search(
+    tp_match = re.search(
         r"тейк\s*(\d+)",
         text
     )
 
-    risk = re.search(
+    risk_match = re.search(
         r"риск\s*(\d+)",
         text
     )
 
 
-    if not entry or not sl or not tp or not risk:
+    if not entry_match or not sl_match or not tp_match or not risk_match:
         return (
             "❌ Не смог разобрать сделку.\n\n"
             "Пример:\n"
@@ -49,13 +51,26 @@ def parse_trade_voice(user_id, text):
         )
 
 
-    entry = float(entry.group(1))
-    sl = float(sl.group(1))
-    tp = float(tp.group(1))
-    risk = float(risk.group(1))
+    entry = float(entry_match.group(1))
+    sl = float(sl_match.group(1))
+    tp = float(tp_match.group(1))
+    risk = float(risk_match.group(1))
 
 
-    rr = abs(tp-entry) / abs(entry-sl)
+    # расчет RR
+    rr = abs(tp - entry) / abs(entry - sl)
+
+
+    # потенциальная прибыль
+    expected_profit = risk * rr
+
+
+    # пока размер позиции считаем автоматически позже
+    position_size = 0
+
+
+    # комментарий для журнала
+    comment = "Создано голосовым помощником"
 
 
     from database import save_trade
@@ -70,7 +85,9 @@ def parse_trade_voice(user_id, text):
         sl=sl,
         risk=risk,
         rr=rr,
-        expected_profit=risk*rr,
+        expected_profit=expected_profit,
+        position_size=position_size,
+        comment=comment,
         currency="USD"
     )
 
@@ -82,5 +99,6 @@ def parse_trade_voice(user_id, text):
         f"🎯 TP: {tp}\n"
         f"🛑 SL: {sl}\n"
         f"⚠️ Риск: {risk}$\n"
-        f"📐 RR: 1:{rr:.2f}"
+        f"📐 RR: 1:{rr:.2f}\n"
+        f"💰 Потенциал: {expected_profit:.2f}$"
     )
