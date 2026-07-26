@@ -3,6 +3,21 @@ from ai import ask_ai, extract_profile
 from database import save_ai_message, get_ai_memory, get_profile, update_profile, get_last_trades_for_ai
 import json
 from ai import client
+from tools import (
+    btc_analysis_tool,
+    statistics_tool,
+    last_trades_tool
+)
+
+TOOLS = {
+
+    "btc_analysis": btc_analysis_tool,
+
+    "statistics": statistics_tool,
+
+    "last_trades": last_trades_tool
+
+}
 
 def process_message(user_id, text: str):
 
@@ -10,52 +25,11 @@ def process_message(user_id, text: str):
 
     action = detect_action(text)
 
-    TOOLS = {
-
-     "btc_analysis":
-         btc_analysis_tool,
-
-     "statistics":
-         statistics_tool,
- 
-     "last_trades":
-         last_trades_tool
-    }
-
-    if action["action"] == "btc_analysis":
-
-        from analysis import make_report
-        return make_report()
-
-
     tool = TOOLS.get(
         action["action"]
     )
     if tool:
         return tool(user_id)
-
-    
-    elif action["action"] == "last_trades":
-
-       from journal import build_last_trades_text
-
-       return build_last_trades_text(user_id)
-
-    elif action["action"] == "trade_coach":
-        from journal import get_trades_for_ai
-        from ai import ask_trade_coach
-
-        trades = get_trades_for_ai(
-            user_id
-        )
-        
-        return ask_trade_coach(
-            trades
-        )
-
-    elif action["action"] == "news":
-
-        return "Новости пока в разработке."
 
     # сохраняем вопрос пользователя
     save_ai_message(
