@@ -91,7 +91,10 @@ async def ai_chat(update, context):
 
     text = update.message.text
 
-    response = process_message(text)
+    response = process_message(
+      update.effective_user.id,
+      text
+    )
 
     await update.message.reply_text(response)
 
