@@ -103,7 +103,7 @@ def parse_trade_voice(user_id, text):
         expected_profit=expected_profit,
         position_size=position_size,
         comment=comment,
-        currency="USD"
+        currency=currency
     )
 
 
