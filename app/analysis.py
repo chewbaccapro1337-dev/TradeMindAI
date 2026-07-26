@@ -80,7 +80,8 @@ async def ai_chat_start(update, context):
     await update.message.reply_text(
         "🤖 Режим AI Ассистента.\n\n"
         "Пиши любой вопрос о трейдинге, рынке или работе бота.\n\n"
-        "Для выхода нажми ❌ Отмена."
+        "Для выхода нажми ❌ Отмена.",
+        reply_markup=back_keyboard
     )
 
     return AI_CHAT
