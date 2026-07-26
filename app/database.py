@@ -379,13 +379,16 @@ def create_trader_profile_table():
 
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS trader_profile (
-        user_id INTEGER PRIMARY KEY,
-        name TEXT,
-        experience TEXT,
-        strategy TEXT,
-        market TEXT,
-        risk TEXT,
-        notes TEXT
+     user_id INTEGER PRIMARY KEY,
+     name TEXT,
+     experience TEXT,
+     strategy TEXT,
+     market TEXT,
+     timeframe TEXT,
+     risk TEXT,
+     style TEXT,
+     goals TEXT,
+     notes TEXT
     )
     """)
 
@@ -433,39 +436,49 @@ def get_profile(user_id):
 
     return result
 
-def update_profile(user_id, field, value):
+def update_trader_profile(
+    user_id,
+    field,
+    value
+):
+
+    allowed = [
+        "name",
+        "experience",
+        "strategy",
+        "market",
+        "timeframe",
+        "risk",
+        "style",
+        "goals",
+        "notes"
+    ]
+
+
+    if field not in allowed:
+        return
+
 
     conn = get_connection()
-    cursor = conn.cursor()
 
-    cursor.execute(
+
+    conn.execute(
         f"""
-        UPDATE trader_profile
-        SET {field}=?
-        WHERE user_id=?
+        INSERT INTO trader_profile
+        (user_id, {field})
+        VALUES (?, ?)
+
+        ON CONFLICT(user_id)
+        DO UPDATE SET {field}=excluded.{field}
         """,
         (
-            value,
-            user_id
+            user_id,
+            value
         )
     )
 
-    if cursor.rowcount == 0:
-
-        cursor.execute(
-            f"""
-            INSERT INTO trader_profile
-            (user_id,{field})
-            VALUES (?,?)
-            """,
-            (
-                user_id,
-                value
-            )
-        )
 
     conn.commit()
-    conn.close()
 
 def get_last_trades_for_ai(user_id, limit=10):
 

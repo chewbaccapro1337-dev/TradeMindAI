@@ -62,7 +62,7 @@ def process_message(user_id, text: str):
 
         if value:
 
-            update_profile(
+            update_trader_profile(
                 user_id,
                 field,
                 value

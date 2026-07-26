@@ -355,7 +355,10 @@ def extract_profile(message: str):
 "experience": null,
 "strategy": null,
 "market": null,
+"timeframe": null,
 "risk": null,
+"style": null,
+"goals": null,
 "notes": null
 }
 
