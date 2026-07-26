@@ -94,3 +94,66 @@ BTC:
     )
 
     return response.choices[0].message.content
+
+def create_trade_tool(user_id, text):
+
+    from trade_voice import parse_trade_voice
+
+    return parse_trade_voice(
+        user_id,
+        text
+    )
+
+
+def close_trade_tool(user_id, text):
+
+    import re
+
+    from database import close_last_trade
+
+    text_lower = text.lower()
+
+    symbol = None
+
+    if "eur" in text_lower or "евро" in text_lower:
+        symbol = "EURUSD"
+
+    elif "gbp" in text_lower:
+        symbol = "GBPUSD"
+
+    elif "btc" in text_lower:
+        symbol = "BTCUSDT"
+
+    elif "eth" in text_lower:
+        symbol = "ETHUSDT"
+
+
+    price = re.search(
+        r"(\d+(?:\.\d+)?)",
+        text
+    )
+
+    if not price:
+        return "❌ Не понял цену закрытия."
+
+    exit_price = float(
+        price.group(1)
+    )
+
+    result = close_last_trade(
+        user_id,
+        exit_price,
+        symbol
+    )
+
+    if not result:
+        return "📭 Нет открытых сделок."
+
+    return (
+        f"✅ Сделка закрыта\n\n"
+        f"📌 {result['symbol']}\n"
+        f"📈 {result['side']}\n"
+        f"📥 Вход: {result['entry']}\n"
+        f"📤 Выход: {result['exit']}\n"
+        f"💰 PNL: {result['pnl']:.2f}"
+    )
