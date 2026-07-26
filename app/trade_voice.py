@@ -68,6 +68,8 @@ def parse_trade_voice(user_id, text):
 
     currency = "USD"
 
+    print("VOICE TEXT:", text)
+
     if "руб" in text or "рублей" in text or "₽" in text:
      currency = "RUB"
 
