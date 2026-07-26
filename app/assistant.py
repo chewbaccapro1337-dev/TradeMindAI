@@ -19,12 +19,12 @@ def process_message(user_id, text: str):
         return make_report()
 
 
-    if action["action"] == "statistics":
+    elif action["action"] == "statistics":
 
         return "Статистика пока в разработке."
 
 
-        if action["action"] == "news":
+    elif action["action"] == "news":
 
         return "Новости пока в разработке."
 
