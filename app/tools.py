@@ -28,7 +28,7 @@ def news_tool(user_id, symbol=None):
 
     from news import build_news_text
 
-   return build_news_text(symbol)
+    return build_news_text(symbol)
 
 def market_brief_tool(user_id):
 
