@@ -296,18 +296,26 @@ async def voice_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         path
     )
 
-
     text = transcribe_voice(path)
 
-
     response = process_message(
-        user_id,
-        text
+     user_id,
+     text
+    )
+
+    await update.message.reply_text(
+     response
+    )
+
+    from tts import text_to_voice
+
+    voice_file = text_to_voice(
+     response
     )
 
 
-    await update.message.reply_text(
-        response
+    await update.message.reply_voice(
+     voice=open(voice_file, "rb")
     )
 
 def main():
