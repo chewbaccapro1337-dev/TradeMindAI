@@ -102,7 +102,11 @@ async def ai_chat(update, context):
 
 def analyze_market(symbol="BTCUSDT"):
 
-    get_candles(symbol)
+    candles = get_candles(
+        symbol,
+        interval="15m",
+        limit=200
+    )
 
     highs, lows = find_swings(candles)
 
