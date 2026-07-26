@@ -80,6 +80,7 @@ from admin import users, grant, revoke
 from analysis import analyze_market
 from datetime import datetime, timedelta
 from voice import transcribe_voice
+from assistant import process_message
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / ".env")
