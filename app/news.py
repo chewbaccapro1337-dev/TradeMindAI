@@ -217,7 +217,7 @@ async def news_button(update, context):
         text[:4000]
     )
 
-def build_news_text(query=None):
+def build_news_text(symbol=None):
 
     from calendar_cache import get_calendar_cached
     events = get_calendar_cached()
