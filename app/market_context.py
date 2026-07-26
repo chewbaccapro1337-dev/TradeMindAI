@@ -5,24 +5,37 @@ def get_price(ticker):
 
     try:
 
-        data = yf.Ticker(ticker)
-
-        price = data.history(
-            period="1d",
-            interval="5m"
+        data = yf.download(
+            ticker,
+            period="5d",
+            interval="15m",
+            progress=False,
+            auto_adjust=False
         )
 
-        if price.empty:
+
+        if data.empty:
+            print("EMPTY:", ticker)
             return None
 
-        last = price["Close"].iloc[-1]
 
-        return round(float(last), 2)
+        price = data["Close"].iloc[-1]
+
+
+        if hasattr(price, "iloc"):
+            price = price.iloc[0]
+
+
+        return round(float(price), 2)
 
 
     except Exception as e:
 
-        print("MARKET DATA ERROR:", ticker, e)
+        print(
+            "MARKET ERROR:",
+            ticker,
+            e
+        )
 
         return None
 
