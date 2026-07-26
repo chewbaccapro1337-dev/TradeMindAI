@@ -45,7 +45,6 @@ def market_brief_tool(user_id, *_):
 
     from market_context import get_market_context
 
-
     btc = make_report("BTCUSDT")
 
     market = get_market_context()
@@ -54,6 +53,8 @@ def market_brief_tool(user_id, *_):
 
     prompt = f"""
 Ты главный аналитик TradeMind AI.
+
+Ты анализируешь рынок как профессиональный трейдер.
 
 Учитывай:
 
@@ -64,6 +65,11 @@ BTC технический анализ:
 Межрыночный анализ:
 {market}
 
+- DXY
+
+- золото
+
+- SP500
 
 Экономический календарь:
 {news}
@@ -96,9 +102,14 @@ BTC технический анализ:
 
 {news}
 
-BTC:
+BTC технический анализ:
 
 {btc}
+
+
+Межрыночный анализ:
+
+{market}
 """
 
     response = client.chat.completions.create(

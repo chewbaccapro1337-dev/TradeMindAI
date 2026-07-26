@@ -31,4 +31,3 @@ def build_market_context():
 
 
     return context
-    }
