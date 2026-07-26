@@ -36,13 +36,15 @@ def process_message(user_id, text: str):
     )
 
     if tool:
-         if action["action"] == "news":
-            return tool(
-                 user_id,
-                 action.get("symbol")
-            )     
-        return tool(user_id)
 
+        if action["action"] == "news":
+            return tool(
+                user_id,
+                action.get("symbol")
+            )
+
+        return tool(user_id)
+        
     # сохраняем вопрос пользователя
     save_ai_message(
         user_id,
