@@ -43,11 +43,30 @@ def market_brief_tool(user_id, *_):
         api_key=os.getenv("OPENAI_API_KEY")
     )
 
-    btc = make_report()
+    from market_context import get_market_context
+
+
+    btc = make_report("BTCUSDT")
+
+    market = get_market_context()
+
     news = build_news_text()
 
     prompt = f"""
 Ты главный аналитик TradeMind AI.
+
+Учитывай:
+
+BTC технический анализ:
+{btc}
+
+
+Межрыночный анализ:
+{market}
+
+
+Экономический календарь:
+{news}
 
 Проанализируй данные ниже.
 
@@ -60,6 +79,10 @@ def market_brief_tool(user_id, *_):
 📊 Общая картина рынка
 
 🌍 Фундамент
+
+Макро фон
+
+Настроение рисков
 
 ₿ Bitcoin
 
