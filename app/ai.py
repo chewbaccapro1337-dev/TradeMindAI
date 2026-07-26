@@ -7,6 +7,7 @@ from news_ai_cache import (
     save_analysis
 )
 
+
 load_dotenv()
 
 client = OpenAI(
@@ -241,12 +242,13 @@ def analyze_economic_event(event):
     return result
 
 
-def ask_ai(message: str, memory=None):
+def ask_ai(message: str, memory=None, profile=None):
 
     messages = [
         {
             "role": "system",
             "content": """
+
 Ты — TradeMind AI.
 
 Ты профессиональный трейдер ICT / Smart Money Concepts.
@@ -262,6 +264,25 @@ def ask_ai(message: str, memory=None):
         }
     ]
 
+    if profile:
+
+        messages.append(
+            {
+                 "role": "system",
+                 "content": f"""
+    Информация о пользователе:
+    
+    Используй эти данные при ответах, если они относятся к вопросу. Если поле пустое, просто игнорируй его.
+
+    Имя: {profile[1]}
+    Опыт: {profile[2]}
+    Стратегия: {profile[3]}
+    Рынок: {profile[4]}
+    Риск: {profile[5]}
+    Дополнительно: {profile[6]}
+    """
+            }
+        ) 
 
     if memory:
 
@@ -290,3 +311,51 @@ def ask_ai(message: str, memory=None):
 
 
     return response.choices[0].message.content
+
+import json
+
+
+def extract_profile(message: str):
+
+    response = client.chat.completions.create(
+        model="gpt-4.1-mini",
+        response_format={"type": "json_object"},
+        temperature=0,
+        messages=[
+            {
+                "role": "system",
+                "content": """
+Ты анализируешь сообщение пользователя.
+
+Нужно определить, содержит ли оно информацию,
+которую стоит сохранить в профиле пользователя.
+
+Верни ТОЛЬКО JSON.
+
+Формат:
+
+{
+"name": null,
+"experience": null,
+"strategy": null,
+"market": null,
+"risk": null,
+"notes": null
+}
+
+Если информации нет —
+оставь значение null.
+
+Ничего кроме JSON не выводи.
+"""
+            },
+            {
+                "role": "user",
+                "content": message
+            }
+        ]
+    )
+
+    return json.loads(
+        response.choices[0].message.content
+    )

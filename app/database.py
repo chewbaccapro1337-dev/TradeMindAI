@@ -432,3 +432,37 @@ def get_profile(user_id):
     conn.close()
 
     return result
+
+def update_profile(user_id, field, value):
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        f"""
+        UPDATE trader_profile
+        SET {field}=?
+        WHERE user_id=?
+        """,
+        (
+            value,
+            user_id
+        )
+    )
+
+    if cursor.rowcount == 0:
+
+        cursor.execute(
+            f"""
+            INSERT INTO trader_profile
+            (user_id,{field})
+            VALUES (?,?)
+            """,
+            (
+                user_id,
+                value
+            )
+        )
+
+    conn.commit()
+    conn.close()
