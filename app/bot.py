@@ -70,7 +70,8 @@ from states import (
     ANALYZE,
     SELECT_CLOSE_TRADE,
     CLOSE_PRICE,
-    ACCOUNT_CURRENCY
+    ACCOUNT_CURRENCY,
+    AI_CHAT,
 )
 from analysis import make_report
 from subscription import check_subscription
