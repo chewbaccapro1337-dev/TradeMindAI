@@ -307,7 +307,7 @@ def main():
         MessageHandler(filters.Regex("^🔒 Закрыть$"), start_close_trade),
         MessageHandler(filters.Regex("^📷 AI Анализ$"), ask_photo),
         MessageHandler(filters.Regex("^💎 Подписка$"), subscription),
-        MessageHandler(filters.Regex("^🤖 AI Ассистент$") ai_chat_start),
+        MessageHandler(filters.Regex("^🤖 AI Ассистент$"), ai_chat_start),
     ],
     states={
         BALANCE: [
