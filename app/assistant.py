@@ -40,7 +40,7 @@ def process_message(user_id, text: str):
         if action["action"] == "news":
             print("ACTION:", action)
             return tool(
-                user_id,а
+                user_id,
                 action.get("symbol")
             )
 
