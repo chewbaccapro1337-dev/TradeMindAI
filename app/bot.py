@@ -301,7 +301,6 @@ def main():
         .build()
     )
     create_tables()
-    create_ai_memory_table()
 
     print(f"🤖 {BOT_NAME} v{VERSION} запущен!")
 

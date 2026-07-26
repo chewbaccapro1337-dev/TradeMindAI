@@ -63,6 +63,7 @@ def create_tables():
     conn.commit()
     conn.close()
 
+    create_ai_memory_table()
 
 
 def save_trade(
