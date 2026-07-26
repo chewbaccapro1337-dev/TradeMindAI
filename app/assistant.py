@@ -363,3 +363,12 @@ chat
     return json.loads(
         response.choices[0].message.content
     )
+
+def create_trade_tool(user_id, text):
+
+    from trade_voice import parse_trade_voice
+
+    return parse_trade_voice(
+        user_id,
+        text
+    )
