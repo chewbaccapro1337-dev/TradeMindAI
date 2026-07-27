@@ -18,8 +18,9 @@ def get_candles(symbol="BTCUSDT", interval="15m", limit=100):
 
     data = response.json()
     
-    print("SYMBOL:", symbol)
-    print("RAW DATA:", data) 
+    print("REQUEST SYMBOL:", symbol)
+    print("DATA TYPE:", type(data))
+    print("RAW DATA:", data)
     
     candles = []
 
