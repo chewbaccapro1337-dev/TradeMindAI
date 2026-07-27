@@ -20,6 +20,7 @@ from liquidity import (
     find_buy_sell_liquidity,
     detect_pool_sweep,
     filter_fvg_by_confirmation,
+    get_forex_candles,
 )
 from subscription import check_subscription
 from assistant import process_message
