@@ -32,7 +32,7 @@ def news_tool(user_id, symbol=None):
 
     return build_news_text(symbol)
 
-def market_brief_tool(user_id, *_):
+def market_brief_tool(user_id, symbol=None, market=None):
 
     from analysis import make_report
     from news import build_news_text
@@ -45,13 +45,48 @@ def market_brief_tool(user_id, *_):
 
     from market_context import get_market_context
 
-    btc = make_report("BTCUSDT")
+    if symbol is None:
+     symbol = "BTCUSDT"
+
+    if market is None:
+     market = "crypto"
+
+    analysis = make_report(symbol)
 
     market = get_market_context()
 
     news = build_news_text()
 
+    if market == "forex":
+
+     intro = """
+Ты анализируешь рынок Forex.
+
+Главное внимание уделяй:
+
+- экономическому календарю
+- DXY
+- золоту
+- валютной паре
+"""
+
+else:
+
+    intro = """
+Ты анализируешь крипторынок.
+
+Главное внимание уделяй:
+
+- BTC
+- DXY
+- SP500
+- золоту
+- настроению риска
+"""
+
     prompt = f"""
+    {intro}
+    
 Ты главный аналитик TradeMind AI.
 
 Ты работаешь как профессиональный трейдер и макро-аналитик.
@@ -60,9 +95,9 @@ def market_brief_tool(user_id, *_):
 
 Учитывай:
 
-₿ BTC технический анализ:
+Технический анализ инструмента {symbol}:
 
-{btc}
+{analysis}
 
 
 🌍 Межрыночный анализ:

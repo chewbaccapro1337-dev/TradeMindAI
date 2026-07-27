@@ -39,20 +39,48 @@ def process_message(user_id, text: str):
 
 
     tool = TOOLS.get(
-        action["action"]
+     action["action"]
     )
-
 
     if tool:
 
         print(
-            "RUN TOOL:",
-            action["action"]
+         RUN TOOL:",
+         action["action"]
         )
+
+    if action["action"] == "news":
+        return tool(
+          user_id,
+          action.get("symbol")
+        )
+
+    elif action["action"] == "market_brief":
+
+        return tool(
+            user_id,
+            action.get("symbol"),
+            action.get("market")
+        )
+
+    elif action["action"] == "create_trade":
 
         return tool(
             user_id,
             text
+        )
+
+    elif action["action"] == "close_trade":
+
+        return tool(
+            user_id,
+            text
+        )
+
+    else:
+
+        return tool(
+            user_id
         )
 
 
@@ -313,11 +341,37 @@ market_brief
 
 если пользователь спрашивает:
 
-- что по рынку сегодня
-- дай обзор рынка
-- план на сегодня
-- что сейчас происходит
-- стоит ли торговать сегодня
+Если пользователь пишет:
+
+что по BTC
+обзор BTC
+обзор крипты
+что по битку
+
+верни
+
+{
+"action":"market_brief",
+"market":"crypto",
+"symbol":"BTCUSDT"
+}
+
+
+Если пользователь пишет:
+
+обзор EURUSD
+что по евро
+что по EURUSD
+что по GBPUSD
+обзор форекса
+
+верни
+
+{
+"action":"market_brief",
+"market":"forex",
+"symbol":"EURUSD"
+}
 
 
 risk
