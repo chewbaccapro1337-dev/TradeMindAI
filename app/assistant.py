@@ -83,6 +83,12 @@ def process_message(user_id, text: str):
             user_id
         )
 
+    if not tool:
+
+        print(
+         "NO TOOL. GO TO AI MEMORY"
+        )
+ 
     # сохраняем вопрос пользователя
     save_ai_message(
         user_id,
@@ -117,6 +123,10 @@ def process_message(user_id, text: str):
         user_id
     )
 
+    trades = get_last_trades_for_ai(
+        user_id,
+        10
+    )
 
     # отправляем в AI
     response = ask_ai(
@@ -127,67 +137,6 @@ def process_message(user_id, text: str):
 
 
     # сохраняем ответ
-    save_ai_message(
-        user_id,
-        "assistant",
-        response
-    )
-
-
-    return response
-
-    # сохраняем вопрос пользователя
-    save_ai_message(
-        user_id,
-        "user",
-        text
-    )
-
-
-    # достаем память
-    memory = get_ai_memory(
-        user_id,
-        limit=10
-    )
-
-
-    # извлекаем информацию о пользователе
-    profile_data = extract_profile(text)
-
-    
-
-    # сохраняем найденные данные
-    for field, value in profile_data.items():
-
-        if value:
-
-            update_trader_profile(
-                user_id,
-                field,
-                value
-            )
-
-
-    # получаем профиль
-    profile = get_profile(
-        user_id
-    )
-
-    trades = get_last_trades_for_ai(
-     user_id,
-     10
-    )
-
-    # отправляем запрос AI
-    response = ask_ai(
-        text,
-        memory,
-        profile,
-        trades
-    )
-
-
-    # сохраняем ответ AI
     save_ai_message(
         user_id,
         "assistant",

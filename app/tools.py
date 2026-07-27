@@ -226,6 +226,22 @@ def create_trade_tool(user_id, text):
         text
     )
 
+def profile_tool(user_id):
+
+    return """
+👤 Профиль трейдера
+
+Имя: Руслан
+
+Торговля:
+- Криптовалюты
+- BTC/USDT
+- Futures
+- Интрадей
+
+Стиль:
+Smart Money / ICT / Liquidity Trading
+"""
 
 def close_trade_tool(user_id, text):
 
