@@ -53,35 +53,35 @@ def process_message(user_id, text: str):
          action["action"]
     )
 
-    if action["action"] == "news":
-        return tool(
-            user_id,
-            action.get("symbol")
-        )
+        if action["action"] == "news":
+         return tool(
+               user_id,
+               action.get("symbol")
+            )
 
-    elif action["action"] == "market_brief":
-        return tool(
-            user_id,
-            action.get("symbol"),
-            action.get("market")
-        )
+        elif action["action"] == "market_brief":
+            return tool(
+                user_id,
+                action.get("symbol"),
+                action.get("market")
+            )
 
-    elif action["action"] == "create_trade":
-        return tool(
-            user_id,
-            text
-        )
+        elif action["action"] == "create_trade":
+            return tool(
+                user_id,
+                text
+            )
 
-    elif action["action"] == "close_trade":
-        return tool(
-            user_id,
-            text
-        )
+        elif action["action"] == "close_trade":
+            return tool(
+                user_id,
+                text
+            )
 
-    else:
-        return tool(
-            user_id
-        )
+        else:
+            return tool(
+                user_id
+            )
 
     if not tool:
 
