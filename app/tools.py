@@ -54,7 +54,7 @@ def market_brief_tool(user_id, symbol=None, market=None):
 
     analysis = make_report(symbol)
 
-    market = get_market_context()
+    market_data = get_market_context()
 
     news = build_news_text()
 
