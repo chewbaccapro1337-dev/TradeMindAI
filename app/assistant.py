@@ -42,6 +42,10 @@ def process_message(user_id, text: str):
      action["action"]
     )
 
+    print("ACTION:", action)
+    print("AVAILABLE TOOLS:", TOOLS.keys())
+    print("TOOL FOUND:", tool)
+
     if tool:
 
         print(
