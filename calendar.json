@@ -1,5 +1,5 @@
 {
-    "updated": "2026-07-26 22:08:24",
+    "updated": "2026-07-27 20:25:19",
     "events": [
         {
             "currency": "EUR",
@@ -42,6 +42,12 @@
             "impact": "yellow",
             "title": "Durable Goods Orders m/m",
             "time": ""
+        },
+        {
+            "currency": "USD",
+            "impact": "orange",
+            "title": "President Trump Speaks",
+            "time": "9:50pm"
         }
     ]
 }

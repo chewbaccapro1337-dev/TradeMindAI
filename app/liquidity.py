@@ -1,5 +1,6 @@
 import requests
-
+import yfinance as yf
+import pandas as pd
 
 def get_candles(symbol="BTCUSDT", interval="15m", limit=100):
 
@@ -33,6 +34,80 @@ def get_candles(symbol="BTCUSDT", interval="15m", limit=100):
         })
 
     return candles
+
+def get_forex_candles(symbol="EURUSD", interval="15m", limit=100):
+
+    ticker_map = {
+        "EURUSD": "EURUSD=X",
+        "GBPUSD": "GBPUSD=X",
+        "USDJPY": "JPY=X",
+        "AUDUSD": "AUDUSD=X"
+    }
+
+
+    ticker = ticker_map.get(
+        symbol,
+        symbol
+    )
+
+
+    print("FOREX SYMBOL:", ticker)
+
+
+    data = yf.download(
+        ticker,
+        period="5d",
+        interval=interval,
+        progress=False,
+        auto_adjust=False
+    )
+
+
+    if data.empty:
+        print("NO FOREX DATA:", ticker)
+        return []
+
+
+    print("RAW FOREX DATA:")
+    print(data.tail())
+
+
+    # исправление MultiIndex от Yahoo
+    if isinstance(data.columns, pd.MultiIndex):
+        data.columns = data.columns.get_level_values(0)
+
+
+    candles = []
+
+
+    for index, row in data.iterrows():
+
+        try:
+
+            candles.append(
+                {
+                    "open": float(row["Open"]),
+                    "high": float(row["High"]),
+                    "low": float(row["Low"]),
+                    "close": float(row["Close"])
+                }
+            )
+
+        except Exception as e:
+
+            print(
+                "CANDLE ERROR:",
+                e
+            )
+
+
+    print(
+        "FOREX CANDLES:",
+        len(candles)
+    )
+
+
+    return candles[-limit:]
 
 def find_swings(candles, left=2, right=2):
 

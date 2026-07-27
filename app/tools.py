@@ -36,6 +36,7 @@ def market_brief_tool(user_id, symbol=None, market=None):
 
     from analysis import make_report
     from news import build_news_text
+    from market_context import get_market_context
     from openai import OpenAI
     import os
 
@@ -43,13 +44,13 @@ def market_brief_tool(user_id, symbol=None, market=None):
         api_key=os.getenv("OPENAI_API_KEY")
     )
 
-    from market_context import get_market_context
-
     if symbol is None:
      symbol = "BTCUSDT"
 
     if market is None:
-     market = "crypto"
+        market = "crypto"
+    else:
+        market_type = market
 
     analysis = make_report(symbol)
 
@@ -57,7 +58,7 @@ def market_brief_tool(user_id, symbol=None, market=None):
 
     news = build_news_text()
 
-    if market == "forex":
+    if market_type == "forex":
 
      intro = """
 Ты анализируешь рынок Forex.
@@ -102,7 +103,7 @@ def market_brief_tool(user_id, symbol=None, market=None):
 
 🌍 Межрыночный анализ:
 
-{market}
+{market_data}
 
 Включает:
 - DXY (индекс доллара)
@@ -175,14 +176,14 @@ S&P500:
 
 {news}
 
-BTC технический анализ:
+Технический анализ {symbol}:
 
-{btc}
+{analysis}
 
 
 Межрыночный анализ:
 
-{market}
+{market_data}
 """
 
     response = client.chat.completions.create(

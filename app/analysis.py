@@ -7,6 +7,7 @@ from ai import analyze_trade
 from openai import OpenAI
 from liquidity import (
     get_candles,
+    get_forex_candles,
     find_swings,
     find_equal_levels,
     detect_bos_choch,
@@ -102,11 +103,16 @@ async def ai_chat(update, context):
 
 def analyze_market(symbol="BTCUSDT"):
 
-    candles = get_candles(
-        symbol,
-        interval="15m",
-        limit=200
+    if symbol.endswith("USDT"):
+
+       candles = get_candles(
+            symbol,
+            interval="15m",
+            limit=200
     )
+    else:
+
+        candles = get_forex_candles(symbol)
 
     highs, lows = find_swings(candles)
 
