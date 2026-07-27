@@ -44,9 +44,9 @@ def process_message(user_id, text: str):
 
     if tool:
 
-    print(
-        "RUN TOOL:",
-        action["action"]
+        print(
+         "RUN TOOL:",
+         action["action"]
     )
 
     if action["action"] == "news":
