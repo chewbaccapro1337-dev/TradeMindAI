@@ -510,6 +510,19 @@ def build_statistics_text(user_id):
             else 0
         )
 
+        best_text = (
+          f"🔥 Лучшая сделка: +{best:.2f} {currency}\n"
+          if best and best > 0
+          else "🔥 Лучшая сделка: нет прибыльных сделок\n"
+        )
+
+
+        worst_text = (
+          f"💀 Худшая сделка: {worst:.2f} {currency}\n"
+          if worst and worst < 0
+          else "💀 Худшая сделка: нет убыточных сделок\n"
+        )
+
         text += (
             f"{'💵' if currency == 'USD' else '₽'} {currency}\n\n"
             f"Всего сделок: {total}\n"
@@ -519,8 +532,8 @@ def build_statistics_text(user_id):
             f"💰 Прибыль: +{profit or 0:.2f} {currency}\n"
             f"💸 Убыток: {loss or 0:.2f} {currency}\n"
             f"📈 Итог: {total_pnl or 0:.2f} {currency}\n"
-            f"🔥 Лучшая сделка: {best or 0:.2f} {currency}\n"
-            f"💀 Худшая сделка: {worst or 0:.2f} {currency}\n"
+            f"{best_text}"
+            f"{worst_text}"
             "━━━━━━━━━━━━━━\n\n"
         )
 

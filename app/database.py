@@ -159,19 +159,22 @@ def get_statistics(user_id):
     conn = get_connection()
     cursor = conn.cursor()
 
-
     cursor.execute("""
         SELECT
             COUNT(*),
             SUM(CASE WHEN pnl > 0 THEN 1 ELSE 0 END),
             SUM(CASE WHEN pnl < 0 THEN 1 ELSE 0 END),
+
             SUM(CASE WHEN pnl > 0 THEN pnl ELSE 0 END),
             SUM(CASE WHEN pnl < 0 THEN pnl ELSE 0 END),
+
             SUM(pnl),
+
             AVG(CASE WHEN pnl > 0 THEN pnl END),
             AVG(CASE WHEN pnl < 0 THEN pnl END),
-            MAX(pnl),
-            MIN(pnl)
+
+            MAX(CASE WHEN pnl > 0 THEN pnl END),
+            MIN(CASE WHEN pnl < 0 THEN pnl END)
 
         FROM trades
         WHERE user_id = ?
@@ -183,7 +186,6 @@ def get_statistics(user_id):
     conn.close()
 
     return stats
-
 def get_statistics_by_currency(user_id):
 
     conn = get_connection()
