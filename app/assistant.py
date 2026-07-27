@@ -44,19 +44,18 @@ def process_message(user_id, text: str):
 
     if tool:
 
-        print(
-         RUN TOOL:",
-         action["action"]
-        )
+    print(
+        "RUN TOOL:",
+        action["action"]
+    )
 
     if action["action"] == "news":
         return tool(
-          user_id,
-          action.get("symbol")
+            user_id,
+            action.get("symbol")
         )
 
     elif action["action"] == "market_brief":
-
         return tool(
             user_id,
             action.get("symbol"),
@@ -64,25 +63,21 @@ def process_message(user_id, text: str):
         )
 
     elif action["action"] == "create_trade":
-
         return tool(
             user_id,
             text
         )
 
     elif action["action"] == "close_trade":
-
         return tool(
             user_id,
             text
         )
 
     else:
-
         return tool(
             user_id
         )
-
 
     # сохраняем вопрос пользователя
     save_ai_message(
