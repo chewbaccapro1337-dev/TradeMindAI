@@ -70,9 +70,9 @@ def market_brief_tool(user_id, symbol=None, market=None):
 - валютной паре
 """
 
-else:
+    else:
 
-    intro = """
+     intro = """
 Ты анализируешь крипторынок.
 
 Главное внимание уделяй:
@@ -86,7 +86,7 @@ else:
 
     prompt = f"""
     {intro}
-    
+
 Ты главный аналитик TradeMind AI.
 
 Ты работаешь как профессиональный трейдер и макро-аналитик.
