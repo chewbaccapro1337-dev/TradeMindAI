@@ -4,6 +4,7 @@ import pandas as pd
 
 def get_candles(symbol="BTCUSDT", interval="15m", limit=100):
 
+    # крипта через Binance
     url = "https://fapi.binance.com/fapi/v1/klines"
 
     params = {
@@ -18,20 +19,32 @@ def get_candles(symbol="BTCUSDT", interval="15m", limit=100):
     )
 
     data = response.json()
-    
+
     print("REQUEST SYMBOL:", symbol)
-    print("DATA TYPE:", type(data))
-    print("RAW DATA:", data)
-    
+    print("RAW DATA TYPE:", type(data))
+
+
+    # если Binance вернул ошибку
+    if isinstance(data, dict):
+
+        print("BINANCE ERROR:", data)
+
+        return []
+
+
     candles = []
 
     for c in data:
+
         candles.append({
+
             "open": float(c[1]),
             "high": float(c[2]),
             "low": float(c[3]),
             "close": float(c[4])
+
         })
+
 
     return candles
 

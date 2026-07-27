@@ -7,7 +7,6 @@ from ai import analyze_trade
 from openai import OpenAI
 from liquidity import (
     get_candles,
-    get_forex_candles,
     find_swings,
     find_equal_levels,
     detect_bos_choch,
@@ -105,11 +104,8 @@ def analyze_market(symbol="BTCUSDT"):
 
     if symbol.endswith("USDT"):
 
-       candles = get_candles(
-            symbol,
-            interval="15m",
-            limit=200
-    )
+        candles = get_candles(symbol)
+
     else:
 
         candles = get_forex_candles(symbol)
