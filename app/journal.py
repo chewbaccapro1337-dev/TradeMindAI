@@ -31,6 +31,7 @@ from states import (
     CLOSE_PRICE,
     ACCOUNT_CURRENCY,
 )
+import traceback
 
 trade_data = session_data
 
@@ -648,14 +649,14 @@ async def select_close_trade(update: Update, context: ContextTypes.DEFAULT_TYPE)
 
 async def close_trade_price(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
-    print("CLOSE PRICE CALLED")
+    print("========== CLOSE TRADE ==========")
     print("RAW TEXT:", repr(update.message.text))
 
     try:
         exit_price = float(update.message.text)
+        print("EXIT PRICE:", exit_price)
 
         trade = context.user_data["selected_trade"]
-        currency = trade[10] if len(trade) > 10 else "USD"
 
         (
             trade_id,
@@ -671,6 +672,8 @@ async def close_trade_price(update: Update, context: ContextTypes.DEFAULT_TYPE):
             created
         ) = trade
 
+        print("TRADE:", trade)
+
         if side == "BUY":
             r_result = (exit_price - entry) / abs(entry - sl)
         else:
@@ -678,12 +681,16 @@ async def close_trade_price(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         pnl = risk * r_result
 
+        print("PNL:", pnl)
+
         coach = close_trade(
             update.effective_user.id,
             trade_id,
             exit_price,
             pnl
         )
+
+        print("COACH READY")
 
         await update.message.reply_text(
             "✅ Сделка закрыта!\n\n"
@@ -701,9 +708,11 @@ async def close_trade_price(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         return ConversationHandler.END
 
-    except ValueError:
+    except Exception as e:
+        traceback.print_exc()
+
         await update.message.reply_text(
-            "❌ Введите число."
+            f"❌ {type(e).__name__}: {e}"
         )
 
         return CLOSE_PRICE
