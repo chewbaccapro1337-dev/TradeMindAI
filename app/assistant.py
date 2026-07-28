@@ -10,7 +10,8 @@ from tools import (
     news_tool,
     market_brief_tool,
     create_trade_tool,
-    close_trade_tool
+    close_trade_tool,
+    trade_copilot_tool
 )
 
 TOOLS = {
