@@ -23,7 +23,6 @@ from liquidity import (
     get_forex_candles,
 )
 from subscription import check_subscription
-from assistant import process_message
 from states import AI_CHAT
 
 ANALYZE = 20
