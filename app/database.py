@@ -201,7 +201,7 @@ def save_trade(
         status,
         currency,
         market_context,
-        entry_reason,
+        entry_reason
     )
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     """,
