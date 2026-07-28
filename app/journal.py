@@ -655,7 +655,8 @@ async def close_trade_price(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         pnl = risk * r_result
 
-        close_trade(
+        coach = close_trade(
+            update.effective_user.id,
             trade_id,
             exit_price,
             pnl
@@ -666,7 +667,9 @@ async def close_trade_price(update: Update, context: ContextTypes.DEFAULT_TYPE):
             f"📈 {symbol}\n"
             f"📊 {side}\n"
             f"📤 Выход: {exit_price}\n"
-            f"💰 PnL: {pnl:.2f} {currency}",
+            f"💰 PnL: {pnl:.2f} {currency}\n\n"
+            "🤖 AI Coach:\n\n"
+            f"{coach}",
             reply_markup=main_keyboard
         )
 

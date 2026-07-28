@@ -350,7 +350,8 @@ def get_open_trades(user_id):
 
     return trades
 
-def close_trade(trade_id, exit_price, pnl):
+def close_trade(user_id, trade_id, exit_price, pnl):
+
     conn = get_connection()
     cursor = conn.cursor()
 
@@ -368,8 +369,21 @@ def close_trade(trade_id, exit_price, pnl):
         trade_id
     ))
 
+
     conn.commit()
     conn.close()
+
+
+    from coach import analyze_closed_trade
+
+
+    coach = analyze_closed_trade(
+        user_id,
+        trade_id
+    )
+
+
+    return coach
 
 def create_subscription_table():
 
