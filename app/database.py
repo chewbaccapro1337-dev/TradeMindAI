@@ -257,6 +257,34 @@ def get_last_trades(user_id, limit=20):
 
     return trades
 
+def get_last_closed_trades(user_id, limit=20):
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT
+            id,
+            symbol,
+            side,
+            pnl,
+            market_context
+        FROM trades
+        WHERE user_id = ?
+        AND status = 'CLOSED'
+        ORDER BY id DESC
+        LIMIT ?
+    """,
+    (
+        user_id,
+        limit
+    ))
+
+    trades = cursor.fetchall()
+
+    conn.close()
+
+    return trades
 
 def get_statistics(user_id):
 
