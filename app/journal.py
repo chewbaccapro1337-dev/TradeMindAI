@@ -31,8 +31,6 @@ from states import (
     CLOSE_PRICE,
     ACCOUNT_CURRENCY,
 )
-from analysis import analyze_market
-import json
 
 trade_data = session_data
 
@@ -384,7 +382,8 @@ async def get_trade_risk(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         expected_profit = risk * rr
 
-
+        from analysis import analyze_market
+        import json
         market_analysis = analyze_market(symbol)
 
         market_context = json.dumps(
