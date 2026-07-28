@@ -384,7 +384,15 @@ async def get_trade_risk(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         from analysis import analyze_market
         import json
-        market_analysis = analyze_market(symbol)
+        try:
+            market_analysis = analyze_market(
+                user["symbol"]
+            )
+        except Exception as e:
+            print("MARKET CONTEXT ERROR:", e)
+            market_analysis = {
+                "error": str(e)
+            }
 
         market_context = json.dumps(
             market_analysis,
