@@ -1,5 +1,5 @@
 {
-    "updated": "2026-07-27 20:25:19",
+    "updated": "2026-07-28 14:44:37",
     "events": [
         {
             "currency": "EUR",
@@ -48,6 +48,72 @@
             "impact": "orange",
             "title": "President Trump Speaks",
             "time": "9:50pm"
+        },
+        {
+            "currency": "GBP",
+            "impact": "yellow",
+            "title": "BRC Shop Price Index y/y",
+            "time": "2:01am"
+        },
+        {
+            "currency": "EUR",
+            "impact": "yellow",
+            "title": "Spanish Unemployment Rate",
+            "time": "10:00am"
+        },
+        {
+            "currency": "EUR",
+            "impact": "yellow",
+            "title": "German Buba Monthly Report",
+            "time": "1:00pm"
+        },
+        {
+            "currency": "USD",
+            "impact": "yellow",
+            "title": "ADP Weekly Employment Change",
+            "time": "3:15pm"
+        },
+        {
+            "currency": "USD",
+            "impact": "yellow",
+            "title": "Goods Trade Balance",
+            "time": "3:30pm"
+        },
+        {
+            "currency": "USD",
+            "impact": "yellow",
+            "title": "Prelim Wholesale Inventories m/m",
+            "time": ""
+        },
+        {
+            "currency": "USD",
+            "impact": "yellow",
+            "title": "HPI m/m",
+            "time": "4:00pm"
+        },
+        {
+            "currency": "USD",
+            "impact": "yellow",
+            "title": "S&P/CS Composite-20 HPI y/y",
+            "time": ""
+        },
+        {
+            "currency": "USD",
+            "impact": "orange",
+            "title": "CB Consumer Confidence",
+            "time": "5:00pm"
+        },
+        {
+            "currency": "USD",
+            "impact": "yellow",
+            "title": "Richmond Manufacturing Index",
+            "time": ""
+        },
+        {
+            "currency": "USD",
+            "impact": "yellow",
+            "title": "API Weekly Statistical Bulletin",
+            "time": "11:30pm"
         }
     ]
 }
