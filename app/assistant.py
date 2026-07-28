@@ -35,6 +35,23 @@ TOOLS = {
 
 def process_message(user_id, text: str):
 
+    from profile_ai import extract_profile
+    from database import update_trader_profile
+
+
+    profile_data = extract_profile(text)
+
+
+    for field,value in profile_data.items():
+
+        if value:
+
+            update_trader_profile(
+                user_id,
+                field,
+                value
+            )
+
     action = detect_action(text)
 
     print("DETECTED ACTION:", action)
