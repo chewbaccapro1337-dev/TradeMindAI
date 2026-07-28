@@ -26,7 +26,7 @@ def analyze_closed_trade(user_id, trade_id):
             sl,
             risk,
             pnl,
-            comment
+            comment,
             market_context
         FROM trades
         WHERE id = ?
