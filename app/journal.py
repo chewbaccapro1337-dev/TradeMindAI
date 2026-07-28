@@ -31,6 +31,8 @@ from states import (
     CLOSE_PRICE,
     ACCOUNT_CURRENCY,
 )
+from analysis import analyze_market
+import json
 
 trade_data = session_data
 
@@ -382,6 +384,14 @@ async def get_trade_risk(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         expected_profit = risk * rr
 
+
+        market_analysis = analyze_market(symbol)
+
+        market_context = json.dumps(
+            market_analysis,
+            default=str
+        )
+
         save_trade(
             user_id=update.effective_user.id,
             symbol=user["symbol"],
@@ -394,7 +404,8 @@ async def get_trade_risk(update: Update, context: ContextTypes.DEFAULT_TYPE):
             expected_profit=expected_profit,
             position_size=user.get("position_size"),
             comment=user.get("comment"),
-            currency=currency
+            currency=currency,
+            market_context
         )
 
         await update.message.reply_text(
