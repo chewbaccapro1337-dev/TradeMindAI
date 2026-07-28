@@ -11,6 +11,8 @@ client = OpenAI(
 
 def analyze_closed_trade(user_id, trade_id):
 
+    print("COACH START:", user_id, trade_id)
+
     conn = get_connection()
     cursor = conn.cursor()
 
@@ -113,8 +115,4 @@ SL:
 
     return response.choices[0].message.content
 
-def analyze_closed_trade(user_id, trade_id):
 
-    print("COACH START", user_id, trade_id)
-
-    return "Тест AI Coach работает"
