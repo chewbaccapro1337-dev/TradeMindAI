@@ -46,6 +46,8 @@ def create_tables():
         exit REAL,
         pnl REAL,
 
+        market_context TEXT,
+
         currency TEXT,
 
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
