@@ -405,7 +405,7 @@ async def get_trade_risk(update: Update, context: ContextTypes.DEFAULT_TYPE):
             position_size=user.get("position_size"),
             comment=user.get("comment"),
             currency=currency,
-            market_context
+            market_context=market_context
         )
 
         await update.message.reply_text(
