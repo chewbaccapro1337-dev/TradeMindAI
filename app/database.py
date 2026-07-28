@@ -59,6 +59,32 @@ def create_tables():
         expires_at TEXT
     )
     """)
+
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS trader_profile (
+
+        user_id INTEGER PRIMARY KEY,
+
+        name TEXT,
+
+        trading_style TEXT,
+
+        markets TEXT,
+
+        timeframes TEXT,
+
+        strategies TEXT,
+
+        mistakes TEXT,
+
+        risk_management TEXT,
+
+        goals TEXT,
+
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
+    )
+    """)
 	
     conn.commit()
     conn.close()
@@ -66,6 +92,75 @@ def create_tables():
     create_ai_memory_table()
     create_trader_profile_table()
 
+
+def get_profile(user_id):
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+    SELECT *
+    FROM trader_profile
+    WHERE user_id = ?
+    """, (user_id,))
+
+
+    profile = cursor.fetchone()
+
+    conn.close()
+
+    return profile
+
+def update_trader_profile(
+        user_id,
+        field,
+        value
+):
+
+    allowed = [
+        "name",
+        "trading_style",
+        "markets",
+        "timeframes",
+        "strategies",
+        "mistakes",
+        "risk_management",
+        "goals"
+    ]
+
+
+    if field not in allowed:
+        return
+
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+
+    cursor.execute(
+        f"""
+        INSERT INTO trader_profile
+        (
+            user_id,
+            {field}
+        )
+        VALUES (?, ?)
+
+        ON CONFLICT(user_id)
+        DO UPDATE SET
+        {field}=excluded.{field},
+        updated_at=CURRENT_TIMESTAMP
+
+        """,
+        (
+            user_id,
+            value
+        )
+    )
+
+
+    conn.commit()
+    conn.close()
 
 def save_trade(
     user_id,

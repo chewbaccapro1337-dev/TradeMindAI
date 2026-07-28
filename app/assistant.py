@@ -29,6 +29,8 @@ TOOLS = {
 
     "close_trade": close_trade_tool,
 
+    "trade_copilot": trade_copilot_tool,
+
 }
 
 def process_message(user_id, text: str):

@@ -279,3 +279,69 @@ def close_trade_tool(user_id, text):
         f"📤 Выход: {result['exit']}\n"
         f"💰 PNL: {result['pnl']:.2f}"
     )
+
+def trade_copilot_tool(user_id):
+
+    from copilot import build_copilot_data
+    from openai import OpenAI
+    import os
+
+
+    client = OpenAI(
+        api_key=os.getenv("OPENAI_API_KEY")
+    )
+
+
+    trades = build_copilot_data(user_id)
+
+
+    prompt = f"""
+
+Ты являешься AI Trading Copilot.
+
+Проанализируй историю сделок трейдера.
+
+Найди:
+
+- главные ошибки
+- повторяющиеся паттерны убытков
+- лучшие условия для входа
+- проблемы риск менеджмента
+- психологические ошибки
+
+
+История:
+
+{trades}
+
+
+Ответь как профессиональный трейдинг наставник.
+
+Структура:
+
+📊 Общая статистика
+
+❌ Главные ошибки
+
+✅ Что работает
+
+🧠 Психология
+
+🎯 Что изменить
+
+"""
+
+
+    response = client.chat.completions.create(
+        model="gpt-4.1-mini",
+        temperature=0.3,
+        messages=[
+            {
+                "role":"user",
+                "content":prompt
+            }
+        ]
+    )
+
+
+    return response.choices[0].message.content
