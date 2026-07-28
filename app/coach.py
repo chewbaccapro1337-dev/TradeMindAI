@@ -27,6 +27,7 @@ def analyze_closed_trade(user_id, trade_id):
             risk,
             pnl,
             comment
+            market_context
         FROM trades
         WHERE id = ?
         AND user_id = ?
@@ -47,8 +48,19 @@ def analyze_closed_trade(user_id, trade_id):
         return None
 
 
-    symbol, side, entry, tp, sl, risk, pnl, comment = trade
+    symbol, side, entry, tp, sl, risk, pnl, comment, market_context = trade
 
+    import json
+
+    context = json.loads(market_context)
+
+    market_summary = {
+        "trend": context.get("trend"),
+        "bos_choch": context.get("bos_choch"),
+        "sweep": context.get("sweep"),
+        "fvgs": context.get("fvgs"),
+        "market_structure": context.get("market_structure")
+    }
 
     prompt = f"""
 
@@ -58,6 +70,8 @@ def analyze_closed_trade(user_id, trade_id):
 
 
 Сделка:
+
+{market_summary}
 
 Инструмент:
 {symbol}
@@ -80,8 +94,9 @@ SL:
 Результат:
 {pnl}
 
-Комментарий трейдера:
-{comment}
+Контекст рынка в момент входа:
+
+{market_context}
 
 
 Дай анализ:
