@@ -149,7 +149,7 @@ def process_message(user_id, text: str):
 def detect_action(text):
 
     response = client.chat.completions.create(
-        model="gpt-4.1-mini",
+        model="gpt-5.4-mini",
         temperature=0,
         response_format={
             "type": "json_object"

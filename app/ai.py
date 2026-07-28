@@ -22,7 +22,7 @@ def analyze_trade(image_path: str):
         image_base64 = base64.b64encode(image.read()).decode("utf-8")
 
     response = client.responses.create(
-        model="gpt-4.1",
+        model="gpt-5.4-mini",
         input=[
             {
                 "role": "user",
@@ -219,7 +219,7 @@ def analyze_economic_event(event):
 
 
     response = client.chat.completions.create(
-        model="gpt-4.1-mini",
+        model="gpt-5.4-mini",
         messages=[
             {
                 "role":"user",
@@ -320,7 +320,7 @@ def ask_ai(message, memory=None, profile=None, trades=None):
 
 
     response = client.chat.completions.create(
-        model="gpt-4.1-mini",
+        model="gpt-5.4-mini",
         messages=messages,
         temperature=0.3
     )
@@ -334,7 +334,7 @@ import json
 def extract_profile(message: str):
 
     response = client.chat.completions.create(
-        model="gpt-4.1-mini",
+        model="gpt-5.4-mini",
         response_format={"type": "json_object"},
         temperature=0,
         messages=[
@@ -405,7 +405,7 @@ def ask_trade_coach(trades):
 
 
     response = client.chat.completions.create(
-        model="gpt-4.1-mini",
+        model="gpt-5.4-mini",
         messages=[
             {
                 "role":"user",
