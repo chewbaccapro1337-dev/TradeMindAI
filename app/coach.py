@@ -53,7 +53,10 @@ def analyze_closed_trade(user_id, trade_id):
 
     import json
 
-    context = json.loads(market_context)
+    if market_context:
+        context = json.loads(market_context)
+    else:
+        context = {}
 
     market_summary = {
         "trend": context.get("trend"),
@@ -97,7 +100,8 @@ SL:
 
 Контекст рынка в момент входа:
 
-{market_context}
+Market context:
+{json.dumps(context, indent=2, ensure_ascii=False)}
 
 Оцени сделку от 1 до 10:
 
