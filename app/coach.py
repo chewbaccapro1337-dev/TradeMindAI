@@ -27,7 +27,8 @@ def analyze_closed_trade(user_id, trade_id):
             risk,
             pnl,
             comment,
-            market_context
+            market_context,
+            entry_reason
         FROM trades
         WHERE id = ?
         AND user_id = ?
@@ -48,7 +49,7 @@ def analyze_closed_trade(user_id, trade_id):
         return None
 
 
-    symbol, side, entry, tp, sl, risk, pnl, comment, market_context = trade
+    symbol, side, entry, tp, sl, risk, pnl, comment, entry_reason, market_context = trade
 
     import json
 
@@ -98,6 +99,10 @@ SL:
 
 {market_context}
 
+Оцени сделку от 1 до 10:
+
+10 — идеальный ICT/SMC сетап
+1 — случайный вход без подтверждений
 
 Дай анализ:
 
@@ -106,8 +111,43 @@ SL:
 3. Нарушена ли стратегия ICT/SMC?
 4. Что сделать лучше в следующей сделке?
 
+Причина входа трейдера:
+{entry_reason}
 
-Ответь коротко как личный торговый наставник.
+Сравни:
+- что хотел увидеть трейдер
+- что реально было в market_context
+
+Дай ответ строго в формате:
+
+🤖 AI Coach
+
+Оценка сделки: X/10
+
+━━━━━━━━━━━━━━
+
+❌ Ошибки:
+- перечисли конкретные ошибки только по данным сделки и market_context
+
+━━━━━━━━━━━━━━
+
+✅ Хорошие моменты:
+- что было сделано правильно
+
+━━━━━━━━━━━━━━
+
+🎯 Главная ошибка:
+одно главное нарушение
+
+━━━━━━━━━━━━━━
+
+📚 Что делать в следующей сделке:
+3 конкретных правила
+
+━━━━━━━━━━━━━━
+
+Не выдумывай события, которых нет в данных.
+Если BOS/CHOCH/Sweep/FVG отсутствуют в анализе — напиши именно это.
 """
 
 

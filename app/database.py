@@ -178,7 +178,8 @@ def save_trade(
     position_size,
     comment,
     currency,
-    market_context=None
+    market_context=None,
+    entry_reason=None
 ):
 
     conn = sqlite3.connect(DB_NAME)
@@ -199,9 +200,10 @@ def save_trade(
         comment,
         status,
         currency,
-        market_context
+        market_context,
+        entry_reason,
     )
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     """,
     (
         user_id,
@@ -217,7 +219,8 @@ def save_trade(
         comment,
         "OPEN",
         currency,
-        market_context
+        market_context,
+        entry_reason
     ))
 
     conn.commit()
