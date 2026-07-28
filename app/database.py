@@ -364,17 +364,19 @@ def close_trade(user_id, trade_id, exit_price, pnl):
     cursor.execute("""
         UPDATE trades
         SET
-            exit = ?,
-            pnl = ?,
-            status = 'CLOSED',
-            closed_at = CURRENT_TIMESTAMP
-        WHERE id = ?
-    """, (
+            exit=?,
+            pnl=?,
+            status='CLOSED',
+            closed_at=CURRENT_TIMESTAMP
+        WHERE id=?
+        AND user_id=?
+    """,
+    (
         exit_price,
         pnl,
-        trade_id
+        trade_id,
+        user_id
     ))
-
 
     conn.commit()
     conn.close()
@@ -382,12 +384,10 @@ def close_trade(user_id, trade_id, exit_price, pnl):
 
     from coach import analyze_closed_trade
 
-
     coach = analyze_closed_trade(
         user_id,
         trade_id
     )
-
 
     return coach
 

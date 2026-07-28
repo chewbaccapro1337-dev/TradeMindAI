@@ -326,7 +326,9 @@ async def get_exit(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return ConversationHandler.END
 
     try:
-        exit_price = float(update.message.text)
+        exit_price = float(
+            update.message.text.replace(",", ".").strip()
+        )
 
         user = trade_data[update.effective_user.id]
 
@@ -645,6 +647,9 @@ async def select_close_trade(update: Update, context: ContextTypes.DEFAULT_TYPE)
         return SELECT_CLOSE_TRADE
 
 async def close_trade_price(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
+    print("CLOSE PRICE CALLED")
+    print("RAW TEXT:", repr(update.message.text))
 
     try:
         exit_price = float(update.message.text)
