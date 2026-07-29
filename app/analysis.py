@@ -24,6 +24,7 @@ from liquidity import (
 )
 from subscription import check_subscription
 from states import AI_CHAT
+from assistant import process_message
 
 ANALYZE = 20
 
