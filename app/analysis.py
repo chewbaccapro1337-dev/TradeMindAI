@@ -93,11 +93,21 @@ async def ai_chat(update, context):
     text = update.message.text
 
     response = process_message(
-      update.effective_user.id,
-      text
+        update.effective_user.id,
+        text
     )
 
-    await update.message.reply_text(response)
+    if response is None:
+        response = "⚠️ AI не смог сформировать ответ."
+    else:
+        response = str(response)
+
+    MAX_LEN = 4000
+
+    for i in range(0, len(response), MAX_LEN):
+        await update.message.reply_text(
+            response[i:i + MAX_LEN]
+        )
 
     return AI_CHAT
 
