@@ -16,19 +16,25 @@ def extract_profile(text):
 
 Извлеки информацию о трейдере.
 
-Верни только JSON.
+Верни ТОЛЬКО валидный JSON.
 
-Поля:
+Никаких пояснений.
+Никакого текста.
+Никаких markdown-блоков.
+Никаких ```json.
 
-name
-trading_style
-markets
-timeframes
-strategies
-mistakes
-risk_management
-goals
+Формат ответа:
 
+{
+  "name": null,
+  "trading_style": null,
+  "markets": null,
+  "timeframes": null,
+  "strategies": null,
+  "mistakes": null,
+  "risk_management": null,
+  "goals": null
+}
 
 Сообщение:
 
