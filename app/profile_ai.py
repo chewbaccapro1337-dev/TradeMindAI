@@ -25,7 +25,7 @@ def extract_profile(text):
 
 Формат ответа:
 
-{
+{{
   "name": null,
   "trading_style": null,
   "markets": null,
@@ -34,7 +34,7 @@ def extract_profile(text):
   "mistakes": null,
   "risk_management": null,
   "goals": null
-}
+}}
 
 Сообщение:
 
